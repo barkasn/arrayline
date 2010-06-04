@@ -1,0 +1,69 @@
+/*
+
+Copyright 2010 Nikolaos Barkas
+
+This is part of Arrayline
+
+Arrayline is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Arrayline is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+*/
+
+body {
+	font-family: Helvetica;
+	font-size: 12px;
+}
+
+
+
+div.page {
+	width: 800px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+div.page div.header {
+	width: 100%;
+	height: 100px;
+	background-color: black; 
+	clear: both;
+	float: left;
+}
+
+div.page div.navigation {
+	width: 200px;
+	height: 400px;
+	background-color: #DDD;
+	clear: left;
+	float: left;
+}
+
+div.page div.content {
+	width: 600px;
+	min-height: 400px;
+	background-color: yellow
+	clear: right;
+	float: left;
+}
+
+div.page div.footer {
+	width: 100%;
+	height: 50px;
+	background-color: black;
+	clear: both;
+	float: left;
+}
+	
+
+
