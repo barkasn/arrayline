@@ -48,7 +48,6 @@ class dspFileNameRandomiser extends lgDatasetProcessor{
 	}
 
 	private function scheduleJob(lgRequest $lgRequest) {
-
 		$postarray = $lgRequest->getPostArray();
 		$dataset = new lgDataset($postarray['datasetid']);
 
@@ -61,36 +60,34 @@ class dspFileNameRandomiser extends lgDatasetProcessor{
 		$lgScriptSet->appendScript($lgScriptHelper);
 		$lgScriptSet->setEntryScript($lgScript); // the command to be called at the command line is specified by the object
 
-		$lgJob = new lgJob();
+		$lgJob = lgJobHelper::createNewJob();
 		$lgJob->setInputDataset($dataset);
 		$lgJob->setScriptSet($lgScriptSet);
 		$lgJob->schedule();
 	}
 
 	private function showConfirmationForm(lgRequest $lgRequest) {
-			$postarray = $lgRequest->getPostArray();
+		$postarray = $lgRequest->getPostArray();
+		$page = new lgCmsPage();
+		$page->setTitle('File Name Randomizer');
+		$page->appendContent('<h2>File Name Randomizer</h2>');
+		$page->appendContent('<p>Are you sure you want to proceed</p>');
 
-                        $page = new lgCmsPage();
-                        $page->setTitle('File Name Randomizer');
-                        $page->appendContent('<h2>File Name Randomizer</h2>');
-                        $page->appendContent('<p>Are you sure you want to proceed</p>');
+		$form = new lgHtmlForm();
+		$field = new lgHtmlSubmitButton('submit','Yes!');
+		$field->setValue('submit');
+		$form->addField($field);
 
-                        $form = new lgHtmlForm();
+		$hiddenVals = array (
+			'requeststring' => 'createdataset',
+			'processorid' => $this->getId(),
+			'processoraction' => 'execute'
+			'datasetid' => $postarray['datasetid'];
+		);
+		$form->addFields(lgHtmlFormHelper::getHiddenFieldsFromArray($hiddenVals));
 
-                        $field = new lgHtmlSubmitButton('submit','Yes!');
-                        $field->setValue('submit');
-                        $form->addField($field);
-
-                        $hiddenVals = array (
-                                'requeststring' => 'createdataset',
-                                'processorid' => $this->getId(),
-                                'processoraction' => 'execute'
-				'datasetid' => $postarray['datasetid'];
-                        );
-                        $form->addFields(lgHtmlFormHelper::getHiddenFieldsFromArray($hiddenVals));
-
-                        $page->appendContent($form->getRenderedHTML());
-                        $page->render();
+		$page->appendContent($form->getRenderedHTML());
+		$page->render();
 	}
 
 }

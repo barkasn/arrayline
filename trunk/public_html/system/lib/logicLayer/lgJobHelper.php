@@ -21,5 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 class lgJobHelper {
+	public static function createNewJob(){
+		//Create the database job
+		$dbJob = dbJobHelper::createNewJob();
 
+	}
 }
