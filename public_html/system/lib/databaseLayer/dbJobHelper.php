@@ -18,8 +18,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 */
+
 class dbJobHelper {
 	private static function getAllJobs() {
 		global $pdo;
@@ -45,8 +45,20 @@ class dbJobHelper {
 		return $jobObjects;
 	}
 
-	private static function createJob() {
+	private static function createNewJob($dbJobState, $description, $autorun, $runStart, $runEnd, $comment ) {
+		global $pdo;
+		$stmt = $pdo->prepare('INSERT INTO jobs(job_state_id, description, autorun, run_start, run_end, comment) VALUES (:job_state_id, :description, :autorun, :run_start, :run_end, :comment);');
+		$stmt->bindValue(:job_state_id', $dbJobState->getId());
+		$stmt->bindValue(':description', $description);
+		$stmt->bindValue(':autorun', $autorun);
+		$stmt->bindValue(':run_start', $runStart);
+		$stmt->bindValue(':run_end', $runEnd);
+		$stmt->bindValue(':comment', $comment);
+	
+		$stmt->execute();
 
+		$id = $pdo->lastInsertId();
+		return new dbJob($id);
 	}
 
 			

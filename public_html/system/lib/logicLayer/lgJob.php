@@ -19,8 +19,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 */
+
 class lgJob {
 	private $dbJob;
 	private $id;
@@ -36,7 +36,6 @@ class lgJob {
 		$dbJob->save();
 	}
 
-
 	public function getId() {
 		return $this->id;
 	}
@@ -50,7 +49,7 @@ class lgJob {
 	}
 
 	public function schedule() {
-
+		
 	}
 }
 
