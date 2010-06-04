@@ -21,18 +21,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-class lgScript {
+class lgScriptset {
+	private $scripts;
+	private $entryScript;
 
-	private $dbScript;
-	private $id;
-	
-	public function __construct($id) {
-		$this->dbScript = new dbScript($id);
-		$this->id = $id;
+	public function __construct()
+		$scripts = array();
 	}
 
-	public function __destruct() {
-		$this->dbScript->save();
+	public function appendScript(lgScript $lgScript) {
+		// TODO: add duplicate checks here
+		$scripts[] = $lgScript;
 	}
 
+	public function setEntryScript(lgScript $lgScript) {
+		// TODO: check script allready in set
+		$entryScript = $lgScript;
+	}
 }
