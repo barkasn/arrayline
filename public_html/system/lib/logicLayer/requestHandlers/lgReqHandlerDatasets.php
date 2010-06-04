@@ -1,0 +1,166 @@
+<?php
+/*
+
+Copyright 2010 Nikolaos Barkas
+
+This is part of Arrayline
+
+Arrayline is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Arrayline is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+*/
+class lgReqHandlerDatasets implements iRequestHandler {
+	public function __construct() {
+		
+	}
+
+	public function processRequest(lgRequest $lgRequest) {
+		switch($lgRequest->getRequestString()) {
+			case 'viewdatasets':
+				$this->processViewAllRequest($lgRequest);
+				break;
+			case 'deletedataset':
+				$this->processDeleteDatasetRequest($lgRequest);
+				break;
+			case 'viewdataset':
+				$this->processViewDatasetRequest($lgRequest);
+				break;
+			case 'createdataset':
+				$this->processCreateDatasetRequest($lgRequest);
+				break;
+			case 'processdataset':
+				$this->processProcessDatasetRequest($lgRequest);
+				break;
+			default:
+				die('lgReqHandlerDatasets: Unknown Request');
+		}
+	}
+
+	// At this point the programmer starts wondering if his naming scheme
+	// was perhaps unfortunate...
+	private function processProcessDatasetRequest(lgRequest $lgRequest) {
+		// Get available dataset processors which accept the dataset type of this dataset
+		// as input and display these to the user
+		$postData = $lgRequest->getPostArray();
+		if ($postData['processorid'] != NULL) {
+			$id = $postData['processorid'];
+			$lgDatasetProcessor = new lgDatasetProcessor($id);
+			$lgSpecialDatasetProcessor = $lgDatasetProcessor->getSpecificObject();
+			// TODO: check permissions again
+			$lgSpecialDatasetProcessor->processRequest($lgRequest);
+		} else {
+			$this->showDatasetProcessingSelection($lgRequest);
+		}
+	}
+
+	private function showDatasetProcessingSelection(lgRequest $lgRequest) {
+		$postData = $lgRequest->getPostArray();
+		$lgDataset = new lgDataset($postData['datasetid']);
+		$inputDatasetState = $lgDataset->getDatasetState();
+		
+		$availableProcessors = lgDatasetProcessorHelper::getDatasetProcessorsByAcceptState($inputDatasetState);
+		$page = new lgCmsPage();
+		$page->setTitle('Select Dataset Processor');
+		$page->appendContent('<h2>Select Dataset Processor</h2>');
+		
+		if (empty($availableProcessors)) {
+			$page->appendContent('No processors available for this dataset');
+		} else {
+			foreach ($availableProcessors as $procs) {
+				$page->appendContent(
+					'<a href="index.php?requeststring=' . $lgRequest->getRequestString() . 
+						'&datasetid=' . $postData['datasetid'] . '&processorid=' . 
+						$procs->getId().'">'.$procs->getName().'</a><br />');
+			}
+		}
+		$page->render();	
+			
+	}
+
+	private function processCreateDatasetRequest(lgRequest $lgRequest) {
+		$postData = $lgRequest->getPostArray();
+		if ($postData['processorid'] != NULL) {
+			$id = $postData['processorid'];
+			$lgDatasetProcessor = new lgDatasetProcessor($id);
+			$lgSpecialDatasetProcessor = $lgDatasetProcessor->getSpecificObject();
+			// TODO: check permissions again
+			$lgSpecialDatasetProcessor->processRequest($lgRequest);
+		} else {
+			$this->showDatasetCreationSelection();
+		}
+	}
+
+	private function showDatasetCreationSelection() {
+		$page = new lgCmsPage();
+		$page->setTitle('Create New Dataset - Select Dataset Handler');
+		$page->appendContent('<h2>Create New Dataset - Select Dataset Handler</h2>');
+
+		$lgCreationProcessors = lgDatasetProcessorHelper::getDatasetCreationProcessors();
+		if (empty($lgCreationProcessors)) {
+			$page->appendContent('No processors for creating datasets were found. Contact the system administrator');
+		} else {
+			foreach($lgCreationProcessors as $pcs) {
+				$page->appendContent('<a href="index.php?requeststring=createdataset&processorid='.$pcs->getId().'">'.$pcs->getName().'</a><br />');
+			}	
+		}
+		$page->render();
+	}
+
+
+	private function processDeleteDatasetRequest(lgRequest $lgRequest) {
+		die('Delete dataset not implemented');
+	}
+
+	private function processViewDatasetRequest(lgRequest $lgRequest) {
+		$postArray = $lgRequest->getPostArray();
+		$id = $postArray['datasetid'];
+
+		if (!is_numeric($id)) {
+			die('lgReqHanderDatasets: Non-numeric id');
+		}
+
+		$lgDataset = new lgDataset($id);
+		$datasetProcessor = $lgDataset->getProcessor();
+		$datasetProcessor = $datasetProcessor->getSpecificObject();
+		$datasetProcessor->processRequest($lgRequest);
+	}
+
+	private function processViewAllRequest(lgRequest $lgRequest) {
+		$page = new lgCmsPage();
+		$page->setTitle('View Datasets');
+		$page->appendContent('<h2>View Datasets</h2>');
+
+		$datasets = lgDatasetHelper::getAllDatasets();
+		if ($datasets) {
+			foreach($datasets as $ds) {
+				$datasetEntry = '<div class="datasetEntry">';
+				$datasetEntry .= '<strong>'.$ds->getId().'</strong>';
+				$datasetEntry .= '<div class="dataset-actions">';
+				$datasetEntry .= '<a href="index.php?requeststring=viewdataset&datasetid='.$ds->getId().'">View</a> ';
+				$datasetEntry .= '<a href="index.php?requeststring=processdataset&datasetid='.$ds->getId().'">Process</a> ';
+				$datasetEntry .= '<a href="index.php?requeststring=deletedataset&datasetid='.$ds->getId().'">Delete</a> ';
+				$datasetEntry .= '</div>';
+	
+				$page->appendContent($datasetEntry);
+			}
+		} else {
+			$page->appendContent('No Datasets Found');
+		}
+		$page->render();
+	}
+
+	public function getRequiredPermissions() {
+		return array();
+	}
+}
