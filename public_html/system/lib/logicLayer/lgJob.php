@@ -24,6 +24,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class lgJob {
 	private $dbJob;
 	private $id;
+	private $inputDataset;
+	private $scriptSet;
 
 	public funciton __construct($id) {
 		$dbJob = new dbJob($id);
@@ -40,11 +42,11 @@ class lgJob {
 	}
 
 	public function setInputDataset(lgDataset $lgDataset) {
-
+		$this->inputDataset = $lgDataset;
 	}
 
 	public function setScriptSet(lgScriptset $lgScriptSet) {
-
+		$this->scriptSet = $lgScriptSet;
 	}
 
 	public function schedule() {
