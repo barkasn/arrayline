@@ -90,7 +90,6 @@ class lgDataset {
 	public function computeAllChecksums() {
 		$this->clearHashFile();
 
-
 		$files = $this->getFileList();
 		if (!empty($files)) {
 			foreach($files as $f) {
@@ -102,6 +101,20 @@ class lgDataset {
 			}
 		}
 	}
+
+	public function copyData($location) {
+		$copyFrom = $this->getFilesDirectoryPath();
+		$copyTo = $location;
+
+		$inputDir = opendir($copyFrom);
+		while ($file = readdir($inputDir)) {
+			if(is_file($copyFrom.'/'.$file)) {
+				copy($copyFrom.'/'.$file, $copyTo.'/'.$file);
+			}
+		}
+		closedir($inputDir);
+	}
+	
 
 	/*
 	 * Private Functions

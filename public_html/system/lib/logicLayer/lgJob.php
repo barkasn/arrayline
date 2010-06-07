@@ -75,13 +75,19 @@ class lgJob {
 
 	public function schedule() {
 		$this->saveScripts();
-
-		// TODO:
-		// 1. Save the input dataset in the appropriate directory
-		// 1. Update job status to TO_BE_RUN
+		$this->saveInputDataset();
+		$this->setToRun();
 	}
 
 	// Private functions
+	private function saveInputDataset() {
+		$inputDir = $this->getInputDataDirectoryPath();
+		$this->inputDataset->copyData($inputDir);
+	}
+
+	private function setToRun() {
+		//TODO: Implement
+	}
 
 	private function saveScripts() {
 		$lgScripts = $this->scriptSet->getAllScripts();
