@@ -25,7 +25,7 @@ class lgScriptset {
 	private $scripts;
 	private $entryScript;
 
-	public function __construct()
+	public function __construct() {
 		$scripts = array();
 	}
 
