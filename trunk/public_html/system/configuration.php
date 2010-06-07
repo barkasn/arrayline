@@ -26,6 +26,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * A place for non-security critical system-wide parameters
  */
 
+// BUILT-WIDE CONSTANTS
+define('DEBUG', true);
+
+// OTHER PARAMETERS
+
 // The location were the system is installed, i.e. were the
 // index.php is. Use absolute path for security reasons 
 $basepath = '/home/nikolas/public_html/arrayline/';
@@ -59,3 +64,4 @@ $maxUsernameLength = 25;
 // The minimun password lenght
 $minPasswordLength = 8;
 $maxPasswordLength = 50;
+

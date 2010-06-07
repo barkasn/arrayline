@@ -18,8 +18,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 */
+
 class dbJob {
 	private $id;
 	private $jobStateId;
@@ -32,9 +32,10 @@ class dbJob {
 	private $dirty;
 
 
-	public function __constructor($id) {
+	public function __construct($id) {
 		global $pdo;
-		$stmt = $pdo->prepare('SELECT job_state_id, description, autorun, run_start, run_end, comment WHERE id = :id;');
+
+		$stmt = $pdo->prepare('SELECT job_state_id, description, autorun, run_start, run_end, comment FROM jobs WHERE id = :id;');
 		$stmt->bindValue(':id', $id);
 		$stmt->execute();
 		
@@ -46,8 +47,10 @@ class dbJob {
 			$this->runEnd = $row['run_end'];
 			$this->comment = $row['comment'];
 			$this->id = $id;
-			$this->dirty = true;
+
+			$this->dirty = false;
 		}
+
 	}
 
 	public function getId() {

@@ -23,17 +23,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class dbJobHelper {
 	private static function getAllJobs() {
 		global $pdo;
+
 		$stmt = $pdo->prepare('SELECT id FROM jobs;');
 		$stmt->execute();
 		$jobObjects = array();
 		while($row = $stmt->fetch() ) {
 			$jobObjects[] = new dbJobObject($row['id']);
 		}
+
 		return $jobObjects;
 	}
 
 	private static function getJobsByState($dbJobState) {
 		global $pdo;
+
 		$stmt = $pdo->prepare('SELECT id FROM jobs WHERE job_state_id = :job_state_id;');
 		$stmt->bindValue(':job_state_id', $dbJobState->getId() );
 		$stmt->execute();
@@ -41,12 +44,15 @@ class dbJobHelper {
 		while($row = $stmt->fetch() ) {
 			$jobObjects[] = new dbJobObject($row['id']);
 		}
+
 		return $jobObjects;
 	}
 
 	public static function createNewJob($dbJobState, $description, $autorun, $runStart, $runEnd, $comment ) {
 		global $pdo;
+
 		$stmt = $pdo->prepare('INSERT INTO jobs(job_state_id, description, autorun, run_start, run_end, comment) VALUES (:job_state_id, :description, :autorun, :run_start, :run_end, :comment);');
+
 		$stmt->bindValue(':job_state_id', $dbJobState->getId());
 		$stmt->bindValue(':description', $description);
 		$stmt->bindValue(':autorun', $autorun);
@@ -57,9 +63,9 @@ class dbJobHelper {
 		$stmt->execute();
 
 		$id = $pdo->lastInsertId();
-		return new dbJob($id);
-	}
+		$dbJob = new dbJob($id);
 
-			
+		return $dbJob;
+	}
 
 }

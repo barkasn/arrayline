@@ -41,7 +41,7 @@ class dbDatasetProcessor {
 			$this->internalName = $row['internal_name'];
 			$this->name = $row['name'];
 
-			$stmt2 = $pdo->prepare('SELECT dataset_state_id FROM module_accept_states WHERE dataset_processor_id = :dataset_processor_id;');
+			$stmt2 = $pdo->prepare('SELECT dataset_state_id FROM dataset_processors_accept_states WHERE dataset_processor_id = :dataset_processor_id;');
 			$stmt2->bindValue(':dataset_processor_id', $this->id);
 			$stmt2->execute();
 

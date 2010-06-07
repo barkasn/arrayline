@@ -41,37 +41,38 @@ class lgJobHelper {
 	}
 
 	public static function getJobInputDataDirectoryPath(lgJob $lgJob) {
-		return self::getJobMainDataDirectoryPath($lgJob).'/input_data';			
+		return self::getJobMainDirectoryPath($lgJob).'/input_data';			
 	}
 
 	public static function getJobOutputDataDirectoryPath(lgJob $lgJob) {
-		return self::getJobMainDataDirectoryPath($lgJob).'/output_data';			
+		return self::getJobMainDirectoryPath($lgJob).'/output_data';			
 	}
 
-	public static function getJobScriptDataDirectoryPath(lgJob $lgJob) {
-		return self::getJobMainDataDirectoryPath($lgJob).'/scripts';			
+	public static function getJobScriptDirectoryPath(lgJob $lgJob) {
+		return self::getJobMainDirectoryPath($lgJob).'/scripts';			
 	}
 
 	public static function getJobLogFilePath(lgJob $lgJob) {
-		return self::getJobMainDataDirectoryPath($lgJob).'/job_log.txt';			
+		return self::getJobMainDirectoryPath($lgJob).'/job_log.txt';			
 	} 
 
-	// Private Functions
-
-	private static function getJobMainDataDirectoryPath(lgJob $lgJob){
+	public static function getJobMainDirectoryPath(lgJob $lgJob){
 		global $basepath;
 		global $jobroot;
 
 		$jobAbsoluteStorage = $basepath.$jobroot;
-		$jobDirectory = $jobAbsoluteStorage.$lgJob->getId();
+		$jobDirectory = $jobAbsoluteStorage.($lgJob->getId());
 
 		return $jobDirectory;
 	}
+
+	// Private Functions
 
 	private static function createDirectoryStructure(lgJob $lgJob) {
 		// TODO: Improve error handling
 		// TODO: Add Checks
 		try {
+			mkdir($lgJob->getMainDirectoryPath());
 			mkdir($lgJob->getInputDataDirectoryPath());
 			mkdir($lgJob->getOutputDataDirectoryPath());
 			mkdir($lgJob->getScriptDirectoryPath());
@@ -81,6 +82,7 @@ class lgJobHelper {
 	}
 
 	private static function getLogicalFromDatabaseJob(dbJob $dbJob) {
-		return new lgJob($dbJob->getId());
+		$id = $dbJob->getId();
+		return new lgJob($id);
 	}
 }
