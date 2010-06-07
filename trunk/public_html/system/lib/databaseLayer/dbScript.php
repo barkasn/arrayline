@@ -41,6 +41,10 @@ class dbScript {
 		}
 	}
 
+	public function getId() {
+		return $this->id;
+	}
+
 	public function getExecutionCommand() {
 		return $this->executionCommand;
 	}
@@ -86,7 +90,7 @@ class dbScript {
 	public function setBody($scriptBody) {
 		global $pdo;
 		$stmt = $pdo->prepare('SELECT script_id FROM script_bodies WHERE script_id = :script_id;');
-		$stmt->bindValue(':script_id', $this->id;);
+		$stmt->bindValue(':script_id', $this->id);
 		$stmt->execute();
 		if ($stmt->fetch()) {
 			$stmt2 = $pdo->prepare('UPDATE script_bodies SET script_body = :script_body WHERE script_id = :script_id;');

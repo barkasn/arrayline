@@ -39,7 +39,7 @@ class dbJobStateHelper {
 		$dbJobState;
 		$stmt = $pdo->prepare('SELECT id FROM job_states WHERE internal_name = :internal_name;');
 		$stmt->bindValue(':internal_name', $internalName);
-		$stmt->exec()
+		$stmt->execute();
 		if ($row = $stmt->fetch()) {
 			$dbJobState = new dbJobState($row['id']);
 		}
