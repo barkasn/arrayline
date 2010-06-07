@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-class lgScriptset {
+class lgScriptSet {
 	private $scripts;
 	private $entryScript;
 
@@ -31,15 +31,15 @@ class lgScriptset {
 
 	public function appendScript(lgScript $lgScript) {
 		// TODO: add duplicate checks here
-		$scripts[] = $lgScript;
+		$this->scripts[] = $lgScript;
 	}
 
 	public function setEntryScript(lgScript $lgScript) {
 		// TODO: check script allready in set
-		$entryScript = $lgScript;
+		$this->entryScript = $lgScript;
 	}
 
 	public function getAllScripts() {
-		return $scripts;
+		return $this->scripts;
 	}
 }
