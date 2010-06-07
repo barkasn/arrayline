@@ -115,7 +115,7 @@ class dbDataset {
 	}
 
 	public function getDatasetState() {
-		return new dbDataset($this->datasetStateId);
+		return new dbDatasetState($this->datasetStateId);
 	}
 
 	public function setDatasetState(dbDatasetState $dbDatasetState) {
