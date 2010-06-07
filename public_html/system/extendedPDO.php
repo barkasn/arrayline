@@ -25,6 +25,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class ExtendedPDO extends PDO {
 	public function __construct($dsn,$username, $password, $driver_options = array()) {
 		parent::__construct($dsn, $username, $password, $driver_options);
+		if ( DEBUG ) {
+			parent::setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		} else {
+			parent::setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+		}
 	}
 
 }	

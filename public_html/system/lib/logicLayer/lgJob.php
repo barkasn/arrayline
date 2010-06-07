@@ -28,8 +28,13 @@ class lgJob {
 	private $scriptSet;
 
 	public function __construct($id) {
-		$this->dbJob = new dbJob($id);
-		$this->id = $id;
+		if ( $id === NULL ) {
+			die('lgJob: invalid id');
+		} else {
+			$this->dbJob = new dbJob($id);
+			$this->id = $id;
+		}
+	
 	}
 
 	public function __destruct() {
@@ -46,6 +51,11 @@ class lgJob {
 
 	public function setScriptSet(lgScriptset $lgScriptSet) {
 		$this->scriptSet = $lgScriptSet;
+	}
+
+
+	public function getMainDirectoryPath() {
+		return lgJobHelper::getJobMainDirectoryPath($this);
 	}
 
 	public function getInputDataDirectoryPath() {
