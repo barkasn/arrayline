@@ -48,6 +48,22 @@ class lgJob {
 		$this->scriptSet = $lgScriptSet;
 	}
 
+	public function getInputDataDirectoryPath() {
+		return lgJobHelper::getJobInputDataDirectoryPath($this);
+	}
+
+	public function getOutputDataDirectoryPath() {
+		return lgJobHelper::getJobOutputDataDirectoryPath($this);
+	}
+
+	public function getScriptDirectoryPath() {
+		return lgJobHelper::getJobScriptDirectoryPath($this);
+	}
+
+	public function getLogFilePath() {
+		return lgJobHelper::getJobLogFilePath($this);
+	}
+
 	public function schedule() {
 		
 	}

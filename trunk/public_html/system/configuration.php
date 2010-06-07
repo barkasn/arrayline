@@ -42,8 +42,13 @@ $classroot = 'system/lib/';
 // relative to $basepath
 $moduleroot = 'modules/';
 
-// The datastore directory, relative to the root
+// The datastore directory
+// relative to the $basepath
 $datastoreroot = 'datastore/';
+
+// The job direcotry, where pending jobs are stores
+// relative to the $basepath
+$jobroot = 'jobs/';
 
 // The minimum length of a username
 $minUsernameLength = 6;
