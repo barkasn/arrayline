@@ -1,0 +1,67 @@
+<?php
+/*
+
+Copyright 2010 Nikolaos Barkas
+
+This is part of Arrayline
+
+Arrayline is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Arrayline is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+*/
+
+class dbScriptHelper {
+
+	public static function getAllScripts() {
+
+		global $pdo;
+		$stmt = $pdo->prepare('SELECT id FROM scripts;');
+		$stmt->execute();
+		$dbScripts = array();
+		
+		while ($row = $stmt->fetch()) {
+			$dbScripts[] = new dbScript($row['id']);
+		}
+
+		return $dbScripts;
+	}
+
+	public static function getScriptByInternalName($internalName) {
+		global $pdo;
+		$stmt = $pdo->prepare('SELECT id FROM scripts WHERE internal_name = :internal_name;');
+		$stmt->bindValue(':internal_name', $internalName);
+		$stmt->execute();
+
+		$dbScript;
+		if ($row = $stmt->fetch()) {
+			$dbScript = new dbScript($row['id']);
+		}
+		return $dbScript;
+	}
+
+	public static function createScript($name) {
+		global $pdo;
+		$stmt = $pdo->prepare('INSERT INTO scripts(internal_name, filename, execution_command, can_be_called_directly) VALUES (:internal_name, :filename, :execution_command, :can_be_called_directly);');
+		$stmt->bindValue(':internal_name', $internalName);
+		$stmt->bindValue(':filename', $filename);
+		$stmt->bindValue(':execution_command', $executionsCommand);
+		$stmt->bindValue(':can_be_called_directly', $canBeCalledDirectly);
+		$stmt->execute();
+
+		$id = $pdo->lastInsertId();
+		return new dbScript($id);
+	}
+
+
+}
