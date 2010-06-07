@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 class dbScript {
+	private $id;
 	private $internalName;
 	private $filename;
 	private $executionCommand;
@@ -29,14 +30,18 @@ class dbScript {
 
 	public function __construct($id) {
 		global $pdo;
+
 		$stmt = $pdo->prepare('SELECT internal_name, filename, execution_command, can_be_called_directly FROM scripts WHERE id = :id;');
 		$stmt->bindValue(':id', $id);
 		$stmt->execute();
+
 		if ($row = $stmt->fetch()) {
 			$this->internalName = $row['internal_name'];
 			$this->filename = $row['filename'];
 			$this->executionCommand = $row['execution_command'];
 			$this->canBeCalledDirectly = $row['can_be_called_directly'];
+			$this->id = $id;
+
 			$this->dirty = false;	
 		}
 	}
@@ -55,7 +60,7 @@ class dbScript {
 	}
 
 	public function getScriptFilename() {
-		return $this->scriptFilename;
+		return $this->filename;
 	}
 
 	public function setScriptFilename($value) {
@@ -77,11 +82,11 @@ class dbScript {
  	// required
 	public function getBody() {
 		global $pdo;
-		$stmt = $pdo->prepare('SELECT script_body FROM script_bodies WHERE script_id = :script_id;');
+		$stmt = $pdo->prepare('SELECT script_body FROM scripts_bodies WHERE script_id = :script_id;');
 		$stmt->bindValue(':script_id', $this->id);
 		$stmt->execute();
 		
-		if ($row = $stmt->execute()) {
+		if ($row = $stmt->fetch()) {
 			return $row['script_body'];
 		}
 		return '';
@@ -89,7 +94,7 @@ class dbScript {
 
 	public function setBody($scriptBody) {
 		global $pdo;
-		$stmt = $pdo->prepare('SELECT script_id FROM script_bodies WHERE script_id = :script_id;');
+		$stmt = $pdo->prepare('SELECT script_id FROM scripts_bodies WHERE script_id = :script_id;');
 		$stmt->bindValue(':script_id', $this->id);
 		$stmt->execute();
 		if ($stmt->fetch()) {

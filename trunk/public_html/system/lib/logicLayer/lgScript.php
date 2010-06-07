@@ -28,6 +28,9 @@ class lgScript {
 	
 	public function __construct($id) {
 		$this->dbScript = new dbScript($id);
+		if ($this->dbScript === NULL) {
+			die('lgScript: Invalid Script Id');
+		} 
 		$this->id = $id;
 	}
 
@@ -52,7 +55,7 @@ class lgScript {
 	}
 
 	public function getBody() {
-		return $this->dbScript()->getBody();
+		return $this->dbScript->getBody();
 	}	
 		
 }

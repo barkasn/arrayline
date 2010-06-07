@@ -74,20 +74,20 @@ class lgJob {
 	}
 
 	public function schedule() {
-		// Steps to schedule:
-		// 1. Save scripts from scriptset on the HD
 		$this->saveScripts();
 
-		// 2. Save the input dataset in the appropriate directory
-		// 3. Update job status from TO_BE_SETUP to TO_BE_RUN
+		// TODO:
+		// 1. Save the input dataset in the appropriate directory
+		// 1. Update job status to TO_BE_RUN
 	}
 
 	// Private functions
 
 	private function saveScripts() {
 		$lgScripts = $this->scriptSet->getAllScripts();
+
 		if (!empty($lgScripts)) {
-			foreach ($scripts as $lgScript) {
+			foreach ($lgScripts as $lgScript) {
 				$this->saveScript($lgScript);			
 			}
 		}
@@ -96,9 +96,9 @@ class lgJob {
 	private function saveScript(lgScript $lgScript) {
 		$scriptDir = $this->getScriptDirectoryPath();
 		$filename = $lgScript->getScriptFilename();
-		
 
-		$scriptFullPath = $scriptDir.$filename;
+		$scriptFullPath = $scriptDir.'/'.$filename;
+
 		$scriptBody = $lgScript->getBody();
 
 		$fp = fopen($scriptFullPath, 'w');
