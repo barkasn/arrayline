@@ -84,9 +84,9 @@ class lgJob {
 
 	// Private functions
 
-	private funciton saveScripts() {
-		$lgScripts = $this->scriptSet->getAllSripts();
-		if (!$empty($scripts)) {
+	private function saveScripts() {
+		$lgScripts = $this->scriptSet->getAllScripts();
+		if (!empty($lgScripts)) {
 			foreach ($scripts as $lgScript) {
 				$this->saveScript($lgScript);			
 			}
