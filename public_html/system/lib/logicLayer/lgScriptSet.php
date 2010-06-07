@@ -38,4 +38,8 @@ class lgScriptset {
 		// TODO: check script allready in set
 		$entryScript = $lgScript;
 	}
+
+	public function getAllScripts() {
+		return $scripts;
+	}
 }

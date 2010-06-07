@@ -35,4 +35,24 @@ class lgScript {
 		$this->dbScript->save();
 	}
 
+	public function getId() {
+		return $this->id;
+	}
+
+	public function getExecutionCommand() {
+		return $this->dbScript->getExecutionCommand();
+	}
+
+	public function getScriptFilename() {
+		return $this->dbScript->getScriptFilename();
+	}
+
+	public function getCanBeCalledDirectly() {
+		return $this->dbScript->getrCanBeCalledDirectly();
+	}
+
+	public function getBody() {
+		return $this->dbScript()->getBody();
+	}	
+		
 }
