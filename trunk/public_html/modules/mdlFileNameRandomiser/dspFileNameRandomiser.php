@@ -35,7 +35,7 @@ class dspFileNameRandomiser extends lgDatasetProcessor{
 		if ($postArray['processoraction'] == 'execute') {
 			$this->scheduleJob($lgRequest);
 		} else {
-			$this->showConfirmationForm($lgRequest)
+			$this->showConfirmationForm($lgRequest);
 		}
 	}
 
@@ -52,8 +52,8 @@ class dspFileNameRandomiser extends lgDatasetProcessor{
 		$dataset = new lgDataset($postarray['datasetid']);
 
 		// Job scripts
-		$lgScript = lgScriptHelper::getScriptByName('randomizer');
-		$lgScriptHelper = lgScriptHelper::getScriptByName('randomizerhelper');
+		$lgScript = lgScriptHelper::getScriptByInternalName('randomizer');
+		$lgScriptHelper = lgScriptHelper::getScriptByInternalName('randomizerhelper');
 
 		$lgScriptSet = new lgScriptSet();
 		$lgScriptSet->appendScript($lgScript);
@@ -81,8 +81,8 @@ class dspFileNameRandomiser extends lgDatasetProcessor{
 		$hiddenVals = array (
 			'requeststring' => 'createdataset',
 			'processorid' => $this->getId(),
-			'processoraction' => 'execute'
-			'datasetid' => $postarray['datasetid'];
+			'processoraction' => 'execute',
+			'datasetid' => $postarray['datasetid'],
 		);
 		$form->addFields(lgHtmlFormHelper::getHiddenFieldsFromArray($hiddenVals));
 
