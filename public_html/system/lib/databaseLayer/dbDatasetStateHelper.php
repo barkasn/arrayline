@@ -38,7 +38,7 @@ class dbDatasetStateHelper {
 		$stmt->bindValue(':internal_name', $internalName);
 		$stmt->execute();
 		if ($row = $stmt->fetch()) {
-			return new dbDataset($row['id']);
+			return new dbDatasetState($row['id']);
 		} else {
 			return NULL;
 		}
