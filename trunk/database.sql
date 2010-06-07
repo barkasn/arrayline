@@ -3,17 +3,11 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 04, 2010 at 01:06 PM
+-- Generation Time: Jun 07, 2010 at 02:25 PM
 -- Server version: 5.1.37
 -- PHP Version: 5.2.10-2ubuntu6.4
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `arrayline`
@@ -115,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `run_end` date NOT NULL,
   `comment` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=51 ;
 
 -- --------------------------------------------------------
 
@@ -203,19 +197,20 @@ CREATE TABLE IF NOT EXISTS `roles` (
 
 CREATE TABLE IF NOT EXISTS `scripts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `internal_name` varchar(255) NOT NULL,
   `filename` varchar(255) NOT NULL,
   `execution_command` varchar(255) NOT NULL,
   `can_be_called_directly` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `scriptsbodies`
+-- Table structure for table `scripts_bodies`
 --
 
-CREATE TABLE IF NOT EXISTS `scriptsbodies` (
+CREATE TABLE IF NOT EXISTS `scripts_bodies` (
   `script_id` int(11) NOT NULL,
   `script_body` text NOT NULL,
   UNIQUE KEY `script_id` (`script_id`)
@@ -259,3 +254,4 @@ CREATE TABLE IF NOT EXISTS `users` (
   `last_access` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+
