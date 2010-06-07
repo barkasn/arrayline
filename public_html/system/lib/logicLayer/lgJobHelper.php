@@ -18,12 +18,28 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 */
-class lgJobHelper {
-	public static function createNewJob(){
-		//Create the database job
-		$dbJob = dbJobHelper::createNewJob();
 
+class lgJobHelper {
+	const defaultJobState = 'toBeSetup';
+	const autorunDefault = 0;
+	const runStartDefault = 0;
+	const runEndDefault = 0;
+	const commentDefault = '';
+	
+	public static function createNewJob($description){
+		$dbJobState = dbJobStateHelper::getJobStateByInternalName(self::defaultJobState);
+		$dbJob = dbJobHelper::createNewJob($dbJobState, $description, self::autorunDefault,
+			 0, self::runStartDefault, self::runEndDefault, self::commentDefault);
+
+		//TODO: Create Directory Structure
+
+		$lgJob = self::getLogicalFromDatabaseJob($dbJob);
+		return $lgJob;	
+	}
+
+
+	private static function getLogicalFromDatabaseJob(dbJob $dbJob) {
+		return new lgJob($dbJob->getId());
 	}
 }

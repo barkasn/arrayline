@@ -24,8 +24,7 @@ class dbJobHelper {
 	private static function getAllJobs() {
 		global $pdo;
 		$stmt = $pdo->prepare('SELECT id FROM jobs;');
-		$stmt->execute()
-;
+		$stmt->execute();
 		$jobObjects = array();
 		while($row = $stmt->fetch() ) {
 			$jobObjects[] = new dbJobObject($row['id']);
@@ -45,10 +44,10 @@ class dbJobHelper {
 		return $jobObjects;
 	}
 
-	private static function createNewJob($dbJobState, $description, $autorun, $runStart, $runEnd, $comment ) {
+	public static function createNewJob($dbJobState, $description, $autorun, $runStart, $runEnd, $comment ) {
 		global $pdo;
 		$stmt = $pdo->prepare('INSERT INTO jobs(job_state_id, description, autorun, run_start, run_end, comment) VALUES (:job_state_id, :description, :autorun, :run_start, :run_end, :comment);');
-		$stmt->bindValue(:job_state_id', $dbJobState->getId());
+		$stmt->bindValue(':job_state_id', $dbJobState->getId());
 		$stmt->bindValue(':description', $description);
 		$stmt->bindValue(':autorun', $autorun);
 		$stmt->bindValue(':run_start', $runStart);

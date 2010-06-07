@@ -27,13 +27,13 @@ class lgJob {
 	private $inputDataset;
 	private $scriptSet;
 
-	public funciton __construct($id) {
-		$dbJob = new dbJob($id);
+	public function __construct($id) {
+		$this->dbJob = new dbJob($id);
 		$this->id = $id;
 	}
 
 	public function __destruct() {
-		$dbJob->save();
+		$this->dbJob->save();
 	}
 
 	public function getId() {

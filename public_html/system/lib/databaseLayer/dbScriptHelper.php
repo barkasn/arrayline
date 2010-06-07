@@ -50,7 +50,7 @@ class dbScriptHelper {
 		return $dbScript;
 	}
 
-	public static function createScript($internalName, $filename, $executionCommand, $canBeCalledDirectly) {
+public static function createScript($internalName, $filename, $executionCommand, $canBeCalledDirectly) {
 		global $pdo;
 		$stmt = $pdo->prepare('INSERT INTO scripts(internal_name, filename, execution_command, can_be_called_directly) VALUES (:internal_name, :filename, :execution_command, :can_be_called_directly);');
 		$stmt->bindValue(':internal_name', $internalName);

@@ -64,7 +64,7 @@ class dbJob {
 	}
 
 	public function getDescription() {
-		retunr $this->description;
+		return $this->description;
 	}
 
 	public function setDescription($value) {

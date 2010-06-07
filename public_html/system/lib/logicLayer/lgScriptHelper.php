@@ -30,13 +30,19 @@ class lgScriptHelper {
 	}
 
 	public function getScriptByInternalName($internalName) {
-		$dbScript = dbScriptHelper:getScriptByInternalName($internalName);
-		return self::getLogicalFromDatabaseScript($dbScript);
+		$lgScript;
+
+		$dbScript = dbScriptHelper::getScriptByInternalName($internalName);
+		if ($dbScript) {
+			$lgScript = self::getLogicalFromDatabaseScript($dbScript);
+		}
+
+		return $lgScript;
 	}
 
 	public function createScript($internalName, $filename, $executionCommand, $canBeCalledDirectly) {
 		$dbScript = dbScriptHelper::createScript($internalName, $filename, $executionCommand, $canBeCalledDirectly);
-		return self::getLogicalScriptFromDatabaseScrip($dbScript);
+		return self::getLogicalScriptFromDatabaseScript($dbScript);
 	}
 
 	private static function getLogicalFromDatabaseScripts($scripts) {
