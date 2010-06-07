@@ -38,6 +38,9 @@ class lgJobHelper {
 		return $lgJob;	
 	}
 
+	private static function createDirectoryStructure($jobId) {
+
+	}
 
 	private static function getLogicalFromDatabaseJob(dbJob $dbJob) {
 		return new lgJob($dbJob->getId());
