@@ -53,7 +53,6 @@ class lgJob {
 		$this->scriptSet = $lgScriptSet;
 	}
 
-
 	public function getMainDirectoryPath() {
 		return lgJobHelper::getJobMainDirectoryPath($this);
 	}
@@ -75,7 +74,36 @@ class lgJob {
 	}
 
 	public function schedule() {
+		// Steps to schedule:
+		// 1. Save scripts from scriptset on the HD
+		$this->saveScripts();
+
+		// 2. Save the input dataset in the appropriate directory
+		// 3. Update job status from TO_BE_SETUP to TO_BE_RUN
+	}
+
+	// Private functions
+
+	private funciton saveScripts() {
+		$lgScripts = $this->scriptSet->getAllSripts();
+		if (!$empty($scripts)) {
+			foreach ($scripts as $lgScript) {
+				$this->saveScript($lgScript);			
+			}
+		}
+	}
+
+	private function saveScript(lgScript $lgScript) {
+		$scriptDir = $this->getScriptDirectoryPath();
+		$filename = $lgScript->getScriptFilename();
 		
+
+		$scriptFullPath = $scriptDir.$filename;
+		$scriptBody = $lgScript->getBody();
+
+		$fp = fopen($scriptFullPath, 'w');
+		fwrite($fp,$scriptBody);
+		fclose($fp);
 	}
 }
 
