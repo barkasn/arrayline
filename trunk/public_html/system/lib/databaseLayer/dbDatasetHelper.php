@@ -60,7 +60,9 @@ class dbDatasetHelper {
 	
 	public static function createDataset($jobId, $parentDatasetId, $datasetStateId, $ownerUserId, $datasetProcessorId) {
 		global $pdo;
+
 		$stmt = $pdo->prepare('INSERT INTO datasets(job_id, parent_dataset_id, dataset_state_id, owner_user_id, dataset_processor_id) VALUES (:job_id, :parent_dataset_id, :dataset_state_id, :owner_user_id, :dataset_processor_id);');
+
 		$stmt->bindValue(':job_id', $jobId);
 		$stmt->bindValue(':parent_dataset_id',$parentDatasetId);
 		$stmt->bindValue(':dataset_state_id', $datasetStateId);
