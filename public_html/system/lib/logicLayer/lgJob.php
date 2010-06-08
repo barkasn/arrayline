@@ -86,7 +86,8 @@ class lgJob {
 	}
 
 	private function setToRun() {
-		//TODO: Implement
+		$dbSetToRunJobState = dbJobStateHelper::getJobStateByInternalName('toBeRun');
+		$this->dbJob->setJobState($dbSetToRunJobState);
 	}
 
 	private function saveScripts() {
@@ -107,6 +108,7 @@ class lgJob {
 
 		$scriptBody = $lgScript->getBody();
 
+		// TODO: Fix problem with CRLF
 		$fp = fopen($scriptFullPath, 'w');
 		fwrite($fp,$scriptBody);
 		fclose($fp);
