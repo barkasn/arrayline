@@ -105,10 +105,12 @@ class lgJob {
 		$filename = $lgScript->getScriptFilename();
 
 		$scriptFullPath = $scriptDir.'/'.$filename;
-
 		$scriptBody = $lgScript->getBody();
 
-		// TODO: Fix problem with CRLF
+		// Remove carriage returns from script body
+		// when followed by new line
+		$scriptBody = str_replace("\r\n","\n", $scriptBody);
+
 		$fp = fopen($scriptFullPath, 'w');
 		fwrite($fp,$scriptBody);
 		fclose($fp);
