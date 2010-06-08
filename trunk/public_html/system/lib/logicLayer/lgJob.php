@@ -79,6 +79,21 @@ class lgJob {
 		$this->setToRun();
 	}
 
+	public function beginRun() {
+		//TODO: Implement this
+	}
+
+	public function checkRunComplete() {
+		//TODO: Implement this
+		// check the lock file
+	}
+
+	public function postProcess() {
+		// Create new dataset
+		// and place resulting data there
+		// then delete input and output data
+	}
+
 	// Private functions
 	private function saveInputDataset() {
 		$inputDir = $this->getInputDataDirectoryPath();

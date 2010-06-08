@@ -28,7 +28,6 @@ class lgJobHelper {
 	const commentDefault = '';
 	
 	// Public Functions
-
 	public static function createNewJob($description){
 		$dbJobState = dbJobStateHelper::getJobStateByInternalName(self::defaultJobState);
 		$dbJob = dbJobHelper::createNewJob($dbJobState, $description, self::autorunDefault,
@@ -38,6 +37,14 @@ class lgJobHelper {
 		self::createDirectoryStructure($lgJob);
 
 		return $lgJob;	
+	}
+
+	public static function getJobsToBeRun() {
+		//TODO: implement
+	}
+
+	public static function getJobsToBePostProcessed() {
+		//TODO: IMplemenr
 	}
 
 	public static function getJobInputDataDirectoryPath(lgJob $lgJob) {
