@@ -34,8 +34,37 @@ class lgJobScheduler {
 		return self::$instance;
 	}		
 
-	public function runPendingJobs() {
-		//TODO: Implement this
+	public function obtainLockOrExit() {
+		//TODO: implement
+	} 
+
+	public function releaseLock() {
+		//TODO: implement
+	}
+
+	public function updateJobStatii() {
+		//TODO: implement
+		//for each job with jobRUnning status check if
+		// finished flag file on disk existas
+		// update its status to toBeProcessed
+	}
+
+	public function runPendingJobsAsync() {
+		$lgPendingJobs = lgJobHelper::getJobsToBeRun();
+		if (!empty($lgPendingJobs)) {
+			foreach ($lgPendingJobs as $job) {
+				$job->beginRun();	
+			}
+		}
+	}
+
+	public function runPostProcessingJobs() {
+		$lgJobsToPostProcess = lgJobHelper::getJobsToBePostProcessed();
+		if (!empty($lgJobs)) {
+			foreach ($lgJobs as $job) {
+				$job->postProcess();
+			}
+		}
 	}
 
 }
