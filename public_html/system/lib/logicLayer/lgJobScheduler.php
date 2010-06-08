@@ -20,9 +20,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
+class lgJobScheduler {
+	private static $instance;
 
-require_once('system/includeall.php');
-$lgJobScheduler = lgJobScheduler::getInstance();
-$lgJobScheduler->runPendingJobs();
+	private function __construct() {
 
+	}
+
+	public static function getInstance() {
+		if (!self::$instance) {
+			self::$instance = new lgJobScheduler();
+		}
+		return self::$instance;
+	}		
+
+	public function runPendingJobs() {
+		//TODO: Implement this
+	}
+
+}
 
