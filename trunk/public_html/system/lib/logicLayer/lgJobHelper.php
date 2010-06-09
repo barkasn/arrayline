@@ -22,6 +22,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class lgJobHelper {
 	const defaultJobState = 'toBeSetup';
+	const toBeRunJobState = 'toBeRun';
+	const runningJobState = 'processRunning';
+	const toBePostProcessedState = 'processComplete';
 	const autorunDefault = 0;
 	const runStartDefault = 0;
 	const runEndDefault = 0;
@@ -40,11 +43,18 @@ class lgJobHelper {
 	}
 
 	public static function getJobsToBeRun() {
-		//TODO: implement
+		$dbJobState = dbJobStateHelper::getJobStateByInternalName(self::toBeRunJobState);
+		return self::getLogicalJobsByDatabaseState($dbJobState);
 	}
 
 	public static function getJobsToBePostProcessed() {
-		//TODO: IMplemenr
+		$dbJobState = dbJobStateHelper::getJobStateByInternalName(self::toBePostProcessedState);
+		return self::getLogicalJobsByDatabaseState($dbJobState);
+	}
+
+	public static function getRunningJobs() {
+		$dbJobState = dbJobStateHelper::getJobStateByInternalName(self::runningJobState);
+		return self::getLogicalJobsByDatabaseState($dbJobState);
 	}
 
 	public static function getJobInputDataDirectoryPath(lgJob $lgJob) {
@@ -75,6 +85,13 @@ class lgJobHelper {
 
 	// Private Functions
 
+	private static function getLogicalJobsByDatabaseState($dbJobState) {
+		$dbJobs = dbJobStateHelper::getJobsByState($dbJobState);
+		$lgJobs = getLogicalFromDatabaseJobs($dbJobs);
+		return $lgJobs;
+
+	}
+
 	private static function createDirectoryStructure(lgJob $lgJob) {
 		// TODO: Improve error handling
 		// TODO: Add Checks
@@ -86,6 +103,15 @@ class lgJobHelper {
 		} catch (Exceptions $e) {
 			die('An error occured while attempting to create a direcotry for the new Job: '. $e->getMessage());
 		}
+	}
+
+	private static function getLogicalFromDatabaseJobs($dbJobs) {
+		$lgJobs  = array();
+		if (!empty($dbJobs)) {
+			foreach ($dbJobs as $dbJob) {
+				$lgJobs[] = self::getLogicalFromDatabaseJob($dbJob);
+			}
+		}	
 	}
 
 	private static function getLogicalFromDatabaseJob(dbJob $dbJob) {
