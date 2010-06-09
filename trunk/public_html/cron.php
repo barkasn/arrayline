@@ -36,7 +36,7 @@ if ( $lgJobScheduler->obtainLock() ) {
 
 	// Check if jobs marked as running, either from the ones just started,
 	// or from previous runs are complete and update their status to toBePostProcessed
-	$lgJobScheduler->updateJobStatii();
+	$lgJobScheduler->updateStatusOfJobs();
 
 	// Commence Asynchrous post processing of jobs
 	$lgJobScheculer->runPostProcessingJobsAsync();
