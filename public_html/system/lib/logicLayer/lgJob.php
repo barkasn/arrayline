@@ -25,7 +25,6 @@ class lgJob {
 	private $dbJob;
 	private $id;
 	private $inputDataset;
-	private $scriptSet;
 
 	public function __construct($id) {
 		if ( $id === NULL ) {
@@ -50,7 +49,7 @@ class lgJob {
 	}
 
 	public function setScriptSet(lgScriptset $lgScriptSet) {
-		$this->scriptSet = $lgScriptSet;
+		$this->dbJob->setScriptSet(new dbScriptSet($lgScriptSet->getId());
 	}
 
 	public function getMainDirectoryPath() {
@@ -80,22 +79,15 @@ class lgJob {
 	}
 
 	public function beginRun() {
-		//TODO: Implement this
-		// Check status first
-		// Update status
+		// TODO: Implement
 	}
 
 	public function checkRunComplete() {
-		//TODO: Implement this
-		// Check status running
-		// check the JOB_COMPLETE FILE
-		// Update status
+		// TODO: Implement
 	}
 
 	public function postProcess() {
-		// Create new dataset
-		// and place resulting data there
-		// then delete input and output data
+		//TODO: Implement
 	}
 
 	// Private functions
@@ -110,10 +102,12 @@ class lgJob {
 	}
 
 	private function saveScripts() {
-		$lgScripts = $this->scriptSet->getAllScripts();
+		$dbScriptSet = $this->dbJob->getScriptSet();
+		$dbScripts = $dbScriptSet->getScripts();
 
-		if (!empty($lgScripts)) {
-			foreach ($lgScripts as $lgScript) {
+		if (!empty($dbScripts)) {
+			foreach ($dbScripts as $dbScript) {
+				$lgScript = new lgScript($dbScript->getId());
 				$this->saveScript($lgScript);			
 			}
 		}
