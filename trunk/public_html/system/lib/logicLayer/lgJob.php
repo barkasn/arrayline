@@ -81,11 +81,15 @@ class lgJob {
 
 	public function beginRun() {
 		//TODO: Implement this
+		// Check status first
+		// Update status
 	}
 
 	public function checkRunComplete() {
 		//TODO: Implement this
-		// check the lock file
+		// Check status running
+		// check the JOB_COMPLETE FILE
+		// Update status
 	}
 
 	public function postProcess() {

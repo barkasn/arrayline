@@ -25,9 +25,23 @@ require_once('system/includeall.php');
 $lgJobScheduler = lgJobScheduler::getInstance();
 
 if ( $lgJobScheduler->obtainLock() ) {
-	$lgJobScheduler->updateJobStatii();
+
+	// Commence asynchronous running of jobs that are waiting to run
+	// do not wait for jobs to complete return immediately
 	$lgJobScheduler->runPendingJobsAsync();
+
+	// TODO: introduce a 1 second delay here so that
+	// jobs which run almost instanteniously get the chance
+	// to be run and postprocessed all in one go
+
+	// Check if jobs marked as running, either from the ones just started,
+	// or from previous runs are complete and update their status to toBePostProcessed
+	$lgJobScheduler->updateJobStatii();
+
+	// Commence Asynchrous post processing of jobs
 	$lgJobScheculer->runPostProcessingJobsAsync();
-	$lgJobSchduler->releaseLock();
+
+	// Release the lock
+	$lgJobScheduler->releaseLock();
 }	
 
