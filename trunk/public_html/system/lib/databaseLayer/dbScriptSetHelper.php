@@ -26,10 +26,10 @@ class dbScriptSetHelper {
 	public static function createScriptSet($description) {
 		global $pdo;
 		$stmt = $pdo->prepare('INSERT INTO script_sets(description) VALUES (:description);');
-		$stmt->bindValue(':description');
+		$stmt->bindValue(':description', $description);
 		$stmt->execute();
 		
-		$id = $pdo->lastInstertId();
+		$id = $pdo->lastInsertId();
 		return new dbScriptSet($id);
 	}
 

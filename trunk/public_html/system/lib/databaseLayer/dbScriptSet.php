@@ -106,13 +106,26 @@ class dbScriptSet {
 		global $pdo;
 
 		if ($this->dirty) {
-			$stmt = $pdo->preapare('UPDATE script_sets SET description = :description, entry_script_id = :entry_script_id WHERE id = :id;');
+			$stmt = $pdo->prepare('UPDATE script_sets SET description = :description, entry_script_id = :entry_script_id WHERE id = :id;');
 			$stmt->bindValue(':description', $this->description);
 			$stmt->bindValue(':entry_script_id', $this->entryScriptId);
 			$stmt->bindValue(':id', $this->id);
 			$stmt->execute();
 
-			$htis->dirty =  false;
+			$stmt2 = $pdo->prepare('DELETE FROM script_sets_scripts WHERE script_set_id = :script_set_id;');
+			$stmt2->bindValue(':script_set_id', $this->id);
+			$stmt2->execute();
+
+			if (!empty($this->scriptIds)) {
+				foreach ($this->scriptIds as $scriptId) {
+					$stmt3 = $pdo->prepare('INSERT INTO script_sets_scripts(script_id, script_set_id) VALUES (:script_id, :script_set_id);');
+					$stmt3->bindValue(':script_id', $scriptId);
+					$stmt3->bindValue(':script_set_id', $this->id);
+
+					$stmt3->execute();
+				}
+			}
+			$this->dirty =  false;
 		}
 	}
 
