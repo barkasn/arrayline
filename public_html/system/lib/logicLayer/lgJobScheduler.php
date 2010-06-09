@@ -60,7 +60,8 @@ class lgJobScheduler {
 		$dbLockAttribute->save();
 	}
 
-	public function updateJobStatii() {
+	// "status" apparently does not have stattii as plural (OED)
+	public function updateStatusOfJobs() {
 		$lgRunningJobs  = lgJobHelper::getRunningJobs();
 		if (!empty($lgRunningJobs as $job)) {
 			foreach ($lgRunningJobs as $job) {
