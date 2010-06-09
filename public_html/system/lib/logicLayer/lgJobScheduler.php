@@ -36,7 +36,6 @@ class lgJobScheduler {
 		return self::$instance;
 	}		
 
-
 	// This is not exactly atomic, but it should suffice given than
 	// the cron job only runs every couple of minutes
 	// TODO: Improve implementation 
@@ -51,7 +50,6 @@ class lgJobScheduler {
 		}
 		return true;
 	} 
-	
 
 	// This is not exactly atomic, but it should suffice given than
 	// the cron job only runs every couple of minutes
