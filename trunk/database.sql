@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 08, 2010 at 10:34 AM
+-- Generation Time: Jun 09, 2010 at 05:09 PM
 -- Server version: 5.1.37
 -- PHP Version: 5.2.10-2ubuntu6.4
 
@@ -14,6 +14,25 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 CREATE DATABASE `arrayline` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `arrayline`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `attributes`
+--
+
+CREATE TABLE IF NOT EXISTS `attributes` (
+  `key` varchar(255) NOT NULL,
+  `value` text NOT NULL,
+  PRIMARY KEY (`key`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `attributes`
+--
+
+INSERT INTO `attributes` (`key`, `value`) VALUES
+('jobSchedulerLock', '0');
 
 -- --------------------------------------------------------
 
@@ -106,12 +125,14 @@ CREATE TABLE IF NOT EXISTS `datasets` (
   `owner_user_id` int(11) NOT NULL,
   `dataset_processor_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=42 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=43 ;
 
 --
 -- Dumping data for table `datasets`
 --
 
+INSERT INTO `datasets` (`id`, `job_id`, `parent_dataset_id`, `dataset_state_id`, `owner_user_id`, `dataset_processor_id`) VALUES
+(42, NULL, NULL, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -155,8 +176,9 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `run_start` date NOT NULL,
   `run_end` date NOT NULL,
   `comment` varchar(255) NOT NULL,
+  `script_set_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=89 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=122 ;
 
 --
 -- Dumping data for table `jobs`
@@ -282,6 +304,41 @@ CREATE TABLE IF NOT EXISTS `roles` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `script_sets`
+--
+
+CREATE TABLE IF NOT EXISTS `script_sets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `description` varchar(255) NOT NULL,
+  `entry_script_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=35 ;
+
+--
+-- Dumping data for table `script_sets`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `script_sets_scripts`
+--
+
+CREATE TABLE IF NOT EXISTS `script_sets_scripts` (
+  `script_set_id` int(11) NOT NULL,
+  `script_id` int(11) NOT NULL,
+  UNIQUE KEY `script_set_id` (`script_set_id`,`script_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `script_sets_scripts`
+--
+
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `scripts`
 --
 
@@ -299,7 +356,7 @@ CREATE TABLE IF NOT EXISTS `scripts` (
 --
 
 INSERT INTO `scripts` (`id`, `internal_name`, `filename`, `execution_command`, `can_be_called_directly`) VALUES
-(1, 'randomizer', 'randomizer.sh', './ randomizer.sh', 1),
+(1, 'randomizer', 'randomizer.sh', './randomizer.sh', 1),
 (2, 'randomizerhelper', 'randomizerhelper.sh', '', 0);
 
 -- --------------------------------------------------------
@@ -319,7 +376,7 @@ CREATE TABLE IF NOT EXISTS `scripts_bodies` (
 --
 
 INSERT INTO `scripts_bodies` (`script_id`, `script_body`) VALUES
-(1, 'Randomizer body'),
+(1, '#! /bin/bash\r\n\r\ncp ../input_data/* ../output_data\r\ncd ../output_data\r\nfor file in `ls` \r\ndo\r\n        randomfilename=$RANDOM\r\n        mv $file $randomfilename\r\ndone\r\ncd ..\r\ntouch JOB_COMPLETE\r\n'),
 (2, 'Randomizer Helper body');
 
 -- --------------------------------------------------------
