@@ -63,10 +63,13 @@ class lgJobScheduler {
 	}
 
 	public function updateJobStatii() {
-		//TODO: implement
-		//for each job with jobRUnning status check if
-		// finished flag file on disk existas
-		// update its status to toBeProcessed
+		$lgRunningJobs  = lgJobHelper::getRunningJobs();
+		if (!empty($lgRunningJobs as $job)) {
+			foreach ($lgRunningJobs as $job) {
+				$job->checkRunComplete();
+			}
+		}
+
 	}
 
 	public function runPendingJobsAsync() {
@@ -78,7 +81,7 @@ class lgJobScheduler {
 		}
 	}
 
-	public function runPostProcessingJobs() {
+	public function runPostProcessingJobsAsync() {
 		$lgJobsToPostProcess = lgJobHelper::getJobsToBePostProcessed();
 		if (!empty($lgJobs)) {
 			foreach ($lgJobs as $job) {
