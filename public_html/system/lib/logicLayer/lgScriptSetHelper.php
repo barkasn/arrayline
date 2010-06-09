@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class lgScriptSetHelper {
 	public static function createScriptSet($description) {
-		$dbScriptSet = dbScriptHelper::createScriptSet($description);
+		$dbScriptSet = dbScriptSetHelper::createScriptSet($description);
 		return new lgScriptSet($dbScriptSet->getId());
 	}	
 

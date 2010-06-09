@@ -33,7 +33,6 @@ class lgJob {
 			$this->dbJob = new dbJob($id);
 			$this->id = $id;
 		}
-	
 	}
 
 	public function __destruct() {
@@ -49,7 +48,7 @@ class lgJob {
 	}
 
 	public function setScriptSet(lgScriptset $lgScriptSet) {
-		$this->dbJob->setScriptSet(new dbScriptSet($lgScriptSet->getId());
+		$this->dbJob->setScriptSet(new dbScriptSet($lgScriptSet->getId()));
 	}
 
 	public function getMainDirectoryPath() {

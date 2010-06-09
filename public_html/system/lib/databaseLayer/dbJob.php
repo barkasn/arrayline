@@ -115,8 +115,10 @@ class dbJob {
 
 	public function save() {
 		global $pdo;
+
 		if ($this->dirty) {
 			$stmt = $pdo->prepare('UPDATE jobs SET job_state_id = :job_state_id, description = :description, autorun = :autorun, run_start = :run_start, run_end = :run_end, comment = :comment, script_set_id = :script_set_id  WHERE id = :id;');
+
 			$stmt->bindValue(':job_state_id', $this->jobStateId);
 			$stmt->bindValue(':description', $this->description);
 			$stmt->bindValue(':autorun', $this->autorun);

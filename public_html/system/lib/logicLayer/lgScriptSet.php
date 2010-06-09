@@ -26,7 +26,9 @@ class lgScriptSet {
 	private $dbScriptSet;
 
 	public function __construct($id) {
-		$this->dbScriptSet = new dbScriptSet($id);
+		if (! $this->dbScriptSet = new dbScriptSet($id)) {
+			die('lgScriptSet: Database record not found');
+		}
 		$this->id = $id;
 	}
 
@@ -34,12 +36,20 @@ class lgScriptSet {
 		$this->dbScriptSet->save();
 	}
 
-	public function appendScript(lgScript $lgScript)
-		$this->dbScriptSet->appendScript(new dbScript($lgScript->getId));
+	public function forceSave() {
+		$this->dbScriptSet->save();
+	}
+
+	public function getId() {
+		return $this->id;
+	}
+
+	public function appendScript(lgScript $lgScript) {
+		$this->dbScriptSet->appendScript(new dbScript($lgScript->getId()));
 	}
 
 	public function setEntryScript(lgScript $lgScript) {
-		$this->dbScriptSet->setEntryScript(new dbScript($lgScript->getId));
+		$this->dbScriptSet->setEntryScript(new dbScript($lgScript->getId()));
 	}
 
 	public function getAllScripts() {
