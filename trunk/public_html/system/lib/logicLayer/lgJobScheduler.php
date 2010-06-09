@@ -21,6 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 class lgJobScheduler {
+	const databaseLockKey = 'jobSchedulerLock';
+
 	private static $instance;
 
 	private function __construct() {
@@ -34,12 +36,30 @@ class lgJobScheduler {
 		return self::$instance;
 	}		
 
-	public function obtainLockOrExit() {
-		//TODO: implement
-	} 
 
+	// This is not exactly atomic, but it should suffice given than
+	// the cron job only runs every couple of minutes
+	// TODO: Improve implementation 
+	public function obtainLock() {
+
+		$dbLockAttribute = new dbAttribute(self::databaseLockKey);
+		if ($dbLockAttribute->getValue() == '1') {
+			return false;
+		} else {
+			$dbLockAttribute->setValue('1');
+			$dbLockAttribute->save();
+		}
+		return true;
+	} 
+	
+
+	// This is not exactly atomic, but it should suffice given than
+	// the cron job only runs every couple of minutes
+	// TODO: Improve implementation 
 	public function releaseLock() {
-		//TODO: implement
+		$dbLockAttribute = new dbAttribute(self::databaseLockKey);
+		$dbLockAttribute->setValue('0');
+		$dbLockAttribute->save();
 	}
 
 	public function updateJobStatii() {
