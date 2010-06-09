@@ -28,6 +28,7 @@ class dbJob {
 	private $runStart;
 	private $runEnd;
 	private $comment;
+	private $scriptSetId;
 
 	private $dirty;
 
@@ -35,7 +36,7 @@ class dbJob {
 	public function __construct($id) {
 		global $pdo;
 
-		$stmt = $pdo->prepare('SELECT job_state_id, description, autorun, run_start, run_end, comment FROM jobs WHERE id = :id;');
+		$stmt = $pdo->prepare('SELECT job_state_id, description, autorun, run_start, run_end, comment, script_set_id FROM jobs WHERE id = :id;');
 		$stmt->bindValue(':id', $id);
 		$stmt->execute();
 		
@@ -46,6 +47,7 @@ class dbJob {
 			$this->runStart = $row['run_start'];
 			$this->runEnd = $row['run_end'];
 			$this->comment = $row['comment'];
+			$this->scriptSetId = $row['script_set_id'];
 			$this->id = $id;
 
 			$this->dirty = false;
@@ -102,16 +104,27 @@ class dbJob {
 		$this->dirty = true;
 	}	
 
+	public function getScriptSet() {
+		return new dbScriptSet($this->scriptSetId);
+	}
+
+	public function setScriptSet($dbScriptSet) {
+		$this->scriptSetId = $dbScriptSet->getId();
+		$this->dirty = true;
+	}
+
 	public function save() {
 		global $pdo;
 		if ($this->dirty) {
-			$stmt = $pdo->prepare('UPDATE jobs SET job_state_id = :job_state_id, description = :description, autorun = :autorun, run_start = :run_start, run_end = :run_end, comment = :comment WHERE id = :id;');
+			$stmt = $pdo->prepare('UPDATE jobs SET job_state_id = :job_state_id, description = :description, autorun = :autorun, run_start = :run_start, run_end = :run_end, comment = :comment, script_set_id = :script_set_id  WHERE id = :id;');
 			$stmt->bindValue(':job_state_id', $this->jobStateId);
 			$stmt->bindValue(':description', $this->description);
 			$stmt->bindValue(':autorun', $this->autorun);
 			$stmt->bindValue(':run_start', $this->runStart);
 			$stmt->bindValue(':run_end', $this->runEnd);
 			$stmt->bindValue(':comment', $this->comment);
+			$stmt->bindValue(':script_set_id', $this->scriptSetId);
+			
 			$stmt->bindValue(':id', $this->id);
 			$stmt->execute();
 			$this->dirty = false;

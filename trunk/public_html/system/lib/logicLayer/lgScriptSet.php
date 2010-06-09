@@ -22,24 +22,35 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 class lgScriptSet {
-	private $scripts;
-	private $entryScript;
+	private $id;
+	private $dbScriptSet;
 
-	public function __construct() {
-		$scripts = array();
+	public function __construct($id) {
+		$this->dbScriptSet = new dbScriptSet($id);
+		$this->id = $id;
 	}
 
-	public function appendScript(lgScript $lgScript) {
-		// TODO: add duplicate checks here
-		$this->scripts[] = $lgScript;
+	public function __destruct() {
+		$this->dbScriptSet->save();
+	}
+
+	public function appendScript(lgScript $lgScript)
+		$this->dbScriptSet->appendScript(new dbScript($lgScript->getId));
 	}
 
 	public function setEntryScript(lgScript $lgScript) {
-		// TODO: check script allready in set
-		$this->entryScript = $lgScript;
+		$this->dbScriptSet->setEntryScript(new dbScript($lgScript->getId));
 	}
 
 	public function getAllScripts() {
-		return $this->scripts;
+		$dbScripts = $this->dbScriptSet->getScripts();
+		$lgScripts  = array();
+		if (!empty($dbScripts)) {
+			foreach ($dbScripts as $script) {
+				$lgScripts[] = new lgScript($dbScript->getId());
+			}
+		}
+		return $lgScripts;
 	}
+
 }
