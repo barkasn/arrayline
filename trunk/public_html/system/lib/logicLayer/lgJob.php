@@ -79,6 +79,8 @@ class lgJob {
 
 	public function beginRun() {
 		// TODO: Implement
+		// Find entry script
+		echo 'lgJob->beginRun() running';
 	}
 
 	public function checkRunComplete() {
@@ -113,6 +115,8 @@ class lgJob {
 	}
 
 	private function saveScript(lgScript $lgScript) {
+		//TODO: Put in here proper permissions checking
+		// and error handling code
 		$scriptDir = $this->getScriptDirectoryPath();
 		$filename = $lgScript->getScriptFilename();
 
@@ -126,6 +130,8 @@ class lgJob {
 		$fp = fopen($scriptFullPath, 'w');
 		fwrite($fp,$scriptBody);
 		fclose($fp);
+
+		chmod($scriptFullPath, 0777);
 	}
 }
 

@@ -63,12 +63,11 @@ class lgJobScheduler {
 	// "status" apparently does not have stattii as plural (OED)
 	public function updateStatusOfJobs() {
 		$lgRunningJobs  = lgJobHelper::getRunningJobs();
-		if (!empty($lgRunningJobs as $job)) {
+		if (!empty($lgRunningJobs)) {
 			foreach ($lgRunningJobs as $job) {
 				$job->checkRunComplete();
 			}
 		}
-
 	}
 
 	public function runPendingJobsAsync() {
