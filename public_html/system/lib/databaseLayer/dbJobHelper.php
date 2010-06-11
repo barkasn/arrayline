@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 class dbJobHelper {
-	private static function getAllJobs() {
+	public static function getAllJobs() {
 		global $pdo;
 
 		$stmt = $pdo->prepare('SELECT id FROM jobs;');
@@ -34,7 +34,7 @@ class dbJobHelper {
 		return $jobObjects;
 	}
 
-	private static function getJobsByState($dbJobState) {
+	public static function getJobsByState($dbJobState) {
 		global $pdo;
 
 		$stmt = $pdo->prepare('SELECT id FROM jobs WHERE job_state_id = :job_state_id;');
@@ -42,7 +42,7 @@ class dbJobHelper {
 		$stmt->execute();
 		$jobObjects = array();
 		while($row = $stmt->fetch() ) {
-			$jobObjects[] = new dbJobObject($row['id']);
+			$jobObjects[] = new dbJob($row['id']);
 		}
 
 		return $jobObjects;

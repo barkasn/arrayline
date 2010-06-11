@@ -87,7 +87,7 @@ class lgJobHelper {
 
 	private static function getLogicalJobsByDatabaseState($dbJobState) {
 		$dbJobs = dbJobHelper::getJobsByState($dbJobState);
-		$lgJobs = getLogicalFromDatabaseJobs($dbJobs);
+		$lgJobs = self::getLogicalFromDatabaseJobs($dbJobs);
 		return $lgJobs;
 
 	}
