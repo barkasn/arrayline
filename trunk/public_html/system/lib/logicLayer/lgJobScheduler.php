@@ -40,7 +40,6 @@ class lgJobScheduler {
 	// the cron job only runs every couple of minutes
 	// TODO: Improve implementation 
 	public function obtainLock() {
-
 		$dbLockAttribute = new dbAttribute(self::databaseLockKey);
 		if ($dbLockAttribute->getValue() == '1') {
 			return false;
@@ -72,6 +71,7 @@ class lgJobScheduler {
 
 	public function runPendingJobsAsync() {
 		$lgPendingJobs = lgJobHelper::getJobsToBeRun();
+
 		if (!empty($lgPendingJobs)) {
 			foreach ($lgPendingJobs as $job) {
 				$job->beginRun();	
