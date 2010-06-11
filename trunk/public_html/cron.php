@@ -27,10 +27,7 @@ $lgJobScheduler = lgJobScheduler::getInstance();
 // DEVELOPEMENT ONLY: Uncoditionally release lock
 $lgJobScheduler->releaseLock();
 
-echo 'Attempting to obtain lock';
 if ( $lgJobScheduler->obtainLock() ) {
-	echo 'lock obtained';
-
 	// Commence asynchronous running of jobs that are waiting to run
 	// do not wait for jobs to complete return immediately
 	$lgJobScheduler->runPendingJobsAsync();

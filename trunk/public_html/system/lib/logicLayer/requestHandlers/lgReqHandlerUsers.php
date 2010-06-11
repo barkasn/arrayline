@@ -122,7 +122,7 @@ class lgReqHandlerUsers implements iRequestHandler {
 
 	private function processCreateUserRequest(lgRequest $lgRequest) {
 		$postData = $lgRequest->getPostArray();
-		if ($postData['submitted']) {
+		if (isset($postData['submitted'])) {
 			$this->processCreateUserFromData($postData);
 		} else {
 			$this->showCreateUserForm();

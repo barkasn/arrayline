@@ -61,7 +61,7 @@ class lgPage {
 	}
 
 	protected  function getRenderedCssLinks() {
-		$ret;
+		$ret = '';
 		if ($this->cssFiles) {
 			foreach ($this->cssFiles as $cssFile) {
 				$ret .= '<link rel="stylesheet" type="text/css" href="styles/'.$cssFile.'" />';

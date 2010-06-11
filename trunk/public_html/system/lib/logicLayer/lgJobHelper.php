@@ -96,6 +96,7 @@ class lgJobHelper {
 		// TODO: Improve error handling
 		// TODO: Add Checks
 		try {
+			umask();
 			mkdir($lgJob->getMainDirectoryPath());
 			mkdir($lgJob->getInputDataDirectoryPath());
 			mkdir($lgJob->getOutputDataDirectoryPath());

@@ -78,9 +78,22 @@ class lgJob {
 	}
 
 	public function beginRun() {
-		// TODO: Implement
-		// Find entry script
-		echo 'lgJob->beginRun() running';
+		// 1. Find Job Entry Script
+
+		$dbScriptSet = $this->dbJob->getScriptSet();	
+		$dbEntryScript = $dbScriptSet->getEntryScript();
+		$lgEntryScript = new lgScript($dbEntryScript->getId());
+		$entryPath = $this->getScriptFullPath($lgEntryScript);
+
+		// 2. Change to the scripts directory
+		$scriptsDir = $this->getScriptDirectoryPath();
+		chdir($scriptsDir);
+		$command = 'nohup nice . '.$entryPath.' &';
+		echo $command;
+		exit;
+
+		// 3. Begin Background Running - scripts already +x
+		// 4. Update Job State
 	}
 
 	public function checkRunComplete() {
@@ -115,23 +128,25 @@ class lgJob {
 	}
 
 	private function saveScript(lgScript $lgScript) {
-		//TODO: Put in here proper permissions checking
-		// and error handling code
-		$scriptDir = $this->getScriptDirectoryPath();
-		$filename = $lgScript->getScriptFilename();
+		//TODO: Implement proper error handling
 
-		$scriptFullPath = $scriptDir.'/'.$filename;
-		$scriptBody = $lgScript->getBody();
-
-		// Remove carriage returns from script body
-		// when followed by new line
-		$scriptBody = str_replace("\r\n","\n", $scriptBody);
+		$scriptFullPath = self::getScriptFullPath($lgScript);
+		$scriptBody = str_replace("\r\n","\n", $lgScript->getBody());
 
 		$fp = fopen($scriptFullPath, 'w');
 		fwrite($fp,$scriptBody);
 		fclose($fp);
 
-		chmod($scriptFullPath, 0777);
+		// wrx for user, rx for others
+		chmod($scriptFullPath, 0755);
+	}
+
+	private function getScriptFullPath(lgScript $lgScript) {
+		$scriptDir = $this->getScriptDirectoryPath();
+		$filename = $lgScript->getScriptFilename();
+		$scriptFullPath = $scriptDir.'/'.$filename;
+
+		return $scriptFullPath;
 	}
 }
 
