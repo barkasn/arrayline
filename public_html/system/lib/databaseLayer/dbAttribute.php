@@ -29,13 +29,13 @@ class dbAttribute {
 	public function __construct($key) {
 		global $pdo;
 
-		$stmt = $pdo->prepare('SELECT value FROM attributes WHERE key = :key;');
+		$stmt = $pdo->prepare('SELECT value FROM attributes WHERE `key` = :key;');
 		$stmt->bindValue(':key',$key);
 		$stmt->execute();
 		
-		if ($row = $stmt->exec()) {
+		if ($row = $stmt->fetch()) {
 			$this->key = $key;
-			$this->value = $value;
+			$this->value = $row['value'];
 			$dirty = false;
 		}
 
@@ -49,15 +49,18 @@ class dbAttribute {
 		return $this->value;
 	}
 
-	public fucntion setValue($value) {
+	public function setValue($value) {
 		$this->value = $value;
 		$this->dirty = true;
 	}
 
 	public function save() {
+		global $pdo;
+
 		if ($this->dirty) {
-			$stmt = $pdo->prepare('UPDATE attributes SET value = :value WHERE key = :key;');
+			$stmt = $pdo->prepare('UPDATE attributes SET value = :value WHERE `key` = :key;');
 			$stmt->bindValue(':key', $this->key);
+			$stmt->bindValue(':value', $this->value);
 			$stmt->execute();
 			$this->dirty = false;
 		}
