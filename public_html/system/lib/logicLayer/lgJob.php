@@ -85,15 +85,14 @@ class lgJob {
 		$lgEntryScript = new lgScript($dbEntryScript->getId());
 		$entryPath = $this->getScriptFullPath($lgEntryScript);
 
-		// 2. Change to the scripts directory
+		// 2. Change to the scripts directory and start job
 		$scriptsDir = $this->getScriptDirectoryPath();
 		chdir($scriptsDir);
-		$command = 'nohup nice . '.$entryPath.' &';
-		echo $command;
-		exit;
-
-		// 3. Begin Background Running - scripts already +x
-		// 4. Update Job State
+		$command = '. '.$entryPath.' > ../joblog.txt &';
+		exec($command);
+	
+		// 3. Update Job state
+		$this->setRunning();
 	}
 
 	public function checkRunComplete() {
@@ -108,6 +107,11 @@ class lgJob {
 	private function saveInputDataset() {
 		$inputDir = $this->getInputDataDirectoryPath();
 		$this->inputDataset->copyData($inputDir);
+	}
+
+	private function setRunning() {
+		$dbSetRunningJobState = dbJobStateHelper::getJobStateByInternalName('processRunning');
+		$this->dbJob->setJobState($dbSetRunningJobState);
 	}
 
 	private function setToRun() {
