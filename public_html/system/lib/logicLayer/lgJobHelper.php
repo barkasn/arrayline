@@ -112,6 +112,7 @@ class lgJobHelper {
 				$lgJobs[] = self::getLogicalFromDatabaseJob($dbJob);
 			}
 		}	
+		return $lgJobs;
 	}
 
 	private static function getLogicalFromDatabaseJob(dbJob $dbJob) {
