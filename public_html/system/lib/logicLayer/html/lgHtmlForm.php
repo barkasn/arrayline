@@ -49,7 +49,7 @@ class lgHtmlForm {
 	}
 
 	public function getRenderedHTML() {
-		$renderedHTML;
+		$renderedHTML = '';
 
 		$renderedHTML .= '<form method="post" action="index.php" '.$this->getEnctypeClause().'  />';
 		if (!empty($this->fields)) {

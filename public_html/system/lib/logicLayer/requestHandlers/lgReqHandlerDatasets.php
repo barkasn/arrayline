@@ -90,7 +90,7 @@ class lgReqHandlerDatasets implements iRequestHandler {
 
 	private function processCreateDatasetRequest(lgRequest $lgRequest) {
 		$postData = $lgRequest->getPostArray();
-		if ($postData['processorid'] != NULL) {
+		if (isset($postData['processorid']) ) {
 			$id = $postData['processorid'];
 			$lgDatasetProcessor = new lgDatasetProcessor($id);
 			$lgSpecialDatasetProcessor = $lgDatasetProcessor->getSpecificObject();

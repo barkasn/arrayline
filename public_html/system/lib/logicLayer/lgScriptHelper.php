@@ -29,7 +29,7 @@ class lgScriptHelper {
 		return $lgScripts;
 	}
 
-	public function getScriptByInternalName($internalName) {
+	public static function getScriptByInternalName($internalName) {
 		$lgScript;
 
 		$dbScript = dbScriptHelper::getScriptByInternalName($internalName);
@@ -40,7 +40,7 @@ class lgScriptHelper {
 		return $lgScript;
 	}
 
-	public function createScript($internalName, $filename, $executionCommand, $canBeCalledDirectly) {
+	public static function createScript($internalName, $filename, $executionCommand, $canBeCalledDirectly) {
 		$dbScript = dbScriptHelper::createScript($internalName, $filename, $executionCommand, $canBeCalledDirectly);
 		return self::getLogicalScriptFromDatabaseScript($dbScript);
 	}

@@ -29,7 +29,7 @@ class lgHtmlHiddenField extends lgHtmlFormField {
 
 
 	public function getRenderedHtml() {
-		$html .= '<input type="hidden" name="'.$this->name.'" id="'.$this->id.'" value="'.$this->value.'" />';
+		$html = '<input type="hidden" name="'.$this->name.'" id="'.$this->id.'" value="'.$this->value.'" />';
 		return $html;
 	}
 
