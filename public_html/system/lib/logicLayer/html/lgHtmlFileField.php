@@ -30,7 +30,7 @@ class lgHtmlFileField extends lgHtmlFormField {
 	
 
 	public function getRenderedHtml() {
-		$html .= '<input type="file" name="'.$this->name.'" id="'.$this->id.'" />';
+		$html = '<input type="file" name="'.$this->name.'" id="'.$this->id.'" />';
 		return $html;
 	}
 
