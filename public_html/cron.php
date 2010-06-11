@@ -24,8 +24,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 require_once('system/includeall.php');
 $lgJobScheduler = lgJobScheduler::getInstance();
 
-// DEVELOPEMENT ONLY: Uncoditionally release lock
-$lgJobScheduler->releaseLock();
+if (DEBUG) {
+	// DEVELOPEMENT ONLY: Uncoditionally release lock
+	$lgJobScheduler->releaseLock();
+}
 
 if ( $lgJobScheduler->obtainLock() ) {
 	// Commence asynchronous running of jobs that are waiting to run
