@@ -95,8 +95,14 @@ class lgJob {
 		$this->setRunning();
 	}
 
-	public function checkRunComplete() {
-		// TODO: Implement
+	public function checkRunComplete() 
+	{
+		if($this->currentJobStatusString() == 'processRunning' &&
+				$this->jobCompleteFileExists()) {
+			$this->setToBePostprocessed();
+			return true;
+		}
+		return false;
 	}
 
 	public function postProcess() {
@@ -104,9 +110,27 @@ class lgJob {
 	}
 
 	// Private functions
+	private function currentJobStatusString() {
+		return $this->dbJob->getJobState()->getInternalName();
+	}
+
+	private function jobCompleteFileExists() {
+		$completeJobFilePath = $this->getMainDirectoryPath().'/JOB_COMPLETE';
+		if (is_file($completeJobFilePath)) {
+			return true;
+		}
+		return false;
+	}
+
 	private function saveInputDataset() {
 		$inputDir = $this->getInputDataDirectoryPath();
 		$this->inputDataset->copyData($inputDir);
+	}
+
+	private function setToBePostprocessed() {
+		$dbRunningCompleteJobState = dbJobStateHelper::getJobStateByInternalName('processComplete');
+		$this->dbJob->setJobState($dbRunningCompleteJobState);
+
 	}
 
 	private function setRunning() {
