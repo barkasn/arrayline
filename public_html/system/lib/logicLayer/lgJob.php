@@ -46,7 +46,7 @@ class lgJob {
 	// Dataset getters and setters
 
 	public function setInputDataset(lgDataset $lgDataset) {
-		$this->dbJob->setInputDataset(new dbDataset($lgDataset->getId());
+		$this->dbJob->setInputDataset(new dbDataset($lgDataset->getId()));
 	}
 
 	public function getInputDataset() {
@@ -54,7 +54,7 @@ class lgJob {
 	}
 
 	public function setOutputDatase(lgDataset $lgDataset) {
-		$this->dbJob->setInputDataset(new dbDataset($lgDataset->getId());
+		$this->dbJob->setInputDataset(new dbDataset($lgDataset->getId()));
 	}
 
 	public function getOutputDataset() {
@@ -135,7 +135,7 @@ class lgJob {
 		// What do we need to do here?
 
 		// 1. Create a new dataset
-		$lgNewDataset = lgDatasetHelper::createDataset($this, 
+	//	$lgNewDataset = lgDatasetHelper::createDataset($this, 
 
 		// 2. Save the data in it
 		// 3. Set Job status to complete
@@ -158,7 +158,8 @@ class lgJob {
 
 	private function saveInputDataset() {
 		$inputDir = $this->getInputDataDirectoryPath();
-		$this->inputDataset->copyData($inputDir);
+		$lgInputDataset = new lgDataset($this->dbJob->getInputDataset()->getId());
+		$lgInputDataset->copyData($inputDir);
 	}
 
 	private function setToBePostprocessed() {

@@ -106,7 +106,11 @@ class lgDataset {
 		$copyFrom = $this->getFilesDirectoryPath();
 		$copyTo = $location;
 
-		$inputDir = opendir($copyFrom);
+		if(!($inputDir = opendir($copyFrom))) {
+			die('An error occured while attempting to open directory');
+		}
+
+
 		while ($file = readdir($inputDir)) {
 			if(is_file($copyFrom.'/'.$file)) {
 				copy($copyFrom.'/'.$file, $copyTo.'/'.$file);
