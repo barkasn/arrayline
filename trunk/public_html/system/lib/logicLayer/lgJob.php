@@ -42,6 +42,22 @@ class lgJob {
 		return $this->id;
 	}
 
+	public function getUser() {
+		return new lgUser($this->dbJob->getUser()->getId());
+	}
+
+	public function setUser(lgUser $lgUser) {
+		$this->dbJob->setUser(new dbUser($lgUser->getId()));
+	}
+
+	public function getDatasetProcessor() {
+		return new lgDatasetProcessor($this->dbJob->getDatasetProcessor()->getId());	
+	}
+
+	public function setDatasetProcessor(lgDatasetProcessor $lgDatasetProcessor) {
+		$this->dbJob->setDatasetProcessor(new dbDatasetProcessor($lgDatasetProcessor->getId()));
+	}
+
 	public function getOutputDatasetProcessState() {
 		return new lgDatasetState($this->dbJob->getOutputDatasetProcessState()->getId());
 	}
@@ -137,21 +153,20 @@ class lgJob {
 	// It executes the postprocessing steps which	
 	// are common for all functions
 	public function postProcess() {
-		// TODO: Implement
-		// What do we need to do here?
+		// TODO: Finish Implementation
 
 		// 1. Create New Dataset
 		$lgNewDatasetState = new lgDatasetState($this->dbJob->getOutputDatasetProcessState());
 		// TODO: Persist the following two pieces of information in the dbJob
-		$lgOwnerUser = 
-		$lgDatasetProcessor = 
+		// $lgOwnerUser = 
+		// $lgDatasetProcessor = 
 		
 		$lgNewDataset = lgDatasetHelper::createDataset(
 			$this, // The Job which created the dataset
 			$this->getInputDataset(), // The input dataset
 			$lgNewDatasetState, // The new dataset state dictated by the module at job creation time 
 			$lgOwnerUser, // The owner of this dataset
-			$lgDatasetProcessor,  // the dsp that set this job up
+			$lgDatasetProcessor  // the dsp that set this job up
 		);
 
 		// 2. Save the data in it

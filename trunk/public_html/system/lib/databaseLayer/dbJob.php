@@ -33,9 +33,10 @@ class dbJob {
 	private $inputDatasetId;
 	private $outputDatasetId;
 	private $outputDatasetProcessStateId;
+	private $userId;
+	private $datasetProcessorId;
 
 	private $dirty;
-
 
 	public function __construct($id) {
 		global $pdo;
@@ -61,7 +62,6 @@ class dbJob {
 			$this->dirty = false;
 		}
 	}
-
 
 	public function getUser() {
 		return new dbUser($this->userId);
@@ -184,7 +184,7 @@ class dbJob {
 		global $pdo;
 
 		if ($this->dirty) {
-			$stmt = $pdo->prepare('UPDATE jobs SET job_state_id = :job_state_id, description = :description, autorun = :autorun, run_start = :run_start, run_end = :run_end, comment = :comment, script_set_id = :script_set_id, input_dataset_id = :input_dataset_id, output_dataset_id = :output_dataset_id, output_dataset_process_state_id = :output_dataset_process_state_id  WHERE id = :id;');
+			$stmt = $pdo->prepare('UPDATE jobs SET job_state_id = :job_state_id, description = :description, autorun = :autorun, run_start = :run_start, run_end = :run_end, comment = :comment, script_set_id = :script_set_id, input_dataset_id = :input_dataset_id, output_dataset_id = :output_dataset_id, output_dataset_process_state_id = :output_dataset_process_state_id, dataset_processor_id = :dataset_processor_id, user_id = :user_id  WHERE id = :id;');
 
 			$stmt->bindValue(':job_state_id', $this->jobStateId);
 			$stmt->bindValue(':description', $this->description);
@@ -196,6 +196,8 @@ class dbJob {
 			$stmt->bindValue(':input_dataset_id', $this->inputDatasetId);
 			$stmt->bindValue(':output_dataset_id', $this->outputDatasetId);
 			$stmt->bindValue(':output_dataset_process_state_id', $this->outputDatasetProcessStateId);
+			$stmt->bindValue(':dataset_processor_id', $this->datasetProcessorId);
+			$stmt->bindValue(':user_id', $this->userId);
 			
 			$stmt->bindValue(':id', $this->id);
 			$stmt->execute();
