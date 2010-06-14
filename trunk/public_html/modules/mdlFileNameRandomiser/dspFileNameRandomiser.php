@@ -60,11 +60,17 @@ class dspFileNameRandomiser extends lgDatasetProcessor{
 		$lgScriptSet->appendScript($lgScript);
 		$lgScriptSet->appendScript($lgScriptHelper); // Just a second script that does nothing
 		$lgScriptSet->setEntryScript($lgScript); // the command to be called at the command line is specified by the object
-		$lgScriptSet->forceSave(); // This is required
+		$lgScriptSet->forceSave(); // This is required, unfortunately
 
 		$lgJob = lgJobHelper::createNewJob('mdlRandomizer Developement Job');
 		$lgJob->setInputDataset($dataset);
 		$lgJob->setScriptSet($lgScriptSet);
+		//Tell the job what state the output dataset must be in
+		// so that the job object processes the data correctly at postprocessing
+
+		$lgOutputDatasetState = new lgDatasetStateHelper::getDatasetStateByInternalName('randomizedData');
+		$lgJob->setOutputDatasetProcessState($lgOutputDatasetState);
+
 		$lgJob->schedule();
 	}
 
