@@ -68,7 +68,7 @@ class dspFileNameRandomiser extends lgDatasetProcessor{
 		//Tell the job what state the output dataset must be in
 		// so that the job object processes the data correctly at postprocessing
 
-		$lgOutputDatasetState = new lgDatasetStateHelper::getDatasetStateByInternalName('randomizedData');
+		$lgOutputDatasetState = lgDatasetStateHelper::getDatasetStateByInternalName('randomizedData');
 		$lgJob->setOutputDatasetProcessState($lgOutputDatasetState);
 
 		$lgJob->schedule();
