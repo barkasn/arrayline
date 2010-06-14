@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 class lgUserHelper {
 	public static function getUserFromEnviroment() {
-		if($_SESSION['isloggedin'] == true) {
+		if(isset($_SESSION['isloggedin'])  && $_SESSION['isloggedin'] == true) {
 			$userid = $_SESSION['userid'];
 
 			return new lgUser($userid);
