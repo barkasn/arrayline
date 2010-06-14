@@ -79,4 +79,4 @@ Ubuntu User Home Folder installation
 7. Use phpmyadmin to import database.sql into your server
 
 8. Visit http://localhost/~username/arrayline on your browser and login
-import database.sql into your serverimport database.sql into your server
+
