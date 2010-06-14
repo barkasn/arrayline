@@ -32,7 +32,8 @@ class dspFileNameRandomiser extends lgDatasetProcessor{
 
 	public function processRequest(lgRequest $lgRequest) {
 		$postArray = $lgRequest->getPostArray();
-		if ($postArray['processoraction'] == 'execute') {
+		if (isset($postArray['processoraction']) &&
+				$postArray['processoraction'] == 'execute') {
 			$this->scheduleJob($lgRequest);
 		} else {
 			$this->showConfirmationForm($lgRequest);

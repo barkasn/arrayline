@@ -36,11 +36,7 @@ class lgRequest {
 		$this->timeCreated = getdate();	
 		$this->post = $postData;
 
-		$this->requestString = $postData['requeststring'];
-
-		if ($this->requestString == NULL) {
-			$this->requestString = 'default';
-		}
+		$this->requestString = isset($postData['requeststring'])?$postData['requeststring']:'default';
 	}
 	
 	public function getRequestString() {
