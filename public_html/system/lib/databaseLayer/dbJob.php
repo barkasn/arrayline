@@ -29,6 +29,9 @@ class dbJob {
 	private $runEnd;
 	private $comment;
 	private $scriptSetId;
+	
+	private $inputDatasetId;
+	private $outputDatasetId;
 
 	private $dirty;
 
@@ -36,7 +39,7 @@ class dbJob {
 	public function __construct($id) {
 		global $pdo;
 
-		$stmt = $pdo->prepare('SELECT job_state_id, description, autorun, run_start, run_end, comment, script_set_id FROM jobs WHERE id = :id;');
+		$stmt = $pdo->prepare('SELECT job_state_id, description, autorun, run_start, run_end, comment, script_set_id, input_dataset_id, output_dataset_id FROM jobs WHERE id = :id;');
 		$stmt->bindValue(':id', $id);
 		$stmt->execute();
 		
@@ -48,11 +51,45 @@ class dbJob {
 			$this->runEnd = $row['run_end'];
 			$this->comment = $row['comment'];
 			$this->scriptSetId = $row['script_set_id'];
+			$this->inputDatasetId = $row['input_dataset_id'];
+			$this->outputDatasetId = $row['output_dataset_id'];
+
 			$this->id = $id;
 
 			$this->dirty = false;
 		}
+	}
 
+	public function getInputDataset() {
+		if ($this->inputDatasetId) {
+			return new dbDataset($this->inputDatasetId);
+		}
+		return NULL;
+	}
+
+	public function setInputDataset(dbDataset $dbDataset) {
+		if ($dbDataset) {
+			$this->inputDatasetId = $dbDataset->getId();
+		} else {
+			$this->inputDatasetId = NULL;
+		}
+		$this->dirty = true;
+	}
+
+	public function getOutputDataset() {
+		if ($this->outputDatasetId) {	
+			return new dbDataset($this->outputDatasetId);	
+		}
+		return NULL;
+	}
+
+	public function setOutputDataset(dbDataset $dbDataset) {
+		if ($dbDataset) {
+			$this->outputDatasetId = $dbDataset->getId();
+		} else {
+			$this->outputDatasetId = NULL;
+		}
+		$this->dirty = true;
 	}
 
 	public function getId() {
@@ -117,7 +154,7 @@ class dbJob {
 		global $pdo;
 
 		if ($this->dirty) {
-			$stmt = $pdo->prepare('UPDATE jobs SET job_state_id = :job_state_id, description = :description, autorun = :autorun, run_start = :run_start, run_end = :run_end, comment = :comment, script_set_id = :script_set_id  WHERE id = :id;');
+			$stmt = $pdo->prepare('UPDATE jobs SET job_state_id = :job_state_id, description = :description, autorun = :autorun, run_start = :run_start, run_end = :run_end, comment = :comment, script_set_id = :script_set_id, input_dataset_id = :input_dataset_id, output_dataset_id = :output_dataset_id  WHERE id = :id;');
 
 			$stmt->bindValue(':job_state_id', $this->jobStateId);
 			$stmt->bindValue(':description', $this->description);
@@ -126,6 +163,8 @@ class dbJob {
 			$stmt->bindValue(':run_end', $this->runEnd);
 			$stmt->bindValue(':comment', $this->comment);
 			$stmt->bindValue(':script_set_id', $this->scriptSetId);
+			$stmt->bindValue(':input_dataset_id', $this->inputDatasetId);
+			$stmt->bindValue(':output_dataset_id', $this->outputDatasetId);
 			
 			$stmt->bindValue(':id', $this->id);
 			$stmt->execute();
