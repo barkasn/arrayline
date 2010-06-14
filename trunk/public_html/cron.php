@@ -34,9 +34,9 @@ if ( $lgJobScheduler->obtainLock() ) {
 	// do not wait for jobs to complete return immediately
 	$lgJobScheduler->runPendingJobsAsync();
 
-	// TODO: introduce a 1 second delay here so that
-	// jobs which run almost instanteniously get the chance
-	// to be run and postprocessed all in one go
+	// Sleep for 1 second to allow jobs that take less than that to
+	// execute processing and preprocessing all in one pass
+	sleep(1);
 
 	// Check if jobs marked as running, either from the ones just started,
 	// or from previous runs are complete and update their status to toBePostProcessed
