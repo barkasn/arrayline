@@ -40,7 +40,7 @@ class dbJob {
 	public function __construct($id) {
 		global $pdo;
 
-		$stmt = $pdo->prepare('SELECT job_state_id, description, autorun, run_start, run_end, comment, script_set_id, input_dataset_id, output_dataset_id, output_dataset_process_state_id FROM jobs WHERE id = :id;');
+		$stmt = $pdo->prepare('SELECT job_state_id, description, autorun, run_start, run_end, comment, script_set_id, input_dataset_id, output_dataset_id, output_dataset_process_state_id, user_id, dataset_processor_id FROM jobs WHERE id = :id;');
 		$stmt->bindValue(':id', $id);
 		$stmt->execute();
 		
@@ -55,12 +55,30 @@ class dbJob {
 			$this->inputDatasetId = $row['input_dataset_id'];
 			$this->outputDatasetId = $row['output_dataset_id'];
 			$this->outputDatasetProcessStateId = $row['output_dataset_process_state_id'];
-			
-
+			$this->userId = $row['user_id'];
+			$this->datasetProcessorId = $row['dataset_processor_id'];
 			$this->id = $id;
-
 			$this->dirty = false;
 		}
+	}
+
+
+	public function getUser() {
+		return new dbUser($this->userId);
+	}
+
+	public function setUser(dbUser $dbUser) {
+		$this->userId = $dbUser->getId();
+		$this->dirty = true;
+	}
+
+	public function setDatasetProcessor(dbDatasetProcessor $dbDatasetProcessor) {
+		$this->datasetProcessorId = $dbDatasetProcessor->getId();
+		$this->dirty = true;
+	}
+
+	public function getDatasetProcessor() {
+		return new dbDatasetProcessor($this->datasetProcessorId);
 	}
 
 	public function getOutputDatasetProcessState() {
