@@ -153,13 +153,10 @@ class lgJob {
 	// It executes the postprocessing steps which	
 	// are common for all functions
 	public function postProcess() {
-		// TODO: Finish Implementation
 
-		// 1. Create New Dataset
-		$lgNewDatasetState = new lgDatasetState($this->dbJob->getOutputDatasetProcessState());
-		// TODO: Persist the following two pieces of information in the dbJob
-		// $lgOwnerUser = 
-		// $lgDatasetProcessor = 
+		$lgNewDatasetState = new lgDatasetState($this->dbJob->getOutputDatasetProcessState()->getId());
+		$lgOwnerUser = new lgUser($this->dbJob->getUser()->getId());
+		$lgDatasetProcessor = new lgDatasetProcessor($this->dbJob->getDatasetProcessor()->getId());
 		
 		$lgNewDataset = lgDatasetHelper::createDataset(
 			$this, // The Job which created the dataset

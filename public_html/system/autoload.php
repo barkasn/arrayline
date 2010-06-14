@@ -50,7 +50,7 @@ function __autoload($class_name) {
 		$location = $basepath.$moduleroot.'mdl'.$moduleName.'/dsp'.$processorName.'.php';
 		autoload_require_file($location);
 	} else {
-		die('Autoloader: a fatal error has occured (Error Code: 01)');
+		die('Autoloader: A fatal error has occured: Invalid class prefix for class '.$class_name);
 	}	
 	return;
 }

@@ -81,8 +81,8 @@ class lgJobScheduler {
 
 	public function runPostProcessingJobsAsync() {
 		$lgJobsToPostProcess = lgJobHelper::getJobsToBePostProcessed();
-		if (!empty($lgJobs)) {
-			foreach ($lgJobs as $job) {
+		if (!empty($lgJobsToPostProcess)) {
+			foreach ($lgJobsToPostProcess as $job) {
 				$job->postProcess();
 			}
 		}
