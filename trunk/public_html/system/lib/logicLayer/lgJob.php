@@ -24,7 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class lgJob {
 	private $dbJob;
 	private $id;
-	private $inputDataset;
 
 	public function __construct($id) {
 		if ( $id === NULL ) {
@@ -43,14 +42,32 @@ class lgJob {
 		return $this->id;
 	}
 
+
+	// Dataset getters and setters
+
 	public function setInputDataset(lgDataset $lgDataset) {
-		$this->inputDataset = $lgDataset;
+		$this->dbJob->setInputDataset(new dbDataset($lgDataset->getId());
 	}
 
+	public function getInputDataset() {
+		return new lgDataset($this->dbJob->getInputDataset()->getId());
+	}
+
+	public function setOutputDatase(lgDataset $lgDataset) {
+		$this->dbJob->setInputDataset(new dbDataset($lgDataset->getId());
+	}
+
+	public function getOutputDataset() {
+		return new lgDataset($this->dbJob0>getOutputDataset()->getId());
+	}
+
+	// Script set setter
 	public function setScriptSet(lgScriptset $lgScriptSet) {
 		$this->dbJob->setScriptSet(new dbScriptSet($lgScriptSet->getId()));
 	}
 
+
+	// Directory path getters
 	public function getMainDirectoryPath() {
 		return lgJobHelper::getJobMainDirectoryPath($this);
 	}
@@ -71,6 +88,8 @@ class lgJob {
 		return lgJobHelper::getJobLogFilePath($this);
 	}
 
+
+	// Misc public fucntions
 	public function schedule() {
 		$this->saveScripts();
 		$this->saveInputDataset();
@@ -78,23 +97,26 @@ class lgJob {
 	}
 
 	public function beginRun() {
-		// 1. Find Job Entry Script
-
 		$dbScriptSet = $this->dbJob->getScriptSet();	
 		$dbEntryScript = $dbScriptSet->getEntryScript();
 		$lgEntryScript = new lgScript($dbEntryScript->getId());
 		$entryPath = $this->getScriptFullPath($lgEntryScript);
 
-		// 2. Change to the scripts directory and start job
 		$scriptsDir = $this->getScriptDirectoryPath();
-		chdir($scriptsDir);
-		$command = '. '.$entryPath.' > ../joblog.txt &';
-		exec($command);
-	
-		// 3. Update Job state
-		$this->setRunning();
+		if (!chdir($scriptsDir) ) {
+			//TODO: Manage the error
+		} else {
+			$command = '. '.$entryPath.' > ../joblog.txt &';
+			exec($command);
+			$this->setRunning();
+		}
 	}
 
+	// This is called by the job schedulaer
+	// The function checks if the process is in the running state
+	// and if so, whether the scripts have terminated (by checking for
+	// the existence of the lock file) if so, it sets it to be
+	// post processed
 	public function checkRunComplete() 
 	{
 		if($this->currentJobStatusString() == 'processRunning' &&
@@ -105,8 +127,20 @@ class lgJob {
 		return false;
 	}
 
+	// This is called by the job scheduler
+	// It executes the postprocessing steps which	
+	// are common for all functions
 	public function postProcess() {
-		//TODO: Implement
+		// TODO: Implement
+		// What do we need to do here?
+
+		// 1. Create a new dataset
+		$lgNewDataset = lgDatasetHelper::createDataset($this, 
+
+		// 2. Save the data in it
+		// 3. Set Job status to complete
+		// 4. Delete all the data in this set	(recoverable through references)
+
 	}
 
 	// Private functions
