@@ -49,27 +49,28 @@ class dspFileNameRandomiser extends lgDatasetProcessor{
 	}
 
 	private function scheduleJob(lgRequest $lgRequest) {
-		$postarray = $lgRequest->getPostArray();
-		$dataset = new lgDataset($postarray['datasetid']);
-
-		// Job scripts
-		$lgScript = lgScriptHelper::getScriptByInternalName('randomizer');
-		$lgScriptHelper = lgScriptHelper::getScriptByInternalName('randomizerhelper');
+		$lgJob = lgJobHelper::createNewJob('mdlRandomizer Developement Job');
 
 		$lgScriptSet = lgScriptSetHelper::createScriptSet('Filename randomizer job script set');
+
+		$lgScript = lgScriptHelper::getScriptByInternalName('randomizer');
+		$lgScript2 = lgScriptHelper::getScriptByInternalName('randomizerhelper');
+
 		$lgScriptSet->appendScript($lgScript);
-		$lgScriptSet->appendScript($lgScriptHelper); // Just a second script that does nothing
-		$lgScriptSet->setEntryScript($lgScript); // the command to be called at the command line is specified by the object
-		$lgScriptSet->forceSave(); // This is required, unfortunately
+		$lgScriptSet->appendScript($lgScript2);
+		$lgScriptSet->setEntryScript($lgScript);
+		$lgScriptSet->forceSave(); // Required for adhoc created script sets
 
-		$lgJob = lgJobHelper::createNewJob('mdlRandomizer Developement Job');
+		// TODO: Add checks here
+		$postarray = $lgRequest->getPostArray();
+		$dataset = new lgDataset($postarray['datasetid']);
 		$lgJob->setInputDataset($dataset);
-		$lgJob->setScriptSet($lgScriptSet);
-		//Tell the job what state the output dataset must be in
-		// so that the job object processes the data correctly at postprocessing
 
+		$lgJob->setScriptSet($lgScriptSet);
 		$lgOutputDatasetState = lgDatasetStateHelper::getDatasetStateByInternalName('randomizedData');
 		$lgJob->setOutputDatasetProcessState($lgOutputDatasetState);
+		$lgJob->setUser(lgUserHelper::getUserFromEnviroment());
+		$lgJob->setDatasetProcessor($this);
 
 		$lgJob->schedule();
 	}
