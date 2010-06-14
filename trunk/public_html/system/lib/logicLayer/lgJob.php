@@ -140,14 +140,19 @@ class lgJob {
 		// TODO: Implement
 		// What do we need to do here?
 
-		// 1. Create a new dataset
-
-		// TODO: Allow module to dictate the output dataset state at job building time
-		// it is important to allow the datasetprocessor to do this because some processors
-		// may potentially be able to output more than one type of dataset
-		$lgDatasetState = new lgDatasetState(1);
+		// 1. Create New Dataset
+		$lgNewDatasetState = new lgDatasetState($this->dbJob->getOutputDatasetProcessState());
+		// TODO: Persist the following two pieces of information in the dbJob
+		$lgOwnerUser = 
+		$lgDatasetProcessor = 
 		
-		//$lgNewDataset = lgDatasetHelper::createDataset($this, $this->getInputDataset(), 
+		$lgNewDataset = lgDatasetHelper::createDataset(
+			$this, // The Job which created the dataset
+			$this->getInputDataset(), // The input dataset
+			$lgNewDatasetState, // The new dataset state dictated by the module at job creation time 
+			$lgOwnerUser, // The owner of this dataset
+			$lgDatasetProcessor,  // the dsp that set this job up
+		);
 
 		// 2. Save the data in it
 		// 3. Set Job status to complete
