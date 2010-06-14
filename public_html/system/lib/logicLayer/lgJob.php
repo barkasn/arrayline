@@ -42,9 +42,15 @@ class lgJob {
 		return $this->id;
 	}
 
+	public function getOutputDatasetProcessState() {
+		return new lgDatasetState($this->dbJob->getOutputDatasetProcessState()->getId());
+	}
+
+	public function setOutputDatasetProcessState(lgDatasetState $lgDatasetState) {
+		$this->dbJob->setOutputDatasetProcessState(new dbDatasetState($lgDatasetState->getId()));
+	}
 
 	// Dataset getters and setters
-
 	public function setInputDataset(lgDataset $lgDataset) {
 		$this->dbJob->setInputDataset(new dbDataset($lgDataset->getId()));
 	}
@@ -58,7 +64,7 @@ class lgJob {
 	}
 
 	public function getOutputDataset() {
-		return new lgDataset($this->dbJob0>getOutputDataset()->getId());
+		return new lgDataset($this->dbJob->getOutputDataset()->getId());
 	}
 
 	// Script set setter
@@ -135,7 +141,13 @@ class lgJob {
 		// What do we need to do here?
 
 		// 1. Create a new dataset
-	//	$lgNewDataset = lgDatasetHelper::createDataset($this, 
+
+		// TODO: Allow module to dictate the output dataset state at job building time
+		// it is important to allow the datasetprocessor to do this because some processors
+		// may potentially be able to output more than one type of dataset
+		$lgDatasetState = new lgDatasetState(1);
+		
+		//$lgNewDataset = lgDatasetHelper::createDataset($this, $this->getInputDataset(), 
 
 		// 2. Save the data in it
 		// 3. Set Job status to complete
