@@ -22,4 +22,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
+session_name(SESSION_NAME);
 session_start();
