@@ -110,7 +110,6 @@ class lgDataset {
 			die('An error occured while attempting to open directory');
 		}
 
-
 		while ($file = readdir($inputDir)) {
 			if(is_file($copyFrom.'/'.$file)) {
 				copy($copyFrom.'/'.$file, $copyTo.'/'.$file);
@@ -118,7 +117,6 @@ class lgDataset {
 		}
 		closedir($inputDir);
 	}
-	
 
 	/*
 	 * Private Functions
