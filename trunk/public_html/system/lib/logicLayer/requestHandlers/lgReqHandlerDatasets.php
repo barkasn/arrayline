@@ -53,7 +53,7 @@ class lgReqHandlerDatasets implements iRequestHandler {
 		// Get available dataset processors which accept the dataset type of this dataset
 		// as input and display these to the user
 		$postData = $lgRequest->getPostArray();
-		if ($postData['processorid'] != NULL) {
+		if (isset($postData['processorid'])) {
 			$id = $postData['processorid'];
 			$lgDatasetProcessor = new lgDatasetProcessor($id);
 			$lgSpecialDatasetProcessor = $lgDatasetProcessor->getSpecificObject();

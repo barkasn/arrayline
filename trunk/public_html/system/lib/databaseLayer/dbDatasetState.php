@@ -75,9 +75,12 @@ class dbDatasetState {
 
 	public function save() {
 		global $pdo;
-		if ($dirty) {
+		if ($this->dirty) {
 			$stmt = $pdo->prepare('UPDATE dataset_states SET internal_name = :internal_name, name = :name, description = :description WHERE id = :id;');
 			$stmt->bindValue(':id', $this->id);
+			$stmt->bindValue(':internal_name', $this->internalName);
+			$stmt->bindValue(':name', $this->name);
+			$stmt->bindValue(':description', $this->description);
 			$stmt->execute();
 			$this->dirty = false;
 		}
