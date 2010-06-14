@@ -32,6 +32,7 @@ class dbJob {
 	
 	private $inputDatasetId;
 	private $outputDatasetId;
+	private $outputDatasetProcessStateId;
 
 	private $dirty;
 
@@ -39,7 +40,7 @@ class dbJob {
 	public function __construct($id) {
 		global $pdo;
 
-		$stmt = $pdo->prepare('SELECT job_state_id, description, autorun, run_start, run_end, comment, script_set_id, input_dataset_id, output_dataset_id FROM jobs WHERE id = :id;');
+		$stmt = $pdo->prepare('SELECT job_state_id, description, autorun, run_start, run_end, comment, script_set_id, input_dataset_id, output_dataset_id, output_dataset_process_state_id FROM jobs WHERE id = :id;');
 		$stmt->bindValue(':id', $id);
 		$stmt->execute();
 		
@@ -53,11 +54,22 @@ class dbJob {
 			$this->scriptSetId = $row['script_set_id'];
 			$this->inputDatasetId = $row['input_dataset_id'];
 			$this->outputDatasetId = $row['output_dataset_id'];
+			$this->outputDatasetProcessStateId = $row['output_dataset_process_state_id'];
+			
 
 			$this->id = $id;
 
 			$this->dirty = false;
 		}
+	}
+
+	public function getOutputDatasetProcessState() {
+		return new dbDatasetState($this->outputDatasetProcessStateId);
+	}
+
+	public function setOutputDatasetProcessState(dbDatasetState $dbDatasetState) {
+		$this->outputDatasetProcessStateId = $dbDatasetState->getId();
+		$this->dirty = true;
 	}
 
 	public function getInputDataset() {
@@ -154,7 +166,7 @@ class dbJob {
 		global $pdo;
 
 		if ($this->dirty) {
-			$stmt = $pdo->prepare('UPDATE jobs SET job_state_id = :job_state_id, description = :description, autorun = :autorun, run_start = :run_start, run_end = :run_end, comment = :comment, script_set_id = :script_set_id, input_dataset_id = :input_dataset_id, output_dataset_id = :output_dataset_id  WHERE id = :id;');
+			$stmt = $pdo->prepare('UPDATE jobs SET job_state_id = :job_state_id, description = :description, autorun = :autorun, run_start = :run_start, run_end = :run_end, comment = :comment, script_set_id = :script_set_id, input_dataset_id = :input_dataset_id, output_dataset_id = :output_dataset_id, output_dataset_process_state_id = :output_dataset_process_state_id  WHERE id = :id;');
 
 			$stmt->bindValue(':job_state_id', $this->jobStateId);
 			$stmt->bindValue(':description', $this->description);
@@ -165,6 +177,7 @@ class dbJob {
 			$stmt->bindValue(':script_set_id', $this->scriptSetId);
 			$stmt->bindValue(':input_dataset_id', $this->inputDatasetId);
 			$stmt->bindValue(':output_dataset_id', $this->outputDatasetId);
+			$stmt->bindValue(':output_dataset_process_state_id', $this->outputDatasetProcessStateId);
 			
 			$stmt->bindValue(':id', $this->id);
 			$stmt->execute();
