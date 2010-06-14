@@ -134,11 +134,6 @@ class lgJob {
 		}
 	}
 
-	// This is called by the job schedulaer
-	// The function checks if the process is in the running state
-	// and if so, whether the scripts have terminated (by checking for
-	// the existence of the lock file) if so, it sets it to be
-	// post processed
 	public function checkRunComplete() 
 	{
 		if($this->currentJobStatusString() == 'processRunning' &&
@@ -149,11 +144,7 @@ class lgJob {
 		return false;
 	}
 
-	// This is called by the job scheduler
-	// It executes the postprocessing steps which	
-	// are common for all functions
 	public function postProcess() {
-
 		$lgNewDatasetState = new lgDatasetState($this->dbJob->getOutputDatasetProcessState()->getId());
 		$lgOwnerUser = new lgUser($this->dbJob->getUser()->getId());
 		$lgDatasetProcessor = new lgDatasetProcessor($this->dbJob->getDatasetProcessor()->getId());
@@ -169,7 +160,6 @@ class lgJob {
 		// 2. Save the data in it
 		// 3. Set Job status to complete
 		// 4. Delete all the data in this set	(recoverable through references)
-
 	}
 
 	// Private functions
