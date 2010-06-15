@@ -246,7 +246,6 @@ class lgJob {
 		$this->dbJob->setJobState($dbSetToRunJobState);
 	}
 
-
 	private function saveScripts() {
 		$dbScriptSet = $this->dbJob->getScriptSet();
 		$dbScripts = $dbScriptSet->getScripts();
@@ -260,17 +259,23 @@ class lgJob {
 	}
 
 	private function saveScript(lgScript $lgScript) {
-		//TODO: Implement proper error handling
+		$scriptFullPath = $this->getScriptFullPath($lgScript);
 
-		$scriptFullPath = self::getScriptFullPath($lgScript);
-		$scriptBody = str_replace("\r\n","\n", $lgScript->getBody());
+		$scriptBasePath = dirname($scriptFullPath).'/';
+		if (!is_writable($scriptBasePath)) {
+			throw new Exception('The webserver does not have permission to save the script in: ' . $scriptBasePath);
+		} else {
+			if ( $fp = fopen($scriptFullPath, 'w')) {
+				$scriptBody = str_replace("\r\n","\n", $lgScript->getBody());
+				fwrite($fp,$scriptBody);
+				fclose($fp);
 
-		$fp = fopen($scriptFullPath, 'w');
-		fwrite($fp,$scriptBody);
-		fclose($fp);
-
-		// wrx for user, rx for others
-		chmod($scriptFullPath, 0755);
+				// wrx for user, rx for others
+				chmod($scriptFullPath, 0755);
+			} else {
+				throw new Exception('An error occured while attempting to open file '.$scriptFullPath.' for writing');
+			}
+		}
 	}
 
 	private function getScriptFullPath(lgScript $lgScript) {
