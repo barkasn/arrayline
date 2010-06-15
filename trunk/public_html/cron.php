@@ -22,12 +22,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 require_once('system/includeall.php');
+
+
+lgSystemLog::logMessage('Cron.php running');
+
 $lgJobScheduler = lgJobScheduler::getInstance();
 
-if (DEBUG) {
-	// DEVELOPEMENT ONLY: Uncoditionally release lock
-	$lgJobScheduler->releaseLock();
-}
+if (DEBUG) { $lgJobScheduler->releaseLock(); } // DEBUG ONLY
 
 if ( $lgJobScheduler->obtainLock() ) {
 	// Commence asynchronous running of jobs that are waiting to run
@@ -48,4 +49,6 @@ if ( $lgJobScheduler->obtainLock() ) {
 	// Release the lock
 	$lgJobScheduler->releaseLock();
 }	
+
+lgSystemLog::logMessage('Cron.php running complete');
 
