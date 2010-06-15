@@ -1,4 +1,7 @@
 // $Date$
+// $Rev$
+// $Author                                     $
+
 
 Arrayline is an open source collaborative web platform
 for data processing. 
