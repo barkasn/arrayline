@@ -1,6 +1,5 @@
-// $Date: $
-// $Rev$
-// $Author                                     $
+// $Id: $
+// $Rev: $
 
 
 Arrayline is an open source collaborative web platform
