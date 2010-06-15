@@ -175,6 +175,16 @@ class dbJob {
 		$this->dirty = true;
 	}
 
+	public function getRunEnd() {
+		return $this->runEnd;
+	}
+
+	public function setRunEnd($value) {
+		$this->runEnd = $value;
+		$this->dirty = true;
+	}
+
+
 	public function getComment() {
 		return $this->comment;
 	}
