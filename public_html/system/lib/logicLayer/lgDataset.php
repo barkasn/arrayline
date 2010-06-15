@@ -103,6 +103,7 @@ class lgDataset {
 	}
 
 	public function copyData($location) {
+		//TODO: Improve implementation
 		$copyFrom = $this->getFilesDirectoryPath();
 		$copyTo = $location;
 
@@ -135,7 +136,7 @@ class lgDataset {
 					} 
 				}
 			} else {
-				throw new Exception('An error occured while attempting to read directory $copyFrom');
+				throw new Exception('An error occured while attempting to read directory '. $copyFrom);
 			}
 		}
 	}

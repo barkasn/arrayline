@@ -25,6 +25,8 @@ class lgJob {
 	private $dbJob;
 	private $id;
 
+
+	// Constructor Destructor
 	public function __construct($id) {
 		if ( $id === NULL ) {
 			die('lgJob: invalid id');
@@ -37,9 +39,15 @@ class lgJob {
 	public function __destruct() {
 		$this->dbJob->save();
 	}
+	
+	// Getters and Setters
 
 	public function getId() {
 		return $this->id;
+	}
+
+	public function getDataCleared() {
+		return $this->dbJob->getDataCleared();
 	}
 
 	public function getUser() {
@@ -145,6 +153,8 @@ class lgJob {
 	}
 
 	public function postProcess() {
+		//TODO: set state to post-processing at start (and force save)
+
 		$lgNewDatasetState = new lgDatasetState($this->dbJob->getOutputDatasetProcessState()->getId());
 		$lgOwnerUser = new lgUser($this->dbJob->getUser()->getId());
 		$lgDatasetProcessor = new lgDatasetProcessor($this->dbJob->getDatasetProcessor()->getId());
@@ -158,6 +168,7 @@ class lgJob {
 		);
 
 		$lgNewDataset->copyDataFrom($this->getOutputDataDirectoryPath());
+		$lgNewDataset->computeAllChecksums();
 
 		$this->setComplete();
 		$this->clearData();
@@ -165,9 +176,37 @@ class lgJob {
 
 	// Private functions
 
-	private function clearData() {
-		//TODO: Implement
+	private function setDataCleared($value) {
+		$this->dbJob->setDataCleared($value);
 	}
+
+	private function clearData() {
+		if (! $this->getDataCleared() ) {
+			$inputDirPath = $this->getInputDataDirectoryPath();	
+			$outputDirPath = $this->getOutputDataDirectoryPath();
+	
+			$this->emptyDirectory($inputDirPath);
+			$this->emptyDirectory($outputDirPath);
+
+			$this->setDataCleared(true);
+		} else {
+			throw new Exception('The data of this job have already been cleared');
+		}
+	}
+
+	private function emptyDirectory($dirPath) {
+		if ($input_dir = opendir($dirPath)) {
+       			while ($file = readdir($input_dir)) {
+				$filePath = $dirPath.'/'.$file;
+				if (is_file($filePath)) {
+					unlink($filePath);
+                              	} 
+			}
+		} else {
+			throw new Exception('An error occured while attempting to read directory '.$input_dir);
+		}
+	}
+
 
 	private function setComplete() {
 		$dbCompleteJobState = dbJobStateHelper::getJobStateByInternalName('complete');
