@@ -157,12 +157,23 @@ class lgJob {
 			$lgDatasetProcessor  // the dsp that set this job up
 		);
 
-		// 2. Save the data in it
-		// 3. Set Job status to complete
-		// 4. Delete all the data in this set	(recoverable through references)
+		$lgNewDataset->copyDataFrom($this->getOutputDataDirectoryPath());
+
+		$this->setComplete();
+		$this->clearData();
 	}
 
 	// Private functions
+
+	private function clearData() {
+		//TODO: Implement
+	}
+
+	private function setComplete() {
+		$dbCompleteJobState = dbJobStateHelper::getJobStateByInternalName('complete');
+		$this->dbJob->setJobState($dbCompleteJobState);
+	}
+
 	private function currentJobStatusString() {
 		return $this->dbJob->getJobState()->getInternalName();
 	}
@@ -184,7 +195,6 @@ class lgJob {
 	private function setToBePostprocessed() {
 		$dbRunningCompleteJobState = dbJobStateHelper::getJobStateByInternalName('processComplete');
 		$this->dbJob->setJobState($dbRunningCompleteJobState);
-
 	}
 
 	private function setRunning() {
@@ -196,6 +206,7 @@ class lgJob {
 		$dbSetToRunJobState = dbJobStateHelper::getJobStateByInternalName('toBeRun');
 		$this->dbJob->setJobState($dbSetToRunJobState);
 	}
+
 
 	private function saveScripts() {
 		$dbScriptSet = $this->dbJob->getScriptSet();
