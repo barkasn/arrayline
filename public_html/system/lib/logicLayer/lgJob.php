@@ -22,11 +22,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 class lgJob {
+	// Private Members
 	private $dbJob;
 	private $id;
 
-
-	// Constructor Destructor
+	// Public functions
 	public function __construct($id) {
 		if ( $id === NULL ) {
 			die('lgJob: invalid id');
@@ -41,7 +41,6 @@ class lgJob {
 	}
 	
 	// Getters and Setters
-
 	public function getId() {
 		return $this->id;
 	}
@@ -74,7 +73,6 @@ class lgJob {
 		$this->dbJob->setOutputDatasetProcessState(new dbDatasetState($lgDatasetState->getId()));
 	}
 
-	// Dataset getters and setters
 	public function setInputDataset(lgDataset $lgDataset) {
 		$this->dbJob->setInputDataset(new dbDataset($lgDataset->getId()));
 	}
@@ -91,13 +89,10 @@ class lgJob {
 		return new lgDataset($this->dbJob->getOutputDataset()->getId());
 	}
 
-	// Script set setter
 	public function setScriptSet(lgScriptset $lgScriptSet) {
 		$this->dbJob->setScriptSet(new dbScriptSet($lgScriptSet->getId()));
 	}
 
-
-	// Directory path getters
 	public function getMainDirectoryPath() {
 		return lgJobHelper::getJobMainDirectoryPath($this);
 	}
@@ -118,7 +113,6 @@ class lgJob {
 		return lgJobHelper::getJobLogFilePath($this);
 	}
 
-	// Other public functions
 	public function schedule() {
 		$this->saveScripts();
 		$this->saveInputDataset();
@@ -135,11 +129,13 @@ class lgJob {
 		if (!chdir($scriptsDir) ) {
 			$this->setFailed();
 			throw new Exception('Unable to change directory to: '.$scriptsDir);
+			return false;
 		} else {
 			$command = '. '.$entryPath.' > ../joblog.txt &';
 			exec($command);
 			$this->setRunning();
 		}
+		return true;
 	}
 
 	public function checkRunComplete() 
@@ -153,18 +149,19 @@ class lgJob {
 	}
 
 	public function postProcess() {
-		//TODO: set state to post-processing at start (and force save)
+		$this->setPostProcessing();
+		$this->dbJob->save();
 
 		$lgNewDatasetState = new lgDatasetState($this->dbJob->getOutputDatasetProcessState()->getId());
 		$lgOwnerUser = new lgUser($this->dbJob->getUser()->getId());
 		$lgDatasetProcessor = new lgDatasetProcessor($this->dbJob->getDatasetProcessor()->getId());
 		
 		$lgNewDataset = lgDatasetHelper::createDataset(
-			$this, // The Job which created the dataset
-			$this->getInputDataset(), // The input dataset
-			$lgNewDatasetState, // The new dataset state dictated by the module at job creation time 
-			$lgOwnerUser, // The owner of this dataset
-			$lgDatasetProcessor  // the dsp that set this job up
+			$this, 					// The job which created the dataset
+			$this->getInputDataset(), 		// The input dataset
+			$lgNewDatasetState, 			// The new dataset state dictated by the module at job creation time 
+			$lgOwnerUser, 				// The owner of this dataset
+			$lgDatasetProcessor  			// The dataset processor that created the job
 		);
 
 		$lgNewDataset->copyDataFrom($this->getOutputDataDirectoryPath());
@@ -208,11 +205,6 @@ class lgJob {
 	}
 
 
-	private function setComplete() {
-		$dbCompleteJobState = dbJobStateHelper::getJobStateByInternalName('complete');
-		$this->dbJob->setJobState($dbCompleteJobState);
-	}
-
 	private function currentJobStatusString() {
 		return $this->dbJob->getJobState()->getInternalName();
 	}
@@ -243,6 +235,14 @@ class lgJob {
 
 	private function setFailed() {
 		$this->setStateByInternalName('failed');
+	}
+
+	private function setComplete() {
+		$this->setStateByInternalName('complete');
+	}
+
+	private function setPostProcessing() {
+		$this->setStateByInternalName('postProcessing');
 	}
 
 	private function setStateByInternalName($stateInternalName) {
