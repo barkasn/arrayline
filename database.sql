@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 14, 2010 at 04:39 PM
+-- Generation Time: Jun 15, 2010 at 12:58 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.2-1ubuntu4.2
 
@@ -126,18 +126,21 @@ CREATE TABLE IF NOT EXISTS `datasets` (
   `owner_user_id` int(11) NOT NULL,
   `dataset_processor_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=49 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=57 ;
 
 --
 -- Dumping data for table `datasets`
 --
 
 INSERT INTO `datasets` (`id`, `job_id`, `parent_dataset_id`, `dataset_state_id`, `owner_user_id`, `dataset_processor_id`) VALUES
-(44, NULL, NULL, 1, 1, 1),
-(45, 141, 44, 2, 1, 2),
-(46, 140, 44, 2, 1, 2),
-(47, 141, 44, 2, 1, 2),
-(48, 140, 44, 2, 1, 2);
+(53, 142, 49, 2, 1, 2),
+(52, 142, 49, 2, 1, 2),
+(51, 142, 49, 2, 1, 2),
+(50, 142, 49, 2, 1, 2),
+(49, NULL, NULL, 1, 1, 1),
+(54, 142, 49, 2, 1, 2),
+(55, 143, 49, 2, 1, 2),
+(56, 145, 49, 2, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -187,16 +190,19 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `output_dataset_process_state_id` int(11) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   `dataset_processor_id` int(11) DEFAULT NULL,
+  `data_cleared` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=142 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=146 ;
 
 --
 -- Dumping data for table `jobs`
 --
 
-INSERT INTO `jobs` (`id`, `job_state_id`, `description`, `autorun`, `run_start`, `run_end`, `comment`, `script_set_id`, `input_dataset_id`, `output_dataset_id`, `output_dataset_process_state_id`, `user_id`, `dataset_processor_id`) VALUES
-(141, 7, 'mdlRandomizer Developement Job', 0, '0000-00-00', '0000-00-00', '0', 53, 44, NULL, 2, 1, 2),
-(140, 7, 'mdlRandomizer Developement Job', 0, '0000-00-00', '0000-00-00', '0', 52, 44, NULL, 2, 1, 2);
+INSERT INTO `jobs` (`id`, `job_state_id`, `description`, `autorun`, `run_start`, `run_end`, `comment`, `script_set_id`, `input_dataset_id`, `output_dataset_id`, `output_dataset_process_state_id`, `user_id`, `dataset_processor_id`, `data_cleared`) VALUES
+(143, 9, 'mdlRandomizer Developement Job', 0, '0000-00-00', '0000-00-00', '0', 55, 49, NULL, 2, 1, 2, 0),
+(142, 9, 'mdlRandomizer Developement Job', 0, '0000-00-00', '0000-00-00', '0', 54, 49, NULL, 2, 1, 2, 0),
+(144, 1, 'mdlRandomizer Developement Job', 0, '0000-00-00', '0000-00-00', '0', 0, NULL, NULL, NULL, NULL, NULL, 0),
+(145, 9, 'mdlRandomizer Developement Job', 0, '0000-00-00', '0000-00-00', '0', 56, 49, NULL, 2, 1, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -306,7 +312,7 @@ CREATE TABLE IF NOT EXISTS `script_sets` (
   `description` varchar(255) NOT NULL,
   `entry_script_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=54 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=57 ;
 
 --
 -- Dumping data for table `script_sets`
@@ -331,7 +337,10 @@ INSERT INTO `script_sets` (`id`, `description`, `entry_script_id`) VALUES
 (50, 'Filename randomizer job script set', 1),
 (51, 'Filename randomizer job script set', 1),
 (52, 'Filename randomizer job script set', 1),
-(53, 'Filename randomizer job script set', 1);
+(53, 'Filename randomizer job script set', 1),
+(54, 'Filename randomizer job script set', 1),
+(55, 'Filename randomizer job script set', 1),
+(56, 'Filename randomizer job script set', 1);
 
 -- --------------------------------------------------------
 
@@ -387,7 +396,13 @@ INSERT INTO `script_sets_scripts` (`script_set_id`, `script_id`) VALUES
 (52, 1),
 (52, 2),
 (53, 1),
-(53, 2);
+(53, 2),
+(54, 1),
+(54, 2),
+(55, 1),
+(55, 2),
+(56, 1),
+(56, 2);
 
 -- --------------------------------------------------------
 
