@@ -32,7 +32,7 @@ define('DEBUG', true);
 // OTHER PARAMETERS
 
 // PHP Session Name
-define('SESSION_NAME',arrayline);
+define('SESSION_NAME','arrayline');
 
 // The location were the system is installed, i.e. were the
 // index.php is. Use absolute path for security reasons 

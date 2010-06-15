@@ -118,6 +118,28 @@ class lgDataset {
 		closedir($inputDir);
 	}
 
+	public function copyDataFrom($copyFrom) {
+		$copyTo = $this->getFilesDirectoryPath();
+
+		if (!is_dir($copyFrom)) {
+			throw new Exception ('Invalid copyFrom path: Not a directory');
+		} else if (!is_dir($copyTo)) {
+			throw new Exception ('Invalid copyTo path: Not a directory');
+		} else {
+			if($inputDir = opendir($copyFrom)) {
+				while ($file = readdir($inputDir)) {
+					if (is_file($copyFrom.'/'.$file)) {
+						if (!copy($copyFrom.'/'.$file, $copyTo.'/'.$file)) {
+							throw new Exception('An error occured while attempting to copy file $file');
+						}
+					} 
+				}
+			} else {
+				throw new Exception('An error occured while attempting to read directory $copyFrom');
+			}
+		}
+	}
+
 	/*
 	 * Private Functions
 	 */
