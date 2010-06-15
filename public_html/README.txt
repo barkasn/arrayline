@@ -1,4 +1,4 @@
-// $Date$
+// $Date: $
 // $Rev$
 // $Author                                     $
 
