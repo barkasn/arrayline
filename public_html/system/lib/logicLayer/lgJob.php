@@ -134,6 +134,7 @@ class lgJob {
 			$command = '. '.$entryPath.' > ../joblog.txt &';
 			exec($command);
 			$this->setRunning();
+			$this->setRunStartNow();
 		}
 		return true;
 	}
@@ -142,6 +143,7 @@ class lgJob {
 	{
 		if($this->currentJobStatusString() == 'processRunning' &&
 				$this->jobCompleteFileExists()) {
+			$this->setRunEndNow();
 			$this->setToBePostprocessed();
 			return true;
 		}
@@ -189,6 +191,14 @@ class lgJob {
 		} else {
 			throw new Exception('The data of this job have already been cleared');
 		}
+	}
+
+	private function setRunStartNow() {
+		$this->dbJob->setRunStart(date("Y-m-d H:i:s"));
+	}
+
+	private function setRunEndNow() {
+		$this->dbJob->setRunEnd(date("Y-m-d H:i:s"));
 	}
 
 	private function emptyDirectory($dirPath) {
