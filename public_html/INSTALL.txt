@@ -1,84 +1,98 @@
 // $Id$
 
-Installation Guilelines for Arrayline
 
+Software Requirements
+---------------------
 
+Arrayline requires:
+	* A UNIX-like operating system (e.g. Linux or MacOS X)
+	* An Apache instalation (version 2 or later recommended)
+	* PHP5 installed and configured to process PHP files
+	* A mysql database
 
+Individual modules may have further requirements
 
-Requirements
-------------
-
-Arrayline requires a UNIX-like operating system (e.g. Linux or MacOS X)
-An Apache (version 2 or later recommended) installation
-PHP installed and configured to process PHP files
-A mysql database
-
-Any requirements by individual modules 
-
-Installation
-------------
+Installation Guidelines for Ubuntu systems
+------------------------------------------
 
 Ubuntu User Home Folder installation
 
-1. Install apache2
-	sudo apt-get install apache2
+The following commands are provided as a guideline only, the commands
+required will vary from system to system. You should review each command
+and execute it manually.
+
+
+A. Required Software Installation
+
+	1. Install apache2
+		$ sudo apt-get install apache2
 	
-2. Install mysql
-	sudo apt-get install mysql-server
+	2. Install mysql
+		$ sudo apt-get install mysql-server
 
-3. Install phpMyAdmin (recommended for managing db)
-	sudo apt-get install phpmyadmin
+	3. Install phpMyAdmin (not required but highly recommended)
+		$ sudo apt-get install phpmyadmin
 
-4. Create a database on your mysql server and a user with access to that database
+B. Apache configuration
 
-5. Enable Apache User directories
+	5. Enable Apache User directories
+		
+	Assuming you want to run apache in a user directory and not in the main
+	httpd folder you need to enable the user directories module:
 
-	sudo ap2enmod userdir
-	# Edit php5 conf, comment out line as per instruction in the file
-	# to allow php to execute in the userdirs
-	gedit /etc/apache2/mods-available/php5.conf
+		$ sudo ap2enmod userdir
+
+	In Ubuntu, user directories are by default not processing php files
+	To enable php processing edit the php4 apache configuration file php5.conf
+	The file contains instructions in the form of comments to enable phpi
+	comment out the appropriate lines as per instruction in the file
+
+		$ gedit /etc/apache2/mods-available/php5.conf
 
 
-6. Download the latest copy of arrayline from sourceforge
-	If you want to install arrayline on a user directory (recommended for development)
-	Create a public directory on you folder:
-
-	cd ~
-	cd ..
-	# Makes your directory readable by the server (but also by all other users)
-	# It might be possible to use mode 744 to make directory accessible but not listable
-	chmod 755 `whoami`
-	cd ~
-	mkdir public_html
-	chmod 755 public_html
-	cd public_html
-	# This will create a new directory called arrayline in public_html
-	svn co https://arrayline.svn.sourceforge.net/svnroot/arrayline/trunk/public_html arrayline 
-
-	cd ~
-	mkdir tmp
-	cd tmp
-	# export a copy of the trunk to get access to the dbconfig and database files
-	svn export https://arrayline.svn.sourceforge.net/svnroot/arrayline/trunk/ arrayline
-	#copy the db config to your home dir (were arrayline will look for it if placed in
-	# ~/public_html/arrayline
-	# see arrayline/system/configuration.php for details
-	cp arrayline/trunk/dbconfig.php ~/dbconfig.php
-	#edit dbconfig and set the details of your database
-	# set server to localhost not 127.0.0.1 (it uses a local socket instead to tcp/ip and is faster)
-	gedit ~/dbconfig.php
+C. Get arrayline
 	
-	#edit the configuration file arrayline/system/configuration.php and set the basepath
-	# you should not need to change anything else
-	# leave debug on
-	gedit ~/public_html/arrayline/system/configuration.php
+	6. Create a public directory on your (or preferably a dedicated users) 
+		home folder and make it accessible to the webserver ( you are
+		also making it accessible to every other user on the system)
 
-	# make the job and dataset directories world writable (so that the server can write to them)
-	cd ~/public_html/arrayline
-	chmod 0777 jobs
-	chmod 0777 datastore
+		$ cd ~/..
+		$ chmod 755 `whoami`
+		$ cd ~
+		$ mkdir public_html
+		$ chmod 755 public_html
+		$ cd public_html
+		$ svn co https://arrayline.svn.sourceforge.net/svnroot/arrayline/trunk/public_html arrayline 
 
-7. Use phpmyadmin to import database.sql into your server
+	7. Export a copy of the trunk to get access to the dbconfig and database files
+		
+		$ cd ~
+		$ mkdir tmp
+		$ cd tmp
+		$ svn export https://arrayline.svn.sourceforge.net/svnroot/arrayline/trunk/ arrayline
 
-8. Visit http://localhost/~username/arrayline on your browser and login
+	8. copy the dbconfig.php to your home directory (were arrayline will 
+		look for it if placed in ~/public_html/arrayline
+		(you can change this location by editing arrayline/system/configuration.php)
 
+		$ cp arrayline/trunk/dbconfig.php ~/dbconfig.php
+
+	9. Edit dbconfig.php to set the details of your database
+		$ gedit ~/dbconfig.php
+	
+	10. Edit the configuration file arrayline/system/configuration.php and set the basepath
+		to the root of the arrayline installation
+
+		$ gedit ~/public_html/arrayline/system/configuration.php
+
+	11. Make the job and dataset directories world writable (so that the server can write to them)
+
+		$ cd ~/public_html/arrayline
+		$ chmod 0777 jobs
+		$ chmod 0777 datastore
+
+	12. Use phpmyadmin to import database.sql into your server
+
+	13. Visit http://localhost/~username/arrayline on your browser and login
+
+	14. Change the default password
