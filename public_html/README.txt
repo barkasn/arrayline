@@ -1,5 +1,4 @@
-// $Id: $
-// $Rev: $
+// $LastChangedDate$
 
 
 Arrayline is an open source collaborative web platform
