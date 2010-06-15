@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 15, 2010 at 02:18 PM
+-- Generation Time: Jun 15, 2010 at 04:36 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.2-1ubuntu4.2
 
@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `datasets` (
   `owner_user_id` int(11) NOT NULL,
   `dataset_processor_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=58 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=59 ;
 
 --
 -- Dumping data for table `datasets`
@@ -141,7 +141,8 @@ INSERT INTO `datasets` (`id`, `job_id`, `parent_dataset_id`, `dataset_state_id`,
 (54, 142, 49, 2, 1, 2),
 (55, 143, 49, 2, 1, 2),
 (56, 145, 49, 2, 1, 2),
-(57, 146, 49, 2, 1, 2);
+(57, 146, 49, 2, 1, 2),
+(58, 147, 49, 2, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -154,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `job_states` (
   `internal_name` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
 -- Dumping data for table `job_states`
@@ -169,7 +170,8 @@ INSERT INTO `job_states` (`id`, `internal_name`, `name`) VALUES
 (6, 'processRunning', 'Process Running'),
 (7, 'processComplete', 'Process Complete'),
 (8, 'postProcessing', 'Post-processing'),
-(9, 'complete', 'Job Complete');
+(9, 'complete', 'Job Complete'),
+(10, 'failed', 'Job Failed');
 
 -- --------------------------------------------------------
 
@@ -193,7 +195,7 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `dataset_processor_id` int(11) DEFAULT NULL,
   `data_cleared` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=147 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=148 ;
 
 --
 -- Dumping data for table `jobs`
@@ -204,7 +206,8 @@ INSERT INTO `jobs` (`id`, `job_state_id`, `description`, `autorun`, `run_start`,
 (142, 9, 'mdlRandomizer Developement Job', 0, '0000-00-00', '0000-00-00', '0', 54, 49, NULL, 2, 1, 2, 0),
 (144, 1, 'mdlRandomizer Developement Job', 0, '0000-00-00', '0000-00-00', '0', 0, NULL, NULL, NULL, NULL, NULL, 0),
 (145, 9, 'mdlRandomizer Developement Job', 0, '0000-00-00', '0000-00-00', '0', 56, 49, NULL, 2, 1, 2, 1),
-(146, 9, 'mdlRandomizer Developement Job', 0, '0000-00-00', '0000-00-00', '0', 57, 49, NULL, 2, 1, 2, 1);
+(146, 9, 'mdlRandomizer Developement Job', 0, '0000-00-00', '0000-00-00', '0', 57, 49, NULL, 2, 1, 2, 1),
+(147, 9, 'mdlRandomizer Developement Job', 0, '2010-06-15', '2010-06-15', '0', 58, 49, NULL, 2, 1, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -314,7 +317,7 @@ CREATE TABLE IF NOT EXISTS `script_sets` (
   `description` varchar(255) NOT NULL,
   `entry_script_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=58 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=59 ;
 
 --
 -- Dumping data for table `script_sets`
@@ -343,7 +346,8 @@ INSERT INTO `script_sets` (`id`, `description`, `entry_script_id`) VALUES
 (54, 'Filename randomizer job script set', 1),
 (55, 'Filename randomizer job script set', 1),
 (56, 'Filename randomizer job script set', 1),
-(57, 'Filename randomizer job script set', 1);
+(57, 'Filename randomizer job script set', 1),
+(58, 'Filename randomizer job script set', 1);
 
 -- --------------------------------------------------------
 
@@ -407,7 +411,9 @@ INSERT INTO `script_sets_scripts` (`script_set_id`, `script_id`) VALUES
 (56, 1),
 (56, 2),
 (57, 1),
-(57, 2);
+(57, 2),
+(58, 1),
+(58, 2);
 
 -- --------------------------------------------------------
 
@@ -463,7 +469,7 @@ CREATE TABLE IF NOT EXISTS `system_log` (
   `created` datetime NOT NULL,
   `message` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `system_log`
@@ -472,7 +478,9 @@ CREATE TABLE IF NOT EXISTS `system_log` (
 INSERT INTO `system_log` (`id`, `created`, `message`) VALUES
 (1, '2010-06-15 14:05:21', 'Cron.php running'),
 (2, '2010-06-15 14:14:41', 'Cron.php running'),
-(3, '2010-06-15 14:14:57', 'Cron.php running');
+(3, '2010-06-15 14:14:57', 'Cron.php running'),
+(4, '2010-06-15 15:56:22', 'Cron.php running'),
+(5, '2010-06-15 15:56:23', 'Cron.php running complete');
 
 -- --------------------------------------------------------
 
