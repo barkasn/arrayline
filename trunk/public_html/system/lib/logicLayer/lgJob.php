@@ -118,8 +118,7 @@ class lgJob {
 		return lgJobHelper::getJobLogFilePath($this);
 	}
 
-
-	// Misc public fucntions
+	// Other public functions
 	public function schedule() {
 		$this->saveScripts();
 		$this->saveInputDataset();
@@ -134,7 +133,8 @@ class lgJob {
 
 		$scriptsDir = $this->getScriptDirectoryPath();
 		if (!chdir($scriptsDir) ) {
-			//TODO: Manage the error
+			$this->setFailed();
+			throw new Exception('Unable to change directory to: '.$scriptsDir);
 		} else {
 			$command = '. '.$entryPath.' > ../joblog.txt &';
 			exec($command);
@@ -231,14 +231,29 @@ class lgJob {
 		$lgInputDataset->copyData($inputDir);
 	}
 
+
+	// Job state setting
 	private function setToBePostprocessed() {
-		$dbRunningCompleteJobState = dbJobStateHelper::getJobStateByInternalName('processComplete');
-		$this->dbJob->setJobState($dbRunningCompleteJobState);
+		$this->setStateByInternalName('processComplete');
 	}
 
 	private function setRunning() {
-		$dbSetRunningJobState = dbJobStateHelper::getJobStateByInternalName('processRunning');
-		$this->dbJob->setJobState($dbSetRunningJobState);
+		$this->setStateByInternalName('processRunning');
+	}
+
+	private function setFailed() {
+		$this->setStateByInternalName('failed');
+	}
+
+	private function setStateByInternalName($stateInternalName) {
+		$dbState = dbJobStateHelper::getJobStateByInternalName($stateInternalName);
+		if (!$dbState) {
+			throw new Exception('Invalide Job state');
+			return false;
+		} else {
+			$this->dbJob->setJobState($dbState);
+		}
+		return true;
 	}
 
 	private function setToRun() {
