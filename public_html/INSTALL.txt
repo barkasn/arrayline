@@ -1,4 +1,6 @@
-Installation Instructions for Arrayline
+Installation Guilelines for Arrayline
+
+
 
 Author: Nikolaos Barkas
 Date: 14 June 2010
