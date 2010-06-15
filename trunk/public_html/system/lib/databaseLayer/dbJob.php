@@ -29,19 +29,18 @@ class dbJob {
 	private $runEnd;
 	private $comment;
 	private $scriptSetId;
-	
 	private $inputDatasetId;
 	private $outputDatasetId;
 	private $outputDatasetProcessStateId;
 	private $userId;
 	private $datasetProcessorId;
-
+	private $dataCleared;
 	private $dirty;
 
 	public function __construct($id) {
 		global $pdo;
 
-		$stmt = $pdo->prepare('SELECT job_state_id, description, autorun, run_start, run_end, comment, script_set_id, input_dataset_id, output_dataset_id, output_dataset_process_state_id, user_id, dataset_processor_id FROM jobs WHERE id = :id;');
+		$stmt = $pdo->prepare('SELECT job_state_id, description, autorun, run_start, run_end, comment, script_set_id, input_dataset_id, output_dataset_id, output_dataset_process_state_id, user_id, dataset_processor_id, data_cleared FROM jobs WHERE id = :id;');
 		$stmt->bindValue(':id', $id);
 		$stmt->execute();
 		
@@ -58,8 +57,22 @@ class dbJob {
 			$this->outputDatasetProcessStateId = $row['output_dataset_process_state_id'];
 			$this->userId = $row['user_id'];
 			$this->datasetProcessorId = $row['dataset_processor_id'];
+			$this->dataCleared = $row['data_cleared'];
 			$this->id = $id;
 			$this->dirty = false;
+		}
+	}
+
+	public function getDataCleared() {
+		return $this->dataCleared;
+	}
+
+	public function setDataCleared($value) {
+		if (is_bool($value)) {
+			$this->dataCleared = $value;
+			$this->dirty = true;
+		} else {
+			throw new Exception('Invalid parameter type:  boolean Required.');
 		}
 	}
 
@@ -184,7 +197,7 @@ class dbJob {
 		global $pdo;
 
 		if ($this->dirty) {
-			$stmt = $pdo->prepare('UPDATE jobs SET job_state_id = :job_state_id, description = :description, autorun = :autorun, run_start = :run_start, run_end = :run_end, comment = :comment, script_set_id = :script_set_id, input_dataset_id = :input_dataset_id, output_dataset_id = :output_dataset_id, output_dataset_process_state_id = :output_dataset_process_state_id, dataset_processor_id = :dataset_processor_id, user_id = :user_id  WHERE id = :id;');
+			$stmt = $pdo->prepare('UPDATE jobs SET job_state_id = :job_state_id, description = :description, autorun = :autorun, run_start = :run_start, run_end = :run_end, comment = :comment, script_set_id = :script_set_id, input_dataset_id = :input_dataset_id, output_dataset_id = :output_dataset_id, output_dataset_process_state_id = :output_dataset_process_state_id, dataset_processor_id = :dataset_processor_id, user_id = :user_id, data_cleared = :data_cleared  WHERE id = :id;');
 
 			$stmt->bindValue(':job_state_id', $this->jobStateId);
 			$stmt->bindValue(':description', $this->description);
@@ -198,6 +211,7 @@ class dbJob {
 			$stmt->bindValue(':output_dataset_process_state_id', $this->outputDatasetProcessStateId);
 			$stmt->bindValue(':dataset_processor_id', $this->datasetProcessorId);
 			$stmt->bindValue(':user_id', $this->userId);
+			$stmt->bindValue(':data_cleared', $this->dataCleared);
 			
 			$stmt->bindValue(':id', $this->id);
 			$stmt->execute();
