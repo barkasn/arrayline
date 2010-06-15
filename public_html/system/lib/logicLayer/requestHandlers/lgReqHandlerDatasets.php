@@ -18,8 +18,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 */
+
 class lgReqHandlerDatasets implements iRequestHandler {
 	public function __construct() {
 		
@@ -47,11 +47,7 @@ class lgReqHandlerDatasets implements iRequestHandler {
 		}
 	}
 
-	// At this point the programmer starts wondering if his naming scheme
-	// was perhaps unfortunate...
 	private function processProcessDatasetRequest(lgRequest $lgRequest) {
-		// Get available dataset processors which accept the dataset type of this dataset
-		// as input and display these to the user
 		$postData = $lgRequest->getPostArray();
 		if (isset($postData['processorid'])) {
 			$id = $postData['processorid'];
@@ -137,27 +133,53 @@ class lgReqHandlerDatasets implements iRequestHandler {
 	}
 
 	private function processViewAllRequest(lgRequest $lgRequest) {
+		$postArray = $lgRequest->getPostArray();
+
+		switch (isset($postArray['viewdisplay'])?$postArray['viewdisplay']:'simple') {
+			case 'simple':
+				$this->displayDatasetsSimple($lgRequest);
+				break;
+			case 'hierarchical':
+				$this->displayDatasetsHierarchical($lgRequest);
+				break;
+		}
+	}
+
+	private function displayDatasetsSimple(lgRequest $lgRequest) {
 		$page = new lgCmsPage();
 		$page->setTitle('View Datasets');
 		$page->appendContent('<h2>View Datasets</h2>');
 
+		// TODO: Add Search Box
+
 		$datasets = lgDatasetHelper::getAllDatasets();
-		if ($datasets) {
-			foreach($datasets as $ds) {
-				$datasetEntry = '<div class="datasetEntry">';
-				$datasetEntry .= '<strong>'.$ds->getId().'</strong>';
-				$datasetEntry .= '<div class="dataset-actions">';
-				$datasetEntry .= '<a href="index.php?requeststring=viewdataset&datasetid='.$ds->getId().'">View</a> ';
-				$datasetEntry .= '<a href="index.php?requeststring=processdataset&datasetid='.$ds->getId().'">Process</a> ';
-				$datasetEntry .= '<a href="index.php?requeststring=deletedataset&datasetid='.$ds->getId().'">Delete</a> ';
-				$datasetEntry .= '</div>';
-	
-				$page->appendContent($datasetEntry);
+		if (isset($datasets) && !empty($datasets)) {
+			foreach($datasets as $dataset) {
+				$page->appendContent($this->getRenderedDatasetEntry($dataset));
 			}
 		} else {
 			$page->appendContent('No Datasets Found');
 		}
 		$page->render();
+	}
+
+
+	private function getRenderedDatasetEntry($ds) {
+		$datasetEntry = '<div class="dataset-entry">';
+		$datasetEntry .= '<div class="dataset-title">';
+		$datasetEntry .= '<strong>'.$ds->getId().'</strong>';
+		$datasetEntry .= '</div>';
+		$datasetEntry .= '<div class="dataset-actions">';
+		$datasetEntry .= '<a href="index.php?requeststring=viewdataset&datasetid='.$ds->getId().'">View</a> ';
+		$datasetEntry .= '<a href="index.php?requeststring=processdataset&datasetid='.$ds->getId().'">Process</a> ';
+		$datasetEntry .= '<a href="index.php?requeststring=deletedataset&datasetid='.$ds->getId().'">Delete</a> ';
+		$datasetEntry .= '</div>';
+
+		return $datasetEntry;
+	}
+
+	private function displayDatasetsHierarchical(lgRequest $lgRequest) {
+		die('Not implemented');	
 	}
 
 	public function getRequiredPermissions() {
