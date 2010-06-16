@@ -63,11 +63,11 @@ EOT;
 		$page->render();
 	}
 
-	public function displayLoginPage() {
+	public function displayLoginPage($message = '') {
 		$page = new lgPage();
 		$page->linkCss('login.css');
 		$page->setTitle('Login Page');
-		$page->setContent($this->getLoginForm());
+		$page->setContent($this->getLoginForm($message));
 		$page->render();
 		exit;
 	}
@@ -112,31 +112,38 @@ EOT;
 
 	private function cleanupSession() {
 		if (isset($_SESSION) && !empty($_SESSION)) {
-			foreach (array_keys($_SESSSION) as $key) {
+			foreach (array_keys($_SESSION) as $key) {
 				unset ($_SESSION[$key]);
 			}
 		}
 	}
 
 	private function showLoginSuccess() {
+		$redirectDelay = 3;
+
 		$page = new lgPage();
-		$page->setTitle('Login Sucessful');
-		$page->setContent('Login Sucessful. You will be redirected to the main page in 3 seconds.');
-		$page->setRedirect('index.php', 3);
+		$page->setTitle('Login Successful');
+		$page->setContent('Login Successful. You will be redirected to the <a href="index.php" >main page</a> in '.						$redirectDelay.' seconds.');
+		$page->setRedirect('index.php', $redirectDelay);
 		$page->render();
 	}
 
 	private function showLoginFailed($message = '') {
-		$page = new lgPage();
-		$page->setTitle('Login Failed');
-		$page->setContent('Login Failed. '.$message);
-		$page->render();
+		$this->displayLoginPage($message);
 	}
 
-	private function getLoginForm() {
+	private function getLoginForm($errorMessage) {
+		$errorContainer = '';		
+		if (!empty($errorMessage)) {
+			$errorContainer .= '<div class="error-message">';
+			$errorContainer .= $errorMessage;
+			$errorContainer .= '</div>';
+		}
+
 		$ret =<<<EOT
 <div class="page login-page">
 <h2>ArrayLine Login</h2>
+$errorContainer
 <form method="post" action='index.php'>
 	<label for="username">Username:</label><input type="text" name="username" id="username"><br />
 	<label for="password">Password:</label><input type="password" name="password" id="password"><br />
