@@ -49,12 +49,11 @@ class lgCmsPage extends lgPage {
 
 
 	public function render() {
-
 		$navRendered = $this->getRenderedNavigation();
 		$this->content =<<<EOT
 			<div class="page">
 				<div class="header">
-				
+					<h2><span>Arrayline</span></h2>
 				</div>
 				<div class="navigation">	
 					$navRendered
@@ -64,7 +63,7 @@ class lgCmsPage extends lgPage {
 					$this->cmsPageContent
 				</div>
 				<div class="footer">
-
+					<p class="website"><a href="http://www.arrayline.org/">arrayline.org</a></p>
 				</div>
 			</div>
 EOT;

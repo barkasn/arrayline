@@ -73,17 +73,16 @@ class lgReqHandlerUsers implements iRequestHandler {
 		} else {
 			foreach($lgPermissions as $p) {
 				$page->appendContent('<div class="permission-row">'.
-					$p->getName().'<a href="index.php?requeststring=editpermission&permissionid='.$p->getId().'">edit</a></div>');
+					$p->getName().'<a href="index.php?requeststring=editpermission&permissionid='.
+						$p->getId().'">edit</a></div>');
 			}
 		}
 		$page->render();
-		
 	}
 
 	private function processEditPermission(lgRequest $lgRequest) {
 		echo 'Edit Permission not implemented';
 	}
-
 
 	private function processViewRoles(lgRequest $lgRequest) {
 		$page = new lgCmsPage();
@@ -143,7 +142,7 @@ class lgReqHandlerUsers implements iRequestHandler {
 		$passwordField = new lgHtmlPasswordField('password', 'Password: ');
 		$htmlForm->addField($passwordField);
 
-		$submitButton = new lgHtmlSubmitButton('submit', 'Submit');
+		$submitButton = new lgHtmlSubmitButton('submit', 'Create User');
 		$htmlForm->addField($submitButton);
 
 		$requestStringField = new lgHtmlHiddenField('requeststring');
@@ -154,7 +153,9 @@ class lgReqHandlerUsers implements iRequestHandler {
 		$submitConfirmField->setValue('1');
 		$htmlForm->addField($submitConfirmField);	
 
+		$page->appendContent('<h2>Create New User</h2>');
 		$page->appendContent($htmlForm->getRenderedHTML());
+
 		$page->render();
 	}
 
