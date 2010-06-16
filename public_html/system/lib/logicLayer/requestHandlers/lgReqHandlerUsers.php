@@ -68,6 +68,7 @@ class lgReqHandlerUsers implements iRequestHandler {
 	private function processViewPriviledges(lgRequest $lgRequest) {
 		$page = new lgCmsPage();
 		$lgPermissions = lgPermissionHelper::getAllPermissions();
+
 		if (empty($lgPermissions)) {
 			$page->appendContent('No Permissions found');
 		} else {
@@ -77,6 +78,7 @@ class lgReqHandlerUsers implements iRequestHandler {
 						$p->getId().'">edit</a></div>');
 			}
 		}
+
 		$page->render();
 	}
 
@@ -142,6 +144,25 @@ class lgReqHandlerUsers implements iRequestHandler {
 		$passwordField = new lgHtmlPasswordField('password', 'Password: ');
 		$htmlForm->addField($passwordField);
 
+		$passwordField2 = new lgHtmlPasswordField('password2', 'Repeat Password: ');
+		$htmlForm->addField($passwordField2);
+
+		$realNameField = new lgHtmlTextField('realname', 'Real Name: ');
+		$htmlForm->addField($realNameField);
+
+		// TODO: Make this a text area
+		$notesField = new lgHtmlTextField('notes', 'Notes: ');
+		$htmlForm->addField($notesField);
+		
+		$roomField = new lgHtmlTextField('room', 'Room: ');
+		$htmlForm->addField($roomField);
+
+		$telephoneField = new lgHtmlTextField('telephone', 'Telephone: ');
+		$htmlForm->addField($telephoneField);
+
+		$emailField = new lgHtmlTextField('email', 'Email: ');
+		$htmlForm->addField($emailField);
+
 		$submitButton = new lgHtmlSubmitButton('submit', 'Create User');
 		$htmlForm->addField($submitButton);
 
@@ -160,9 +181,9 @@ class lgReqHandlerUsers implements iRequestHandler {
 	}
 
 	private function processCreateUserFromData(array $postData) {
+		// TODO: Turn these into constants
 		global $minUsernameLength;
 		global $maxUsernameLength;
-
 		global $minPasswordLength;
 		global $maxPasswordLength;
 
@@ -170,6 +191,14 @@ class lgReqHandlerUsers implements iRequestHandler {
 	
 		$username = $postData['username'];
 		$password = $postData['password'];
+		$password2 = $postData['password2'];	
+		$realName = $postData['realname'];
+		$notes = $postData['notes'];
+		$room = $postData['room'];
+		$telephone = $postData['telephone'];
+		$email = $postData['email'];
+
+		// TODO: Add check for password
 
 		if (empty($username)) {
 			$page->setTitle('Create User - Invalid Username');
@@ -191,10 +220,18 @@ class lgReqHandlerUsers implements iRequestHandler {
 			$page->appendContent('A user with this username already exists. Please select a diffent username.');
 		} else {
 			$lgUser = lgUserHelper::createUser($postData['username'], $postData['password']);
+
 			if ($lgUser) {
+				$lgUser->setRealName($realName);
+				$lgUser->setNotes($notes);
+				$lgUser->setRoom($room);
+				$lgUser->setTelephone($telephone);
+				$lgUser->setEmail($email);
+
 				$page->setTitle('Create user - sucess');
 				$page->setContent('The user was sucessfully created');
 			} else {
+				// TODO: Show Form with error message
 				$page->setTitle('Create user - Error');
 				$page->setContent('An error occured while attempting to create the new user.');
 			}	
