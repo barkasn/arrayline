@@ -29,12 +29,9 @@ class lgReqHandlerDefault implements iRequestHandler {
 	}
 
 	public function processRequest(lgRequest $lgRequest) {
-		// Display Default page	
 		$page = new lgCmsPage();
-		$page->setTitle('Default Page');
-		$page->setContent('Welcome to Arrayline<form method="POST"><input type="hidden" name="requeststring" value="logout"><input type="submit" value="logout"/></form>');
+		$page->setTitle('Home Page');
 		$page->render();
-		
 	}
 
 	public function getRequiredPermissions() {

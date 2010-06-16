@@ -89,6 +89,7 @@ class lgReqHandlerUsers implements iRequestHandler {
 	private function processViewRoles(lgRequest $lgRequest) {
 		$page = new lgCmsPage();
 		$lgRoles = lgRoleHelper::getAllRoles();
+		$page->appendContent('<h2>View Roles</h2>');
 		if (empty($lgRoles)) {
 			$page->appendContent('No roles found');
 		} else {
