@@ -20,8 +20,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 */
+
 class dbUser {
 	private $id;
 	private $username;
@@ -35,7 +35,7 @@ class dbUser {
 	private $notes;
 	private $room;
 	private $telephone;
-	private email;
+	private $email;
 
 	private $dirty;
 
@@ -80,6 +80,7 @@ class dbUser {
 		}
 		
 	}
+	
 
 	public function getRealName() {
 		return $this->realName;
@@ -87,15 +88,6 @@ class dbUser {
 	
 	public function setRealName($value) {
 		$this->realName = $value;
-		$this->dirty = true;
-	}
-
-	public function getNotes() {
-		return $this->notes;
-	}
-
-	public function setNotes($values) {#
-$value;
 		$this->dirty = true;
 	}
 
@@ -210,33 +202,45 @@ $value;
 		global $pdo;
 
 		if ($this->dirty) {
-			$stmt = $pdo->prepare('UPDATE users SET username = :username, passwordsha1 = :passwordsha1, created = :created, last_access = :last_access WHER id = :id;');
+			$stmt = $pdo->prepare('UPDATE users SET username = :username, passwordsha1 = :passwordsha1, created = :created, last_access = :last_access, real_name = :real_name, notes = :notes, room = :room, telephone = :telephone, email = :email WHERE id = :id;');
 			$stmt->bindValue(':username', $this->username);
-			$stmt->bindValue(':passwordsha1', $this->passwordsha1);
+			$stmt->bindValue(':passwordsha1', $this->passwordSha1);
 			$stmt->bindValue(':created', $this->created);
 			$stmt->bindValue(':last_access', $this->lastAccess);
+
+			$stmt->bindValue(':real_name', $this->realName);
+			$stmt->bindValue(':notes', $this->notes);
+			$stmt->bindValue(':room', $this->room);
+			$stmt->bindValue(':telephone', $this->telephone);
+			$stmt->bindValue(':email', $this->email);
+			$stmt->bindValue(':id', $this->id);
+
 			$stmt->execute();
 
 			$stmt2 = $pdo->prepare('DELETE FROM user_roles WHERE user_id = :user_id;');
 			$stmt2->bindValue(':user_id', $this->id);
 			$stmt2->execute();
 
-			foreach ($roleIds as $rid) {
-				$stmt3 = $pdo->prepare('INSERT INTO user_roles(user_id, role_id) VALUES (:user_id, :role_id);');
-				$stmt3->bindValue(':user_id', $this->id);
-				$stmt3->bindValue(':role_id', $rid);
-				$stmt3->execute();
+			if (!empty($this->roleIds)) {
+				foreach ($this->roleIds as $rid) {
+					$stmt3 = $pdo->prepare('INSERT INTO user_roles(user_id, role_id) VALUES (:user_id, :role_id);');
+					$stmt3->bindValue(':user_id', $this->id);
+					$stmt3->bindValue(':role_id', $rid);
+					$stmt3->execute();
+				}
 			}
 
-			$stmt4 = $pdo->prepare('DELECT FROM user_permissions WHERE user_id = :user_id;');
+			$stmt4 = $pdo->prepare('DELETE FROM user_permissions WHERE user_id = :user_id;');
 			$stmt4->bindValue(':user_id', $this->id);
 			$stmt4->execute();
 
-			foreach ($permissionsIds as $pid) {
-				$stmt5 = $pdo->prepare('INSERT INTO user_permissions(user_id, permission_id) VALUES (:user_id, :permissions_id);');
-				$stmt5->bindValue(':user_id', $this->id);
-				$stmt5->bindValue(':permissions_id', $pid);
-				$stmt5->execute();
+			if (!empty($this->permissionsIds)) {
+				foreach ($permissionsIds as $pid) {
+					$stmt5 = $pdo->prepare('INSERT INTO user_permissions(user_id, permission_id) VALUES (:user_id, :permissions_id);');
+					$stmt5->bindValue(':user_id', $this->id);
+					$stmt5->bindValue(':permissions_id', $pid);
+					$stmt5->execute();
+				}
 			}
 
 			$this->dirty =  false;	

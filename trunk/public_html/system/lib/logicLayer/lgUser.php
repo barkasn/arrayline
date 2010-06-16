@@ -33,7 +33,7 @@ class lgUser {
 		}
 	}
 
-	public function _destruct() {
+	public function __destruct() {
 		$this->dbUser->save();
 	}
 		
