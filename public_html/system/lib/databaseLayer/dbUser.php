@@ -30,12 +30,19 @@ class dbUser {
 	private $lastAccess;
 	private $rolesIds;
 	private $permissionsIds;
+
+	private $realName;
+	private $notes;
+	private $room;
+	private $telephone;
+	private email;
+
 	private $dirty;
 
 	public function __construct($id) {
 		global $pdo;
 
-		$stmt = $pdo->prepare('SELECT username, passwordsha1, created, last_access FROM users WHERE id = :id;');
+		$stmt = $pdo->prepare('SELECT username, passwordsha1, created, last_access, real_name, notes, room, telephone, email FROM users WHERE id = :id;');
 		$stmt->bindParam(':id', $id);
 		$stmt->execute();
 		
@@ -45,7 +52,11 @@ class dbUser {
 			$this->passwordSha1 = $row['passwordsha1'];
 			$this->created = $row['created'];
 			$this->last_access = $row['last_access'];
-
+			$this->real_name = $row['real_name'];
+			$this->notes = $row['notes'];
+			$this->room = $row['room'];
+			$this->room = $row['telephone'];
+			$this->email = $row['email'];
 
 			$this->rolesIds = array();
 			$stmt2 = $pdo->prepare('SELECT role_id FROM user_roles WHERE user_id = :user_id');
@@ -68,6 +79,60 @@ class dbUser {
 			throw new Exception("User not found");
 		}
 		
+	}
+
+	public function getRealName() {
+		return $this->realName;
+	}
+	
+	public function setRealName($value) {
+		$this->realName = $value;
+		$this->dirty = true;
+	}
+
+	public function getNotes() {
+		return $this->notes;
+	}
+
+	public function setNotes($values) {#
+$value;
+		$this->dirty = true;
+	}
+
+	public function getNotes() {
+		return $this->notes;
+	}
+
+	public function setNotes($value) {
+		$this->notes = $value;
+		$this->dirty = true;
+	}
+
+	public function getRoom() {
+		return $this->room;
+	}
+
+	public function setRoom($value) {
+		$this->room = $value;
+		$this->dirty = true;
+	}
+
+	public function getTelephone() {
+		return $this->telephone;
+	}
+
+	public function setTelephone($value) {
+		$this->telephone = $value;
+		$this->dirty = true;
+	}
+
+	public function getEmail() {
+		return $this->email;
+	}
+
+	public function setEmail($value) {
+		$this->email = $value;
+		$this->dirty = true;
 	}
 
 	public function getRoles() {
