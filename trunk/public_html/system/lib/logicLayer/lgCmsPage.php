@@ -65,8 +65,7 @@ class lgCmsPage extends lgPage {
 				<div class="footer">
 					<div class="footer-internal">
 						<p class="website"><a href="http://www.arrayline.org/">www.arrayline.org</a></p>
-						<p class="copyright">&copy; Copyright 2010 Nikolaos Barkas</p>
-						<p class="licence">This software is licenced under the terms of the GPLv3 licence</p>
+						<p class="copyright">Arrayline Copyright &copy; 2010 Nikolaos Barkas</p>
 					</div>
 				</div>
 			</div>
