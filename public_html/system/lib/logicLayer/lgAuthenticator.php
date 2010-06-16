@@ -20,8 +20,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 */
+
 class lgAuthenticator implements iRequestHandler {
 	private static $instance;
 		
@@ -86,42 +86,50 @@ EOT;
 		$username = $args['username'];
 		$password = $args['password'];
 	
-		if ($username == '') {
-			$page = new lgPage();
-			$page->setTitle('Login Failed');
-			$page->setContent('Login Failed: Username required');
-			$page->render();
-			exit;
-		} else if ($password == '') {
-			$page = new lgPage();
-			$page->setTitle('Login Failed');
-			$page->setContent('Login Failed: Password required');
-			$page->render();
+		if ($username == '' || $password == '') {
+			$this->showLoginFailed('Username and Password required');
 			exit;
 		} else {
 			$lgUser = lgUserHelper::getUserByUserName($username);
 			if ($lgUser == NULL) {
-				$page = new lgPage();
-				$page->setTitle('Login Failed');
-				$page->setContent('Login Failed. User does not exist');
-				$page->render();
+				$this->showLoginFailed('Invalid username or password');
 				exit;
 			} else if ($lgUser->checkPassword($password)) {
-				$_SESSION['isloggedin'] = true;
-				$_SESSION['userid'] = $lgUser->getId();
-
-				$page = new lgPage();
-				$page->setTitle('Login Sucessful');
-				$page->setContent('Login Sucessful. You will be redirected to the main page in 3 seconds.');
-				$page->setRedirect('index.php', 3);
-				$page->render();
+				$this->setUserLoggedIn($lgUser->getId());
+				$this->showLoginSuccess();
 			} else {
-				$page = new lgPage();
-				$page->setTitle('Login Failed');
-				$page->setContent('Login Failed. Incorrect password.');
-				$page->render();
+				$this->showLoginFailed('Invalid username or password');
 			}
 		}
+	}
+
+	private function setUserLoggedIn($id) {
+		$this->cleanupSession();	
+		$_SESSION['isloggedin'] = true;
+		$_SESSION['userid'] = $id;
+	}
+
+	private function cleanupSession() {
+		if (isset($_SESSION) && !empty($_SESSION)) {
+			foreach (array_keys($_SESSSION) as $key) {
+				unset ($_SESSION[$key]);
+			}
+		}
+	}
+
+	private function showLoginSuccess() {
+		$page = new lgPage();
+		$page->setTitle('Login Sucessful');
+		$page->setContent('Login Sucessful. You will be redirected to the main page in 3 seconds.');
+		$page->setRedirect('index.php', 3);
+		$page->render();
+	}
+
+	private function showLoginFailed($message = '') {
+		$page = new lgPage();
+		$page->setTitle('Login Failed');
+		$page->setContent('Login Failed. '.$message);
+		$page->render();
 	}
 
 	private function getLoginForm() {
