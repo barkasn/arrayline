@@ -65,6 +65,7 @@ EOT;
 
 	public function displayLoginPage() {
 		$page = new lgPage();
+		$page->linkCss('login.css');
 		$page->setTitle('Login Page');
 		$page->setContent($this->getLoginForm());
 		$page->render();
@@ -134,13 +135,15 @@ EOT;
 
 	private function getLoginForm() {
 		$ret =<<<EOT
+<div class="page login-page">
 <h2>ArrayLine Login</h2>
 <form method="post" action='index.php'>
 	<label for="username">Username:</label><input type="text" name="username" id="username"><br />
-	<label for="password">Password:</lable><input type="password" name="password" id="password"><br />
+	<label for="password">Password:</label><input type="password" name="password" id="password"><br />
 	<input type="hidden" name="requeststring" value="login">
-	<input type="submit" value="Login"</input>
+	<input type="submit" id="login" value="Login"</input>
 </form>
+</div>
 EOT;
 		return $ret;
 	}
