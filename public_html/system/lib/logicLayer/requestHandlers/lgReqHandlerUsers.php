@@ -67,13 +67,14 @@ class lgReqHandlerUsers implements iRequestHandler {
 	private function processViewPriviledges(lgRequest $lgRequest) {
 		$page = new lgCmsPage();
 		$lgPermissions = lgPermissionHelper::getAllPermissions();
+		$page->appendContent('<h2>View Priviledges</h2>');
 
 		if (empty($lgPermissions)) {
 			$page->appendContent('No Permissions found');
 		} else {
 			foreach($lgPermissions as $p) {
 				$page->appendContent('<div class="permission-row">'.
-					$p->getName().'<a href="index.php?requeststring=editpermission&permissionid='.
+					$p->getName().' <a href="index.php?requeststring=editpermission&permissionid='.
 						$p->getId().'">edit</a></div>');
 			}
 		}
@@ -101,13 +102,14 @@ class lgReqHandlerUsers implements iRequestHandler {
 	private function processViewUsersRequest(lgRequest $lgRequest) {
 		$page = new lgCmsPage();
 		$lgUsers  = lgUserHelper::getAllUsers();
+		$page->appendContent('<h2>View Users</h2>');
 		if (empty($lgUsers)) {
 			$page->appendContent('No users found'); 
 		} else {
 			foreach ($lgUsers as $usr) {
 				$page->appendContent('<div class="user-row">'.
 					$usr->getUsername().
-					'<a href="index.php?requeststring=edituser&userid='.$usr->getId().'">edit</a>'.
+					' <a href="index.php?requeststring=edituser&userid='.$usr->getId().'">edit</a> '.
 					'<a href="index.php?requeststring=deleteuser&userid='.$usr->getId().'">delete</a>'.'</div>');
 			}
 		}
