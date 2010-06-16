@@ -1,0 +1,43 @@
+div.login-page {
+	width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+	font-family: Helvetica;
+}
+
+div.login-page h2 {
+	
+}
+
+div.login-page form {
+	width: 350px;
+	margin-left: auto;
+	margin-right: auto;
+	
+}
+
+div.login-page form label {
+	display: block;
+	float: left;
+	clear: both;
+	font-size: 0.8em;
+}
+
+div.login-page form input {
+	display: block;
+	float: left;
+	clear: both;
+	font-size: 1.40em;
+	width: 350px;
+	margin-bottom: 0.5em;
+	border: 1px solid #979;
+	background-color: #ded;
+	color: #000;
+}
+
+div.login-page form input#login {
+	clear: both;
+	float: right;
+	width: 80px;
+
+}
