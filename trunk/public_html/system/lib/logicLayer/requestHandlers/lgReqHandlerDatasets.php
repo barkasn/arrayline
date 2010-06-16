@@ -55,6 +55,7 @@ class lgReqHandlerDatasets implements iRequestHandler {
 			$id = $postData['processorid'];
 			$lgDatasetProcessor = new lgDatasetProcessor($id);
 			$lgSpecialDatasetProcessor = $lgDatasetProcessor->getSpecificObject();
+
 			// TODO: check permissions again
 			$lgSpecialDatasetProcessor->processRequest($lgRequest);
 		} else {
@@ -82,8 +83,8 @@ class lgReqHandlerDatasets implements iRequestHandler {
 						$procs->getId().'">'.$procs->getName().'</a><br />');
 			}
 		}
+
 		$page->render();	
-			
 	}
 
 	private function processCreateDatasetRequest(lgRequest $lgRequest) {
@@ -92,6 +93,7 @@ class lgReqHandlerDatasets implements iRequestHandler {
 			$id = $postData['processorid'];
 			$lgDatasetProcessor = new lgDatasetProcessor($id);
 			$lgSpecialDatasetProcessor = $lgDatasetProcessor->getSpecificObject();
+
 			// TODO: check permissions again
 			$lgSpecialDatasetProcessor->processRequest($lgRequest);
 		} else {
@@ -156,8 +158,10 @@ class lgReqHandlerDatasets implements iRequestHandler {
 
 		$datasets = lgDatasetHelper::getAllDatasets();
 		if (isset($datasets) && !empty($datasets)) {
+			$i = 1;
 			foreach($datasets as $dataset) {
-				$page->appendContent($this->getRenderedDatasetEntry($dataset));
+				$page->appendContent($this->getRenderedDatasetEntry($dataset, ($i++%2?'odd':'even')));
+ 
 			}
 		} else {
 			$page->appendContent('No Datasets Found');
@@ -166,15 +170,16 @@ class lgReqHandlerDatasets implements iRequestHandler {
 	}
 
 
-	private function getRenderedDatasetEntry($ds) {
-		$datasetEntry = '<div class="dataset-entry">';
+	private function getRenderedDatasetEntry($ds, $class = '') {
+		$datasetEntry = '<div class="dataset-entry '.$class.'">';
 		$datasetEntry .= '<div class="dataset-title">';
 		$datasetEntry .= '<strong>'.$ds->getId().'</strong>';
 		$datasetEntry .= '</div>';
 		$datasetEntry .= '<div class="dataset-actions">';
 		$datasetEntry .= '<a href="index.php?requeststring=viewdataset&datasetid='.$ds->getId().'">View</a> ';
 		$datasetEntry .= '<a href="index.php?requeststring=processdataset&datasetid='.$ds->getId().'">Process</a> ';
-		$datasetEntry .= '<a href="index.php?requeststring=deletedataset&datasetid='.$ds->getId().'">Delete</a> ';
+		//$datasetEntry .= '<a href="index.php?requeststring=deletedataset&datasetid='.$ds->getId().'">Delete</a> ';
+		$datasetEntry .= '</div>';
 		$datasetEntry .= '</div>';
 
 		return $datasetEntry;
