@@ -20,8 +20,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 */
+
 class lgUser {
 	private $id;
 	private $dbUser;
@@ -57,19 +57,15 @@ class lgUser {
 
 	public function checkPermissions($permissions = array()) {
 		$permissionMissing = false;
-
-
 		$allUserPermissions = $this->getAllPermissions();
 
 		if (!empty($permissions)) {
-
-		foreach ($permissions as $p) {
-			if (!in_array($p, $allUserPermissions)) {
-				$permissionMissing = true;
-				break;
+			foreach ($permissions as $p) {
+				if (!in_array($p, $allUserPermissions)) {
+					$permissionMissing = true;
+					break;
+				}
 			}
-		}
-
 		}
 
 		return (!$permissionMissing);
@@ -79,7 +75,6 @@ class lgUser {
 		$rolePermissions = $this->getRolePermissions();
 		$userPermissions = $this->getUserPermissions();
 		$allPermissions = array_unique(array_merge($rolePermissions, $userPermissions));
-
 
 		return $allPermissions;
 	}
@@ -114,6 +109,46 @@ class lgUser {
 
 		return $permissionStrings;
 					
+	}
+
+	public function getRealName() {
+		return $this->dbUser->getRealName();
+	}
+
+	public function setRealName($value) {
+		$this->dbUser->setRealName($value);
+	}
+
+	public function getNotes() {
+		return $this->dbUser->getNotes();
+	}
+
+	public function setNotes($values) {
+		$this->dbUser->setNotes($values);
+	}
+
+	public function getRoom() {
+		return $this->dbUser->getRoom();
+	}
+
+	public function setRoom($value) {
+		$this->dbUser->setRoom($value);
+	}
+
+	public function getTelephone() {
+		return $this->dbUser->getTelephone();
+	}
+
+	public function setTelephone($value) {
+		$this->dbUser->setTelephone($value);
+	}
+
+	public function getEmail() {
+		return $this->dbUser->getEmail();
+	}
+
+	public function setEmail($value) {
+		$this->dbUser->setEmail($value);
 	}
 }
 
