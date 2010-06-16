@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 15, 2010 at 04:36 PM
+-- Generation Time: Jun 16, 2010 at 04:44 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.2-1ubuntu4.2
 
@@ -530,13 +530,18 @@ CREATE TABLE IF NOT EXISTS `users` (
   `passwordsha1` varchar(255) NOT NULL,
   `created` datetime NOT NULL,
   `last_access` datetime NOT NULL,
+  `real_name` varchar(255) NOT NULL,
+  `notes` text NOT NULL,
+  `room` varchar(255) NOT NULL,
+  `telephone` text NOT NULL,
+  `email` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `passwordsha1`, `created`, `last_access`) VALUES
-(1, 'nikolas', 'a28cc654d85c1d3cb8418061db20859c322a0bc6', '2010-05-26 00:00:00', '2010-05-26 00:00:00');
+INSERT INTO `users` (`id`, `username`, `passwordsha1`, `created`, `last_access`, `real_name`, `notes`, `room`, `telephone`, `email`) VALUES
+(1, 'nikolas', 'a28cc654d85c1d3cb8418061db20859c322a0bc6', '2010-05-26 00:00:00', '2010-05-26 00:00:00', '', '', '', '', '');
 
