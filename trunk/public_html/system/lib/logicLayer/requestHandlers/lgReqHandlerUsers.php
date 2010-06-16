@@ -20,7 +20,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 */
 
 class lgReqHandlerUsers implements iRequestHandler {
@@ -103,7 +102,7 @@ class lgReqHandlerUsers implements iRequestHandler {
 		$page = new lgCmsPage();
 		$lgUsers  = lgUserHelper::getAllUsers();
 		if (empty($lgUsers)) {
-			$page->appendContent('No users found'); // Obviously this is here for completeness not for executions. One hopes...
+			$page->appendContent('No users found'); 
 		} else {
 			foreach ($lgUsers as $usr) {
 				$page->appendContent('<div class="user-row">'.
@@ -218,6 +217,9 @@ class lgReqHandlerUsers implements iRequestHandler {
 		} else if (lgUserHelper::getUserByUsername($username)) {
 			$page->setTitle('Create User - Invalid username');	
 			$page->appendContent('A user with this username already exists. Please select a diffent username.');
+		} else if ($password != $password2) {
+			$page->setTitle('Create User - The two passwords do not match');	
+			$page->appendContent('The two passwords do not match');
 		} else {
 			$lgUser = lgUserHelper::createUser($postData['username'], $postData['password']);
 
