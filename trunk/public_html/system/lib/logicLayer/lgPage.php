@@ -82,7 +82,8 @@ class lgPage {
 		<?php
 
 		if ($this->redirect) {
-			echo '<meta http-equiv="refresh" content="'.$this->redirectTimeOut.';URL='.$this->redirectUrl.'" />';
+			echo '<meta http-equiv="refresh" content="'.$this->redirectTimeout.';URL='.$this->redirectUrl.'" />';
+
 		}
 
 		?>
