@@ -102,7 +102,11 @@ class lgReqHandlerDatasets implements iRequestHandler {
 	private function showDatasetCreationSelection() {
 		$page = new lgCmsPage();
 		$page->setTitle('Create New Dataset - Select Dataset Handler');
-		$page->appendContent('<h2>Create New Dataset - Select Dataset Handler</h2>');
+		$page->appendContent('<h2>Create New Dataset: Select Dataset Handler</h2>');
+		$page->appendContent('<p class="notice">Creating a new dataset requires that you use a specific handler
+			particular to the dataset type you wish to create. Below you can find the available dataset
+			handlers in this installation of arrayline. If you cannot find the handler you required,
+			please contact your system administrator.</p>');
 
 		$lgCreationProcessors = lgDatasetProcessorHelper::getDatasetCreationProcessors();
 		if (empty($lgCreationProcessors)) {
@@ -156,11 +160,13 @@ class lgReqHandlerDatasets implements iRequestHandler {
 
 		$datasets = lgDatasetHelper::getAllDatasets();
 		if (isset($datasets) && !empty($datasets)) {
+			$page->appendContent('<div class="dataset-listing">');
 			$i = 1;
 			foreach($datasets as $dataset) {
 				$page->appendContent($this->getRenderedDatasetEntry($dataset, ($i++%2?'odd':'even')));
  
 			}
+			$page->appendContent('</div>');
 		} else {
 			$page->appendContent('No Datasets Found');
 		}
@@ -174,7 +180,7 @@ class lgReqHandlerDatasets implements iRequestHandler {
 		$datasetEntry .= '<strong>'.$ds->getId().'</strong>';
 		$datasetEntry .= '</div>';
 		$datasetEntry .= '<div class="dataset-actions">';
-		$datasetEntry .= '<a href="index.php?requeststring=viewdataset&datasetid='.$ds->getId().'">View</a> ';
+		$datasetEntry .= '<a href="index.php?requeststring=viewdataset&datasetid='.$ds->getId().'">View</a> | ';
 		$datasetEntry .= '<a href="index.php?requeststring=processdataset&datasetid='.$ds->getId().'">Process</a> ';
 		//$datasetEntry .= '<a href="index.php?requeststring=deletedataset&datasetid='.$ds->getId().'">Delete</a> ';
 		$datasetEntry .= '</div>';

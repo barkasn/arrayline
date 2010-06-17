@@ -18,6 +18,7 @@
  
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 */
 
 class lgCmsPage extends lgPage {
@@ -45,13 +46,12 @@ class lgCmsPage extends lgPage {
 		return $this->cmsPageContent;
 	}
 
-
 	public function render() {
 		$navRendered = $this->getRenderedNavigation();
 		$this->content =<<<EOT
 			<div class="page">
 				<div class="header">
-					<h2><span>Arrayline</span></h2>
+					<h2><a href="index.php"><span>Arrayline</span></a></h2>
 					<p class="moto">An extensible bioinformatics data platform</p>
 				</div>
 				<div class="navigation">	

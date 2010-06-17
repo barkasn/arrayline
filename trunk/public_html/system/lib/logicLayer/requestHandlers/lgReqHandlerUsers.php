@@ -106,14 +106,32 @@ class lgReqHandlerUsers implements iRequestHandler {
 		if (empty($lgUsers)) {
 			$page->appendContent('No users found'); 
 		} else {
-			foreach ($lgUsers as $usr) {
-				$page->appendContent('<div class="user-row">'.
-					$usr->getUsername().
-					' <a href="index.php?requeststring=edituser&userid='.$usr->getId().'">edit</a> '.
-					'<a href="index.php?requeststring=deleteuser&userid='.$usr->getId().'">delete</a>'.'</div>');
+			$i = 1;
+			$page->appendContent('<div class="user-listing">');
+			foreach ($lgUsers as $lgUser) {
+				$page->appendContent($this->getUserEntryRendered($lgUser,($i++%2?'odd':'even')));
 			}
+			$page->appendContent('</div>');
 		}
 		$page->render();
+	}
+
+	private function getUserEntryRendered($lgUser, $class) {
+		$username = $lgUser->getUsername();
+		$id = $lgUser->getId();
+
+		$return=<<<EOF
+	<div class="user-entry $class">
+		<div class="user-title">
+			$username
+		</div>
+		<div class="user-actions">
+			<a href="index.php?requeststring=edituser&userid=$id">edit</a> 
+			<a href="index.php?requeststring=deleteuser&userid=$id">delete</a>
+		</div>
+	</div>
+EOF;
+		return $return;
 	}
 
 	private function processEditUserRequest(lgRequest $lgRequest) {
