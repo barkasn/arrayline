@@ -78,14 +78,62 @@ EOT;
 	private function getRenderedNavigation() {
 		$ret = <<<EOT
 		<ul class="main-menu">
-			<li><a href="index.php?requeststring=createdataset">Create Dataset</a></li>
-			<li><a href="index.php?requeststring=viewdatasets">View Datasets</a></li>
-			<li><a href="index.php?requeststring=viewusers">View Users</a></li>
-			<li><a href="index.php?requeststring=createuser">Create User</a></li>
-			<li><a href="index.php?requeststring=viewroles">View Roles</a></li>
-			<li><a href="index.php?requeststring=viewpriviledges">View Priviledges</a></li>
-			<li><a href="index.php?requeststring=about">About</a></li>
-			<li><a href="index.php?requeststring=logout">Logout</a></li>
+			<li>
+				<a href="index.php?requeststring=createdataset">
+					<span>
+						<img src="images/icons/add.png" alt="add icon" />Create Dataset
+					</span>
+				</a>
+			</li>
+			<li>
+				<a href="index.php?requeststring=viewdatasets">
+					<span>
+						<img src="images/icons/layout.png" alt="add icon" />View Datasets
+					</span>
+				</a>
+			</li>
+			<li>
+				<a href="index.php?requeststring=viewusers">
+					<span>
+						<img src="images/icons/layout.png" alt="add icon" />View Users
+					</span>
+				</a>
+			</li>
+			<li>
+				<a href="index.php?requeststring=createuser">
+					<span>
+						<img src="images/icons/add.png" alt="add icon" />Create User
+					</span>
+				</a>
+			</li>
+			<li>
+				<a href="index.php?requeststring=viewroles">
+					<span>				
+						<img src="images/icons/layout.png" alt="add icon" />View Roles
+					</span>
+				</a>
+			</li>
+			<li>
+				<a href="index.php?requeststring=viewpriviledges">
+					<span>
+						<img src="images/icons/layout.png" alt="add icon" />View Priviledges
+					</span>
+				</a>
+			</li>
+			<li>
+				<a href="index.php?requeststring=about">
+					<span>
+						<img src="images/icons/brick.png" alt="add icon" />About
+					</span>
+				</a>
+			</li>
+			<li>
+				<a href="index.php?requeststring=logout">
+					<span>
+						<img src="images/icons/cancel.png" alt="add icon" />Logout
+					</span>
+				</a>
+			</li>
 		</ul>
 EOT;
 		return $ret;

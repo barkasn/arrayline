@@ -31,6 +31,10 @@ a {
 	text-decoration: none;
 }
 
+a img {
+	border: 0;
+}
+
 div.page {
 	width: 1000px;
 	margin-right: auto;
@@ -71,13 +75,11 @@ div.page div.navigation {
 div.page div.navigation  ul {
 	margin: 0;
 	padding: 0;
-	
 }
 
 div.page div.navigation li {
 	display: block;
 	width: 100%;
-	
 	height: 30px;
 	border-top: 1px solid black;
 }
@@ -90,11 +92,22 @@ div.page div.navigation li a {
 	color: black;
 }
 
-div.page div.navigation li a:hover {
-	background-color: #ccc;
+div.page div.navigation li a span {
+	display: block;
+	width: 90%;
+	margin-left: auto;
+	padding-top: 6px;
 }
 
 
+div.page div.navigation li a span img {
+	padding-right: 5px;
+	padding-bottom: 3px;
+	vertical-align: middle;
+}
+div.page div.navigation li a:hover {
+	background-color: #ccc;
+}
 
 div.page div.main {
 	width: 660px;
