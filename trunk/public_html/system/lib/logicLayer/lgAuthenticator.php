@@ -75,8 +75,9 @@ EOT;
 		$_SESSION = array();
 
 		$postLogoutPage = new lgPage();
-		$postLogoutPage->setTitle('Logout Sucessful');
-		$postLogoutPage->setContent('Logout Sucessful');
+		$postLogoutPage->setTitle('Logout Successful');
+		$postLogoutPage->setContent('Logout Successful. You will be redirected to the login page shortly.');
+		$postLogoutPage->setRedirect('index.html', 1);
 		$postLogoutPage->render();
 	}
 

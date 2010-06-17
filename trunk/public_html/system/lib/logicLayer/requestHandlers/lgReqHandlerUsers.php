@@ -65,6 +65,7 @@ class lgReqHandlerUsers implements iRequestHandler {
 
 	private function processViewPriviledges(lgRequest $lgRequest) {
 		$page = new lgCmsPage();
+		$page->setTitle('View Priviledges');
 		$lgPermissions = lgPermissionHelper::getAllPermissions();
 		$page->appendContent('<h2>View Priviledges</h2>');
 
@@ -87,6 +88,7 @@ class lgReqHandlerUsers implements iRequestHandler {
 
 	private function processViewRoles(lgRequest $lgRequest) {
 		$page = new lgCmsPage();
+		$page->setTitle('View Roles');
 		$lgRoles = lgRoleHelper::getAllRoles();
 		$page->appendContent('<h2>View Roles</h2>');
 		if (empty($lgRoles)) {
@@ -126,7 +128,7 @@ class lgReqHandlerUsers implements iRequestHandler {
 			$username
 		</div>
 		<div class="user-actions">
-			<a href="index.php?requeststring=edituser&userid=$id">edit</a> 
+			<a href="index.php?requeststring=edituser&userid=$id">edit</a> | 
 			<a href="index.php?requeststring=deleteuser&userid=$id">delete</a>
 		</div>
 	</div>
