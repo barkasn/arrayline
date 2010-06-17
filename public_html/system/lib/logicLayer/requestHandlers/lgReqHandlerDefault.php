@@ -30,6 +30,7 @@ class lgReqHandlerDefault implements iRequestHandler {
 	public function processRequest(lgRequest $lgRequest) {
 		$page = new lgCmsPage();
 		$page->setTitle('Home Page');
+		$page->appendContent('<p class="notice">Welcome to Arrayline. You can use the menu at the left to create and process you own datasets</p>');
 		$page->render();
 	}
 

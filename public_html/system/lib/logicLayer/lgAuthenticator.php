@@ -76,8 +76,8 @@ EOT;
 
 		$postLogoutPage = new lgPage();
 		$postLogoutPage->setTitle('Logout Successful');
-		$postLogoutPage->setContent('Logout Successful. You will be redirected to the login page shortly.');
-		$postLogoutPage->setRedirect('index.html', 1);
+		$postLogoutPage->setContent('Logout Successful. You will be redirected to the <a href="index.php" >login page</a> shortly.');
+		$postLogoutPage->setRedirect('index.php', 1);
 		$postLogoutPage->render();
 	}
 
@@ -119,7 +119,7 @@ EOT;
 	}
 
 	private function showLoginSuccess() {
-		$redirectDelay = 3;
+		$redirectDelay = 1;
 
 		$page = new lgPage();
 		$page->setTitle('Login Successful');
