@@ -57,7 +57,7 @@ class lgCmsPage extends lgPage {
 				<div class="header">
 					<h2><a href="index.php"><span>Arrayline</span></a></h2>
 					<p class="moto">An extensible bioinformatics data platform</p>
-					<div class="user-info">Logged in as $username</div>
+					<div class="user-info">Logged in as $username [<a href="index.php?requeststring=logout">logout</a>]</div>
 				</div>
 				<div class="navigation">	
 					$navRendered
@@ -133,13 +133,13 @@ EOT;
 					</span>
 				</a>
 			</li>
-			<li>
+<!--			<li>
 				<a href="index.php?requeststring=logout">
 					<span>
 						<img src="images/icons/cancel.png" alt="add icon" />Logout
 					</span>
 				</a>
-			</li>
+			</li> -->
 		</ul>
 EOT;
 		return $ret;
