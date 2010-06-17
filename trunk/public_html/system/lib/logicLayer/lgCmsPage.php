@@ -79,13 +79,15 @@ EOT;
 
 	private function getRenderedNavigation() {
 		$ret = <<<EOT
-			<a href="index.php?requeststring=createdataset">Create Dataset</a><br />
-			<a href="index.php?requeststring=viewdatasets">View Datasets</a><br />
-			<a href="index.php?requeststring=viewusers">View Users</a><br />
-			<a href="index.php?requeststring=createuser">Create User</a><br />
-			<a href="index.php?requeststring=viewroles">View Roles</a><br />
-			<a href="index.php?requeststring=viewpriviledges">View Priviledges</a><br>
-			<a href="index.php?requeststring=logout">Logout</a>
+		<ul class="main-menu">
+			<li><a href="index.php?requeststring=createdataset">Create Dataset</a></li>
+			<li><a href="index.php?requeststring=viewdatasets">View Datasets</a></li>
+			<li><a href="index.php?requeststring=viewusers">View Users</a></li>
+			<li><a href="index.php?requeststring=createuser">Create User</a></li>
+			<li><a href="index.php?requeststring=viewroles">View Roles</a></li>
+			<li><a href="index.php?requeststring=viewpriviledges">View Priviledges</a></li>
+			<li><a href="index.php?requeststring=logout">Logout</a></li>
+		</ul>
 EOT;
 		return $ret;
 	}
