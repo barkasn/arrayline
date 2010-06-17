@@ -22,8 +22,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 body {
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
+	font-size: 14px;
+	background-color: #fafafc;
 }
+
+a {
+	color: #2222ff;
+	text-decoration: none;
+}
+
+
 
 div.page {
 	width: 1000px;
@@ -33,10 +41,25 @@ div.page {
 
 div.page div.header {
 	width: 100%;
-	height: 150px;
+	height: 135px;
 	background-color: #aabbbb; 
 	clear: both;
 	float: left;
+}
+
+div.page div.header h2 {
+	font-size: 3em;
+	color: #333399;
+	margin: 0;
+	padding: 0;
+	margin-top: 30px;
+	margin-left: 40px;
+	
+}
+
+div.page div.header p.moto {
+	font-style: italic;
+	margin-left: 40px;
 }
 
 div.page div.navigation {
@@ -48,12 +71,12 @@ div.page div.navigation {
 	float: left;
 }
 
-div.page div.content {
-	width: 600px;
-	min-height: 400px;
-	background-color: yellow
+div.page div.main {
+	width: 700px;
+	min-height: 800px;
 	clear: right;
 	float: left;
+	padding: 20px 45px;
 }
 
 div.page div.footer {
@@ -79,5 +102,7 @@ div.page div.footer p {
 	color: #333;
 }
 
-
+div.page div.footer a {
+	color: #333;
+}
 

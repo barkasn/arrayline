@@ -54,6 +54,7 @@ class lgCmsPage extends lgPage {
 			<div class="page">
 				<div class="header">
 					<h2><span>Arrayline</span></h2>
+					<p class="moto">An extensible bioinformatics data platform</p>
 				</div>
 				<div class="navigation">	
 					$navRendered
