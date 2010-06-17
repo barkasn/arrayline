@@ -23,7 +23,6 @@
 body {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
-	//background-color: #fafafc;
 	background-color: #eaeadd;
 }
 
@@ -48,6 +47,7 @@ div.page div.header {
 	background-color: #aabbbb; 
 	clear: both;
 	float: left;
+	position: relative;
 }
 
 div.page div.header h2 {
@@ -62,9 +62,19 @@ div.page div.header h2 {
 div.page div.header h2 a {
 	color: inherit;
 }
+
 div.page div.header p.moto {
 	font-style: italic;
 	margin-left: 40px;
+}
+
+div.page div.header div.user-info {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	font-size: 0.8em;
+	color: #444;
+
 }
 
 div.page div.navigation {

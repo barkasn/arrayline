@@ -47,12 +47,17 @@ class lgCmsPage extends lgPage {
 	}
 
 	public function render() {
+
+		$currentUser = lgUserHelper::getUserFromEnviroment();
+		$username = $currentUser->getUsername();
+
 		$navRendered = $this->getRenderedNavigation();
 		$this->content =<<<EOT
 			<div class="page">
 				<div class="header">
 					<h2><a href="index.php"><span>Arrayline</span></a></h2>
 					<p class="moto">An extensible bioinformatics data platform</p>
+					<div class="user-info">Logged in as $username</div>
 				</div>
 				<div class="navigation">	
 					$navRendered
