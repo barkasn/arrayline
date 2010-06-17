@@ -1,5 +1,5 @@
 <?php
-// $Id: lgReqHandlerDefault.php 95 2010-06-16 15:42:47Z barkasn $
+// $Id$
 
 /*
 
