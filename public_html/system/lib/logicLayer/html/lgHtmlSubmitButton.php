@@ -30,7 +30,7 @@ class lgHtmlSubmitButton extends lgHtmlFormField {
 
 
 	public function getRenderedHtml() {
-		$html = '<input type="submit" id="'.$this->id.'" value="'.$this->label.'" />';
+		$html = '<input type="submit" name="'.$this->name.'" id="'.$this->id.'" value="'.$this->label.'" />';
 		return $html;
 	}
 
