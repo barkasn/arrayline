@@ -126,13 +126,15 @@ class dbDataset {
 	public function save() {
 		global $pdo;
 		if ($this->dirty) {
-			$stmt = $pdo->prepare('UPDATE datasets SET job_id = :job_id, parent_dataset_id = :parent_dataset_id, dataset_state_id = :dataset_state_id, owner_user_id = :owner_user_id, dataset_processor_id = :dataset_processor_id WHERE id =: id;');
+			$stmt = $pdo->prepare('UPDATE datasets SET job_id = :job_id, parent_dataset_id = :parent_dataset_id, dataset_state_id = :dataset_state_id, owner_user_id = :owner_user_id, dataset_processor_id = :dataset_processor_id WHERE id = :id;');
+
 			$stmt->bindValue(':job_id', $this->jobId);
 			$stmt->bindValue(':parent_dataset_id', $this->parentDatasetId);
 			$stmt->bindValue(':dataset_state_id', $this->datasetStateId);
 			$stmt->bindValue(':owner_user_id', $this->ownerUserId);
 			$stmt->bindValue(':dataset_processor_id', $this->datasetProcessorId);
 			$stmt->bindValue(':id', $this->id);
+
 			$stmt->execute();
 			$this->dirty = false;
 		}
