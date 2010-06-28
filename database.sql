@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 16, 2010 at 04:44 PM
+-- Generation Time: Jun 28, 2010 at 05:25 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.2-1ubuntu4.2
 
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `dataset_processors` (
   `name` varchar(255) NOT NULL,
   `has_no_accept_states` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `dataset_processors`
@@ -54,7 +54,8 @@ CREATE TABLE IF NOT EXISTS `dataset_processors` (
 
 INSERT INTO `dataset_processors` (`id`, `internal_name`, `name`, `has_no_accept_states`) VALUES
 (1, 'RawDataUpload', 'Raw Data Upload', 1),
-(2, 'FileNameRandomiser', 'File Name Randomiser', 0);
+(2, 'FileNameRandomiser', 'File Name Randomiser', 0),
+(3, 'AffymetrixUpload', 'Affymetrix Upload', 1);
 
 -- --------------------------------------------------------
 
@@ -82,7 +83,8 @@ INSERT INTO `dataset_processors_accept_states` (`dataset_processor_id`, `dataset
 
 CREATE TABLE IF NOT EXISTS `dataset_processors_produce_states` (
   `dataset_processor_id` int(11) NOT NULL,
-  `dataset_state_id` int(11) NOT NULL
+  `dataset_state_id` int(11) NOT NULL,
+  UNIQUE KEY `dataset_processor_id` (`dataset_processor_id`,`dataset_state_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -102,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `dataset_states` (
   `name` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `dataset_states`
@@ -110,7 +112,9 @@ CREATE TABLE IF NOT EXISTS `dataset_states` (
 
 INSERT INTO `dataset_states` (`id`, `internal_name`, `name`, `description`) VALUES
 (1, 'rawData', 'Raw Data', 'Dataset resulting from the upload of raw data. For Development purposes.'),
-(2, 'randomizedData', 'Randomised Data', 'Data from the developemetn randomisation module');
+(2, 'randomizedData', 'Randomised Data', 'Data from the experimental filename randomiser module'),
+(3, 'affymetrixCelDataIncomplete', 'Affymetrix Non Finalised', 'Affymetric Raw .CEL Data - Not Finalised Dataset'),
+(4, 'affymetrixCelDataComplete', 'Affymetrix Finalised Raw Data', 'Affymetrix Finalised Raw Data');
 
 -- --------------------------------------------------------
 
@@ -126,23 +130,12 @@ CREATE TABLE IF NOT EXISTS `datasets` (
   `owner_user_id` int(11) NOT NULL,
   `dataset_processor_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=59 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=75 ;
 
 --
 -- Dumping data for table `datasets`
 --
 
-INSERT INTO `datasets` (`id`, `job_id`, `parent_dataset_id`, `dataset_state_id`, `owner_user_id`, `dataset_processor_id`) VALUES
-(53, 142, 49, 2, 1, 2),
-(52, 142, 49, 2, 1, 2),
-(51, 142, 49, 2, 1, 2),
-(50, 142, 49, 2, 1, 2),
-(49, NULL, NULL, 1, 1, 1),
-(54, 142, 49, 2, 1, 2),
-(55, 143, 49, 2, 1, 2),
-(56, 145, 49, 2, 1, 2),
-(57, 146, 49, 2, 1, 2),
-(58, 147, 49, 2, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -201,13 +194,6 @@ CREATE TABLE IF NOT EXISTS `jobs` (
 -- Dumping data for table `jobs`
 --
 
-INSERT INTO `jobs` (`id`, `job_state_id`, `description`, `autorun`, `run_start`, `run_end`, `comment`, `script_set_id`, `input_dataset_id`, `output_dataset_id`, `output_dataset_process_state_id`, `user_id`, `dataset_processor_id`, `data_cleared`) VALUES
-(143, 9, 'mdlRandomizer Developement Job', 0, '0000-00-00', '0000-00-00', '0', 55, 49, NULL, 2, 1, 2, 0),
-(142, 9, 'mdlRandomizer Developement Job', 0, '0000-00-00', '0000-00-00', '0', 54, 49, NULL, 2, 1, 2, 0),
-(144, 1, 'mdlRandomizer Developement Job', 0, '0000-00-00', '0000-00-00', '0', 0, NULL, NULL, NULL, NULL, NULL, 0),
-(145, 9, 'mdlRandomizer Developement Job', 0, '0000-00-00', '0000-00-00', '0', 56, 49, NULL, 2, 1, 2, 1),
-(146, 9, 'mdlRandomizer Developement Job', 0, '0000-00-00', '0000-00-00', '0', 57, 49, NULL, 2, 1, 2, 1),
-(147, 9, 'mdlRandomizer Developement Job', 0, '2010-06-15', '2010-06-15', '0', 58, 49, NULL, 2, 1, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -220,7 +206,7 @@ CREATE TABLE IF NOT EXISTS `modules` (
   `internal_name` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `modules`
@@ -228,7 +214,8 @@ CREATE TABLE IF NOT EXISTS `modules` (
 
 INSERT INTO `modules` (`id`, `internal_name`, `name`) VALUES
 (1, 'RawDataUpload', 'Raw Data Upload Module'),
-(2, 'FileNameRandomiser', 'Randomises File Names');
+(2, 'FileNameRandomiser', 'Randomises File Names'),
+(3, 'AffymetrixUpload', 'Affymetrix Upload');
 
 -- --------------------------------------------------------
 
@@ -247,7 +234,8 @@ CREATE TABLE IF NOT EXISTS `modules_dataset_processors` (
 
 INSERT INTO `modules_dataset_processors` (`module_id`, `dataset_processor_id`) VALUES
 (1, 1),
-(2, 2);
+(2, 2),
+(3, 3);
 
 -- --------------------------------------------------------
 
@@ -323,31 +311,6 @@ CREATE TABLE IF NOT EXISTS `script_sets` (
 -- Dumping data for table `script_sets`
 --
 
-INSERT INTO `script_sets` (`id`, `description`, `entry_script_id`) VALUES
-(35, 'Filename randomizer job script set', 1),
-(36, 'Filename randomizer job script set', 1),
-(37, 'Filename randomizer job script set', 1),
-(38, 'Filename randomizer job script set', 1),
-(39, 'Filename randomizer job script set', 1),
-(40, 'Filename randomizer job script set', 1),
-(41, 'Filename randomizer job script set', 1),
-(42, 'Filename randomizer job script set', 1),
-(43, 'Filename randomizer job script set', 1),
-(44, 'Filename randomizer job script set', 1),
-(45, 'Filename randomizer job script set', 1),
-(46, 'Filename randomizer job script set', 1),
-(47, 'Filename randomizer job script set', 1),
-(48, 'Filename randomizer job script set', 1),
-(49, 'Filename randomizer job script set', 1),
-(50, 'Filename randomizer job script set', 1),
-(51, 'Filename randomizer job script set', 1),
-(52, 'Filename randomizer job script set', 1),
-(53, 'Filename randomizer job script set', 1),
-(54, 'Filename randomizer job script set', 1),
-(55, 'Filename randomizer job script set', 1),
-(56, 'Filename randomizer job script set', 1),
-(57, 'Filename randomizer job script set', 1),
-(58, 'Filename randomizer job script set', 1);
 
 -- --------------------------------------------------------
 
@@ -365,55 +328,6 @@ CREATE TABLE IF NOT EXISTS `script_sets_scripts` (
 -- Dumping data for table `script_sets_scripts`
 --
 
-INSERT INTO `script_sets_scripts` (`script_set_id`, `script_id`) VALUES
-(35, 1),
-(35, 2),
-(36, 1),
-(36, 2),
-(37, 1),
-(37, 2),
-(38, 1),
-(38, 2),
-(39, 1),
-(39, 2),
-(40, 1),
-(40, 2),
-(41, 1),
-(41, 2),
-(42, 1),
-(42, 2),
-(43, 1),
-(43, 2),
-(44, 1),
-(44, 2),
-(45, 1),
-(45, 2),
-(46, 1),
-(46, 2),
-(47, 1),
-(47, 2),
-(48, 1),
-(48, 2),
-(49, 1),
-(49, 2),
-(50, 1),
-(50, 2),
-(51, 1),
-(51, 2),
-(52, 1),
-(52, 2),
-(53, 1),
-(53, 2),
-(54, 1),
-(54, 2),
-(55, 1),
-(55, 2),
-(56, 1),
-(56, 2),
-(57, 1),
-(57, 2),
-(58, 1),
-(58, 2);
 
 -- --------------------------------------------------------
 
@@ -475,12 +389,6 @@ CREATE TABLE IF NOT EXISTS `system_log` (
 -- Dumping data for table `system_log`
 --
 
-INSERT INTO `system_log` (`id`, `created`, `message`) VALUES
-(1, '2010-06-15 14:05:21', 'Cron.php running'),
-(2, '2010-06-15 14:14:41', 'Cron.php running'),
-(3, '2010-06-15 14:14:57', 'Cron.php running'),
-(4, '2010-06-15 15:56:22', 'Cron.php running'),
-(5, '2010-06-15 15:56:23', 'Cron.php running complete');
 
 -- --------------------------------------------------------
 
