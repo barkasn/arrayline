@@ -61,6 +61,11 @@ class lgDataset {
 		return new lgDatasetState($this->dbDataset->getDatasetState()->getId());
 	}
 
+	public function setDatasetState(lgDatasetState $lgDatasetState) {
+		$dbDatasetState = new dbDatasetState($lgDatasetState->getId());
+		$this->dbDataset->setDatasetState($dbDatasetState);
+	}
+
 	public function getProcessor() {
 		return new lgDatasetProcessor($dbDataset->getProcessor()->getId());
 	}

@@ -22,7 +22,7 @@
 
 */
 class lgDatasetProcessor implements iRequestHandler {
-	private $id;
+	protected $id;
 	private $dbDatasetProcessor;
 	
 	
