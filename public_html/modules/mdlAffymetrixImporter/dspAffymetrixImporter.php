@@ -38,8 +38,5 @@ class dspAffymetrixImporter extends lgDatasetProcessor {
 	public function getRequiredPermissions() {
 		return array();
 	}
-
-
-
 }
 	
