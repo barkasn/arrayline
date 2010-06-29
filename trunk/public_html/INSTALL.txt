@@ -25,6 +25,7 @@ Arrayline requires:
 	* An Apache instalation (version 2 or later recommended)
 	* PHP5 installed and configured to process PHP files
 	* A mysql database
+	* R with Bioconductor (for Affymetrix modules)
 
 Individual modules may have further requirements
 
@@ -51,7 +52,7 @@ A. Required Software Installation
 
 B. Apache configuration
 
-	5. Enable Apache User directories
+	1. Enable Apache User directories
 		
 	Assuming you want to run apache in a user directory and not in the main
 	httpd folder you need to enable the user directories module:
@@ -71,9 +72,20 @@ B. Apache configuration
 	and the maximum file size. Specifically set both post_max_size
 	and upload_max_filesize to '1G' - one gigabyte. Reboot apache.
 
-C. Get arrayline
+C. R with Bioconductor
 	
-	6. Create a public directory on your (or preferably a dedicated users) 
+	Install R and a _site-wide_ installation of the bioconductor packages. 
+	From the command prompt run:
+		
+		$ sudo apt-get install libcurl3-dev
+		$ sudo apt-get install libxml2-dev
+		$ sudo R
+		> source("http://bioconductor.org/biocLite.R")
+		> biocLite()
+
+D. Get arrayline
+	
+	1. Create a public directory on your (or preferably a dedicated users) 
 		home folder and make it accessible to the webserver ( you are
 		also making it accessible to every other user on the system)
 
@@ -85,35 +97,35 @@ C. Get arrayline
 		$ cd public_html
 		$ svn co https://arrayline.svn.sourceforge.net/svnroot/arrayline/trunk/public_html arrayline 
 
-	7. Export a copy of the trunk to get access to the dbconfig and database files
+	2. Export a copy of the trunk to get access to the dbconfig and database files
 		
 		$ cd ~
 		$ mkdir tmp
 		$ cd tmp
 		$ svn export https://arrayline.svn.sourceforge.net/svnroot/arrayline/trunk/ arrayline
 
-	8. copy the dbconfig.php to your home directory (were arrayline will 
+	3. copy the dbconfig.php to your home directory (were arrayline will 
 		look for it if placed in ~/public_html/arrayline
 		(you can change this location by editing arrayline/system/configuration.php)
 
 		$ cp arrayline/trunk/dbconfig.php ~/dbconfig.php
 
-	9. Edit dbconfig.php to set the details of your database
+	4. Edit dbconfig.php to set the details of your database
 		$ gedit ~/dbconfig.php
 	
-	10. Edit the configuration file arrayline/system/configuration.php and set the basepath
+	5. Edit the configuration file arrayline/system/configuration.php and set the basepath
 		to the root of the arrayline installation
 
 		$ gedit ~/public_html/arrayline/system/configuration.php
 
-	11. Make the job and dataset directories world writable (so that the server can write to them)
+	6. Make the job and dataset directories world writable (so that the server can write to them)
 
 		$ cd ~/public_html/arrayline
 		$ chmod 0777 jobs
 		$ chmod 0777 datastore
 
-	12. Use phpmyadmin to import database.sql into your server
+	7. Use phpmyadmin to import database.sql into your server
 
-	13. Visit http://localhost/~username/arrayline on your browser and login
+	8. Visit http://localhost/~username/arrayline on your browser and login
 
-	14. Change the default password
+	9. Change the default password
