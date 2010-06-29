@@ -21,7 +21,7 @@
 
 */
 
-class dspAffymetrixImporter extends lgDatasetProcessor {
+class dspAffymetrixRawQC extends lgDatasetProcessor {
 	public function __construct($id) {
 		parent::__construct($id);
 	}
@@ -48,8 +48,8 @@ class dspAffymetrixImporter extends lgDatasetProcessor {
 		$postarray = $lgRequest->getPostArray();
 		$page = new lgCmsPage();
 		$page->setTitle('Affymetrix Importer');
-		$page->appendContent('<h2>Affymetrix Importer</h2>');
-		$page->appendContent('<p>You are about to schedule a background job that will convert your input dataset to an Biovconductor object. Are you sure you want to continue?</p>');
+		$page->appendContent('<h2>Affymetrix Raw QC</h2>');
+		$page->appendContent('<p>Are you sure you want to continue?</p>');
 
 		$form = new lgHtmlForm();
 		$field = new lgHtmlSubmitButton('submit','Continue >');
@@ -70,7 +70,8 @@ class dspAffymetrixImporter extends lgDatasetProcessor {
 	}
 
 	private function scheduleJob(lgRequest $lgRequest) {
-		$lgJob = lgJobHelper::createNewJob('Affymetrix Importer Background Job');
+/*
+		$lgJob = lgJobHelper::createNewJob('Affymetrix Raw QC Background Job');
 
 		$lgScriptSet = lgScriptSetHelper::createScriptSet('Temporary Scriptset');
 
@@ -89,13 +90,14 @@ class dspAffymetrixImporter extends lgDatasetProcessor {
 		$lgJob->setInputDataset($dataset);
 		$lgJob->setScriptSet($lgScriptSet);
 
-		$lgOutputDatasetState = lgDatasetStateHelper::getDatasetStateByInternalName('AffymetrixImportedData');
+		$lgOutputDatasetState = lgDatasetStateHelper::getDatasetStateByInternalName('affymetrixRawQC');
 		$lgJob->setOutputDatasetProcessState($lgOutputDatasetState);
 
 		$lgJob->setUser(lgUserHelper::getUserFromEnviroment());
 		$lgJob->setDatasetProcessor($this);
 
 		$lgJob->schedule();
+*/
 	}
 
 }
