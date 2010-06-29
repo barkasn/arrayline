@@ -66,6 +66,11 @@ B. Apache configuration
 		$ gedit /etc/apache2/mods-available/php5.conf
 
 
+	Allow large file uploads in php configuration. Edit 
+	/etc/php5/apache2/php.ini and increase both the post form limit
+	and the maximum file size. Specifically set both post_max_size
+	and upload_max_filesize to '1G' - one gigabyte. Reboot apache.
+
 C. Get arrayline
 	
 	6. Create a public directory on your (or preferably a dedicated users) 
