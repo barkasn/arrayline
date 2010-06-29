@@ -28,7 +28,13 @@ class dspAffymetrixImporter extends lgDatasetProcessor {
 	}
 
 	public function processRequest(lgRequest $lgRequest) {
-
+		$postArray = $lgRequest->getPostArray();
+		if (isset($postArray['processoraction']) &&
+				$postArray['processoraction'] == 'execute') {
+			$this->scheduleJob($lgRequest);
+		} else {
+			$this->showConfirmationForm($lgRequest);
+		}
 	}
 
 	public function getSpecialised() {
@@ -38,5 +44,58 @@ class dspAffymetrixImporter extends lgDatasetProcessor {
 	public function getRequiredPermissions() {
 		return array();
 	}
+
+	private function showConfirmationForm(lgRequest $lgRequest) {
+		$postarray = $lgRequest->getPostArray();
+		$page = new lgCmsPage();
+		$page->setTitle('Affymetrix Importer');
+		$page->appendContent('<h2>Affymetrix Importer</h2>');
+		$page->appendContent('<p>You are about to schedule a background job that will convert your input dataset to an Biovconductor object. Are you sure you want to continue?</p>');
+
+		$form = new lgHtmlForm();
+		$field = new lgHtmlSubmitButton('submit','Continue >');
+		$field->setValue('submit');
+		$form->addField($field);
+
+		$hiddenVals = array (
+			'requeststring' => 'processdataset',
+			'processorid' => $this->getId(),
+			'processoraction' => 'execute',
+			'datasetid' => $postarray['datasetid'],
+		);
+		$form->addFields(lgHtmlFormHelper::getHiddenFieldsFromArray($hiddenVals));
+
+		$page->appendContent($form->getRenderedHTML());
+		$page->render();
+
+	}
+
+	private function scheduleJob(lgRequest $lgRequest) {
+		$lgJob = lgJobHelper::createNewJob('Affymetrix Importer Background Job');
+
+		$lgScriptSet = lgScriptSetHelper::createScriptSet('Temporary Scriptset');
+
+		// Get the scripts here
+		$lgScript = lgScriptHelper::getScriptByInternalName('');
+
+		$lgScriptSet->appendScript($lgScript);
+		$lgScriptSet->setEntryScript($lgScript);
+		$lgScriptSet->forceSave(); // Required for adhoc created script sets
+
+		$postarray = $lgRequest->getPostArray();
+		$dataset = new lgDataset($postarray['datasetid']);
+
+		$lgJob->setInputDataset($dataset);
+		$lgJob->setScriptSet($lgScriptSet);
+
+		$lgOutputDatasetState = lgDatasetStateHelper::getDatasetStateByInternalName('AffymetrixImportedData');
+		$lgJob->setOutputDatasetProcessState($lgOutputDatasetState);
+
+		$lgJob->setUser(lgUserHelper::getUserFromEnviroment());
+		$lgJob->setDatasetProcessor($this);
+
+		$lgJob->schedule();
+	}
+
 }
 	
