@@ -42,6 +42,10 @@ class dspAffymetrixUpload extends lgDatasetProcessor {
 			$this->doFinalise($lgRequest);
 		} else if ($postArray['processoraction'] == 'doUploadCel') {
 			$this->doUploadCelFile($lgRequest);
+		} else if ($postArray['processoraction'] == 'doUploadCov') {
+			$this->doUploadCovFile($lgRequest);
+		} else {
+			die('Undefined processor action!');
 		}
 	}
 
@@ -100,7 +104,7 @@ class dspAffymetrixUpload extends lgDatasetProcessor {
 		$this->datasetId = $lgDataset->getId();
 	}
 
-	private function showMainSelectionForm(lgRequest $lgRequest, $message = NULL) {
+	private function showMainSelectionForm($lgRequest, $message = NULL) {
 		$page = new lgCmsPage();
 		$page->setTitle('Create Dataset - Affymetrix Upload - Main Menu');
 		$page->appendContent('<h2>Affymetrix Upload</h2>');
@@ -163,6 +167,7 @@ class dspAffymetrixUpload extends lgDatasetProcessor {
 		
 		$form = new lgHtmlForm();
 		$form->setEnctype('multipart/form-data');
+
 		$form->addField(new lgHtmlFileField('file'));
 		
                 $hiddenVals = array (
@@ -197,8 +202,48 @@ class dspAffymetrixUpload extends lgDatasetProcessor {
 	}
 
 	private function showUploadCovarFileForm(lgRequest $lgRequest) {
-		// TODO: Upload covariates file
+		$page = new lgCmsPage();
+		$page->setTitle('Create Dataset - Affymetrix Upload - Upload covariates file');
+		$page->appendContent('<h3>Upload covariates file</h3>');
+		$page->appendContent('<p class="notice">Please use the form bellow to upload a covariates file</p>');
+
+                $form = new lgHtmlForm();
+                $form->setEnctype('multipart/form-data');
+
+                $form->addField(new lgHtmlFileField('file'));
+
+                $hiddenVals = array (
+                        'requeststring' => 'createdataset',
+                        'processorid' => $this->getId(),
+                        'processoraction' => 'doUploadCov',
+                        'datasetid' => $this->datasetId,
+                 );
+                $form->addFields(lgHtmlFormHelper::getHiddenFieldsFromArray($hiddenVals));
+
+                $form->addField(new lgHtmlSubmitButton('submit','Start Upload'));
+                $page->appendContent($form->getRenderedHtml());
+                $page->render();
 	}
+
+
+        private function doUploadCovFile(lgRequest $lgRequest) {
+                $post =  $lgRequest->getPostArray();
+                $this->datasetId = $post['datasetid'];
+                $lgDataset = new lgDataset($this->datasetId);
+
+                // TODO: Add checks here
+                if(is_uploaded_file($_FILES['file']['tmp_name']) ){
+                        $lgDataset->addFileFromUpload($_FILES['file']['tmp_name'],'covariates.txt');
+
+                        $message = 'Your file has been uploaded successfully';
+                        $this->showMainSelectionForm(NULL,$message);
+                } else {
+                        $message = 'An error occured while attempting to upload your file. Please try again. If the
+                                problem persists please contact ther system administrator';
+                        $this->showMainSelectionForm(NULL,$message);
+                }
+        }
+
 
 	private function showFinaliseForm(lgRequest $lgRequest) {
 		$page = new lgCmsPage();
