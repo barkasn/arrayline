@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 28, 2010 at 05:25 PM
+-- Generation Time: Jun 29, 2010 at 12:41 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.2-1ubuntu4.2
 
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `dataset_processors` (
   `name` varchar(255) NOT NULL,
   `has_no_accept_states` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `dataset_processors`
@@ -55,7 +55,8 @@ CREATE TABLE IF NOT EXISTS `dataset_processors` (
 INSERT INTO `dataset_processors` (`id`, `internal_name`, `name`, `has_no_accept_states`) VALUES
 (1, 'RawDataUpload', 'Raw Data Upload', 1),
 (2, 'FileNameRandomiser', 'File Name Randomiser', 0),
-(3, 'AffymetrixUpload', 'Affymetrix Upload', 1);
+(3, 'AffymetrixUpload', 'Affymetrix Upload', 1),
+(4, 'AffymetrixImporter', 'Import Affymetrix Data into R/Bioconductor', 0);
 
 -- --------------------------------------------------------
 
@@ -73,7 +74,8 @@ CREATE TABLE IF NOT EXISTS `dataset_processors_accept_states` (
 --
 
 INSERT INTO `dataset_processors_accept_states` (`dataset_processor_id`, `dataset_state_id`) VALUES
-(2, 1);
+(2, 1),
+(4, 4);
 
 -- --------------------------------------------------------
 
@@ -130,12 +132,16 @@ CREATE TABLE IF NOT EXISTS `datasets` (
   `owner_user_id` int(11) NOT NULL,
   `dataset_processor_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=75 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=97 ;
 
 --
 -- Dumping data for table `datasets`
 --
 
+INSERT INTO `datasets` (`id`, `job_id`, `parent_dataset_id`, `dataset_state_id`, `owner_user_id`, `dataset_processor_id`) VALUES
+(96, NULL, NULL, 1, 1, 1),
+(95, NULL, NULL, 3, 1, 3),
+(94, NULL, NULL, 4, 1, 3);
 
 -- --------------------------------------------------------
 
@@ -206,7 +212,7 @@ CREATE TABLE IF NOT EXISTS `modules` (
   `internal_name` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `modules`
@@ -215,7 +221,8 @@ CREATE TABLE IF NOT EXISTS `modules` (
 INSERT INTO `modules` (`id`, `internal_name`, `name`) VALUES
 (1, 'RawDataUpload', 'Raw Data Upload Module'),
 (2, 'FileNameRandomiser', 'Randomises File Names'),
-(3, 'AffymetrixUpload', 'Affymetrix Upload');
+(3, 'AffymetrixUpload', 'Affymetrix Upload'),
+(4, 'AffymetrixImporter', 'Affymetrix Data Importer in R');
 
 -- --------------------------------------------------------
 
@@ -235,7 +242,8 @@ CREATE TABLE IF NOT EXISTS `modules_dataset_processors` (
 INSERT INTO `modules_dataset_processors` (`module_id`, `dataset_processor_id`) VALUES
 (1, 1),
 (2, 2),
-(3, 3);
+(3, 3),
+(4, 4);
 
 -- --------------------------------------------------------
 
