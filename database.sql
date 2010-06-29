@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 29, 2010 at 12:41 PM
+-- Generation Time: Jun 29, 2010 at 02:06 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.2-1ubuntu4.2
 
@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `dataset_states` (
   `name` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `dataset_states`
@@ -116,7 +116,8 @@ INSERT INTO `dataset_states` (`id`, `internal_name`, `name`, `description`) VALU
 (1, 'rawData', 'Raw Data', 'Dataset resulting from the upload of raw data. For Development purposes.'),
 (2, 'randomizedData', 'Randomised Data', 'Data from the experimental filename randomiser module'),
 (3, 'affymetrixCelDataIncomplete', 'Affymetrix Non Finalised', 'Affymetric Raw .CEL Data - Not Finalised Dataset'),
-(4, 'affymetrixCelDataComplete', 'Affymetrix Finalised Raw Data', 'Affymetrix Finalised Raw Data');
+(4, 'affymetrixCelDataComplete', 'Affymetrix Finalised Raw Data', 'Affymetrix Finalised Raw Data'),
+(5, 'AffymetrixImportedData', 'Affymetrix Imported Data', 'Affymetrix Microarray Data in imported format');
 
 -- --------------------------------------------------------
 
