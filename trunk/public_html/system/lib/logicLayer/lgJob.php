@@ -132,7 +132,7 @@ class lgJob {
 			throw new Exception('Unable to change directory to: '.$scriptsDir);
 			return false;
 		} else {
-			$command = '. '.$entryPath.' > ../joblog.txt &';
+			$command = 'nohup . '.$entryPath.' > ../joblog.txt 2>&1 &;';
 			exec($command);
 			$this->setRunning();
 			$this->setRunStartNow();
