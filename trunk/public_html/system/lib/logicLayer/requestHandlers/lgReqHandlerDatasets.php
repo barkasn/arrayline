@@ -178,6 +178,7 @@ class lgReqHandlerDatasets implements iRequestHandler {
 		$datasetEntry = '<div class="dataset-entry '.$class.'">';
 		$datasetEntry .= '<div class="dataset-title">';
 		$datasetEntry .= '<strong>'.$ds->getId().'</strong>';
+		$datasetEntry .= ': <i>'.$ds->getDatasetState()->getName().'</i>';
 		$datasetEntry .= '</div>';
 		$datasetEntry .= '<div class="dataset-actions">';
 		$datasetEntry .= '<a href="index.php?requeststring=viewdataset&datasetid='.$ds->getId().'">View</a> | ';
