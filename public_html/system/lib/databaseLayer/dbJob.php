@@ -36,12 +36,13 @@ class dbJob {
 	private $userId;
 	private $datasetProcessorId;
 	private $dataCleared;
+	private $processId; // System process id, not a FK
 	private $dirty;
 
 	public function __construct($id) {
 		global $pdo;
 
-		$stmt = $pdo->prepare('SELECT job_state_id, description, autorun, run_start, run_end, comment, script_set_id, input_dataset_id, output_dataset_id, output_dataset_process_state_id, user_id, dataset_processor_id, data_cleared FROM jobs WHERE id = :id;');
+		$stmt = $pdo->prepare('SELECT job_state_id, description, autorun, run_start, run_end, comment, script_set_id, input_dataset_id, output_dataset_id, output_dataset_process_state_id, user_id, dataset_processor_id, data_cleared, process_id FROM jobs WHERE id = :id;');
 		$stmt->bindValue(':id', $id);
 		$stmt->execute();
 		
@@ -59,9 +60,19 @@ class dbJob {
 			$this->userId = $row['user_id'];
 			$this->datasetProcessorId = $row['dataset_processor_id'];
 			$this->dataCleared = $row['data_cleared'];
+			$this->processId = $row['process_id'];
 			$this->id = $id;
 			$this->dirty = false;
 		}
+	}
+
+	public function getProcessId() {
+		return $this->processId;
+	}
+
+	public funciton setProcessId($value) {
+		$this->processId = $value;
+		$this->dirty = true;
 	}
 
 	public function getDataCleared() {
@@ -208,7 +219,7 @@ class dbJob {
 		global $pdo;
 
 		if ($this->dirty) {
-			$stmt = $pdo->prepare('UPDATE jobs SET job_state_id = :job_state_id, description = :description, autorun = :autorun, run_start = :run_start, run_end = :run_end, comment = :comment, script_set_id = :script_set_id, input_dataset_id = :input_dataset_id, output_dataset_id = :output_dataset_id, output_dataset_process_state_id = :output_dataset_process_state_id, dataset_processor_id = :dataset_processor_id, user_id = :user_id, data_cleared = :data_cleared  WHERE id = :id;');
+			$stmt = $pdo->prepare('UPDATE jobs SET job_state_id = :job_state_id, description = :description, autorun = :autorun, run_start = :run_start, run_end = :run_end, comment = :comment, script_set_id = :script_set_id, input_dataset_id = :input_dataset_id, output_dataset_id = :output_dataset_id, output_dataset_process_state_id = :output_dataset_process_state_id, dataset_processor_id = :dataset_processor_id, user_id = :user_id, data_cleared = :data_cleared, process_id = :process_id  WHERE id = :id;');
 
 			$stmt->bindValue(':job_state_id', $this->jobStateId);
 			$stmt->bindValue(':description', $this->description);
@@ -223,6 +234,7 @@ class dbJob {
 			$stmt->bindValue(':dataset_processor_id', $this->datasetProcessorId);
 			$stmt->bindValue(':user_id', $this->userId);
 			$stmt->bindValue(':data_cleared', $this->dataCleared);
+			$stmt->bindValue(':process_id', $this->processId);
 			
 			$stmt->bindValue(':id', $this->id);
 			$stmt->execute();
