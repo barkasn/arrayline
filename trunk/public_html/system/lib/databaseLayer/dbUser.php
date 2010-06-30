@@ -50,8 +50,8 @@ class dbUser {
 			$this->username = $row['username'];
 			$this->passwordSha1 = $row['passwordsha1'];
 			$this->created = $row['created'];
-			$this->last_access = $row['last_access'];
-			$this->real_name = $row['real_name'];
+			$this->lastAccess = $row['last_access'];
+			$this->realName = $row['real_name'];
 			$this->notes = $row['notes'];
 			$this->room = $row['room'];
 			$this->room = $row['telephone'];
