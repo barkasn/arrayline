@@ -27,13 +27,34 @@ class dspAffymetrixImporter extends lgDatasetProcessor {
 	}
 
 	public function processRequest(lgRequest $lgRequest) {
-		$postArray = $lgRequest->getPostArray();
-		if (isset($postArray['processoraction']) &&
-				$postArray['processoraction'] == 'execute') {
-			$this->scheduleJob($lgRequest);
-		} else {
-			$this->showConfirmationForm($lgRequest);
+		$requestString = $lgRequest->getRequestString();
+		switch($requestString) {
+			case 'processdataset':
+				$this->handleDatasetProcessing($lgRequest);
+				break;
+			case 'viewdataset':
+				$this->handleDatasetViewing($lgRequest);
+				break;
+			default:
+				throw new Exception('Unknown request string');
 		}
+	}
+
+	private function handleDatasetProcessing(lgRequest $lgRequest) {
+		$postArray = $lgRequest->getPostArray();
+		$processorAction = empty($postArray['processoraction'])?'':$postArray['processoraction'];
+		switch ($processorAction) {
+			case 'execute':
+				$this->doExecute($lgRequest);
+				break;
+			default:
+				$this->showConfirmationForm($lgRequest);
+				break;
+		} 
+	}
+
+	private function handleDatasetViewing(lgRequest $lgRequest) {
+		echo 'Dataset Viewing not implemented';
 	}
 
 	public function getSpecialised() {
@@ -96,6 +117,18 @@ class dspAffymetrixImporter extends lgDatasetProcessor {
 		$lgJob->setDatasetProcessor($this);
 
 		$lgJob->schedule();
+
+		return $lgJob;
+	}
+
+	private function showScheduledConfirmation(lgJob $lgJob) {
+		//TODO: Fix this
+		echo 'Job scheduled';
+	}
+	
+	private function doExecute(lgRequest $lgRequest) {
+		$lgJob = $this->scheduleJob($lgRequest);
+		$this->showScheduledConfirmation($lgJob);
 	}
 
 }
