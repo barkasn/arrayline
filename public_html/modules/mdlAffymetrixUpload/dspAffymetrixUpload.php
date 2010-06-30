@@ -29,23 +29,49 @@ class dspAffymetrixUpload extends lgDatasetProcessor {
 	}
 
 	public function processRequest(lgRequest $lgRequest) {
+		$requestString = $lgRequest->getRequestString();
+		switch($requestString) {
+			case 'createdataset':
+				$this->handleDatasetCreation($lgRequest);
+				break;
+			case 'viewdataset':
+				$this->handleDatasetViewing($lgRequest);
+				break;
+			default:
+				throw new Exception('Unknown request');
+		}
+	}
+
+	private function handleDatasetViewing(lgRequest $lgRequest) {
+		echo 'Viewing dataset';
+	}
+
+	private function handleDatasetCreation(lgRequest $lgRequest) {
 		$postArray = $lgRequest->getPostArray();
-		if (empty($postArray['processoraction'])) {
-			$this->showIntroForm($lgRequest);
-		} else  if ($postArray['processoraction'] == 'help') {
-			$this->showHelpPage($lgRequest);
-		} else if ($postArray['processoraction'] == 'createdataset') {
-			$this->createNewDataset($lgRequest);	
-		} else if ($postArray['processoraction'] == 'selectaction') {
-			$this->processActionSelection($lgRequest);
-		} else if ($postArray['processoraction'] == 'doFinalise') {
-			$this->doFinalise($lgRequest);
-		} else if ($postArray['processoraction'] == 'doUploadCel') {
-			$this->doUploadCelFile($lgRequest);
-		} else if ($postArray['processoraction'] == 'doUploadCov') {
-			$this->doUploadCovFile($lgRequest);
-		} else {
-			die('Undefined processor action!');
+
+		$processorAction = empty($postArray['processoraction'])?'':$postArray['processoraction'];
+		switch($processorAction) {
+			case 'help':
+				$this->showHelpPage($lgRequest);
+				break;
+			case 'createdataset':
+				$this->createNewDataset($lgRequest);
+				break;
+			case 'selectaction':
+				$this->processActionSelection($lgRequest);
+				break;
+			case 'doFinalise':
+				$this->doFinalise($lgRequest);
+				break;
+			case 'doUploadCel':
+				$this->doUploadCelFile($lgRequest);
+				break;
+			case 'doUploadCov':
+				$this->doUploadCovFile($lgRequest);
+				break;
+			default:
+				$this->showIntroForm($lgRequest);
+				break;
 		}
 	}
 
