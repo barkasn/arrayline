@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 29, 2010 at 04:35 PM
+-- Generation Time: Jun 30, 2010 at 04:51 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.2-1ubuntu4.2
 
@@ -136,23 +136,24 @@ CREATE TABLE IF NOT EXISTS `datasets` (
   `owner_user_id` int(11) NOT NULL,
   `dataset_processor_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=104 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=115 ;
 
 --
 -- Dumping data for table `datasets`
 --
 
 INSERT INTO `datasets` (`id`, `job_id`, `parent_dataset_id`, `dataset_state_id`, `owner_user_id`, `dataset_processor_id`) VALUES
-(103, 155, 94, 5, 1, 4),
-(102, 154, 94, 5, 1, 4),
-(101, 153, 94, 5, 1, 4),
-(100, 152, 94, 5, 1, 4),
-(99, 151, 94, 5, 1, 4),
-(98, 148, 94, 5, 1, 4),
-(97, 149, 94, 5, 1, 4),
-(96, NULL, NULL, 1, 1, 1),
-(95, NULL, NULL, 3, 1, 3),
-(94, NULL, NULL, 4, 1, 3);
+(114, NULL, NULL, 4, 1, 3),
+(113, NULL, NULL, 3, 1, 3),
+(112, NULL, NULL, 3, 1, 3),
+(111, NULL, NULL, 3, 1, 3),
+(110, 166, 108, 6, 1, 6),
+(109, 165, 108, 6, 1, 6),
+(108, 163, 104, 5, 1, 4),
+(107, 162, 104, 5, 1, 4),
+(106, 161, 104, 5, 1, 4),
+(105, 159, 104, 5, 1, 4),
+(104, NULL, NULL, 4, 1, 3);
 
 -- --------------------------------------------------------
 
@@ -194,8 +195,8 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `job_state_id` int(11) NOT NULL,
   `description` varchar(255) NOT NULL,
   `autorun` tinyint(1) NOT NULL,
-  `run_start` date NOT NULL,
-  `run_end` date NOT NULL,
+  `run_start` datetime NOT NULL,
+  `run_end` datetime NOT NULL,
   `comment` varchar(255) NOT NULL,
   `script_set_id` int(11) NOT NULL,
   `input_dataset_id` int(11) DEFAULT NULL,
@@ -204,23 +205,28 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `user_id` int(11) DEFAULT NULL,
   `dataset_processor_id` int(11) DEFAULT NULL,
   `data_cleared` tinyint(1) NOT NULL,
+  `process_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=157 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=174 ;
 
 --
 -- Dumping data for table `jobs`
 --
 
-INSERT INTO `jobs` (`id`, `job_state_id`, `description`, `autorun`, `run_start`, `run_end`, `comment`, `script_set_id`, `input_dataset_id`, `output_dataset_id`, `output_dataset_process_state_id`, `user_id`, `dataset_processor_id`, `data_cleared`) VALUES
-(151, 9, 'Affymetrix Importer Background Job', 0, '2010-06-29', '2010-06-29', '0', 62, 94, NULL, 5, 1, 4, 1),
-(150, 9, 'Affymetrix Raw QC Background Job', 0, '0000-00-00', '0000-00-00', '0', 61, 98, NULL, 6, 1, 6, 0),
-(149, 9, 'Affymetrix Importer Background Job', 0, '2010-06-29', '2010-06-29', '0', 60, 94, NULL, 5, 1, 4, 1),
-(148, 9, 'Affymetrix Importer Background Job', 0, '2010-06-29', '2010-06-29', '0', 59, 94, NULL, 5, 1, 4, 1),
-(152, 9, 'Affymetrix Importer Background Job', 0, '2010-06-29', '2010-06-29', '0', 63, 94, NULL, 5, 1, 4, 1),
-(153, 9, 'Affymetrix Importer Background Job', 0, '2010-06-29', '2010-06-29', '0', 64, 94, NULL, 5, 1, 4, 1),
-(154, 9, 'Affymetrix Importer Background Job', 0, '2010-06-29', '2010-06-29', '0', 65, 94, NULL, 5, 1, 4, 1),
-(155, 9, 'Affymetrix Importer Background Job', 0, '2010-06-29', '2010-06-29', '0', 66, 94, NULL, 5, 1, 4, 1),
-(156, 5, 'Affymetrix Raw QC Background Job', 0, '0000-00-00', '0000-00-00', '0', 67, 103, NULL, 6, 1, 6, 0);
+INSERT INTO `jobs` (`id`, `job_state_id`, `description`, `autorun`, `run_start`, `run_end`, `comment`, `script_set_id`, `input_dataset_id`, `output_dataset_id`, `output_dataset_process_state_id`, `user_id`, `dataset_processor_id`, `data_cleared`, `process_id`) VALUES
+(165, 9, 'Affymetrix Raw QC Background Job', 0, '2010-06-30 00:00:00', '0000-00-00 00:00:00', '0', 76, 108, NULL, 6, 1, 6, 1, NULL),
+(163, 9, 'Affymetrix Importer Background Job', 0, '2010-06-30 00:00:00', '0000-00-00 00:00:00', '0', 74, 104, NULL, 5, 1, 4, 1, NULL),
+(162, 9, 'Affymetrix Importer Background Job', 0, '2010-06-30 00:00:00', '0000-00-00 00:00:00', '0', 73, 104, NULL, 5, 1, 4, 1, NULL),
+(161, 9, 'Affymetrix Importer Background Job', 0, '2010-06-30 00:00:00', '0000-00-00 00:00:00', '0', 72, 104, NULL, 5, 1, 4, 1, NULL),
+(159, 9, 'Affymetrix Importer Background Job', 0, '2010-06-30 00:00:00', '0000-00-00 00:00:00', '0', 70, 104, NULL, 5, 1, 4, 1, NULL),
+(166, 9, 'Affymetrix Raw QC Background Job', 0, '2010-06-30 15:21:08', '0000-00-00 00:00:00', '0', 77, 108, NULL, 6, 1, 6, 1, NULL),
+(167, 9, 'Affymetrix Raw QC Background Job', 0, '2010-06-30 15:45:17', '0000-00-00 00:00:00', '0', 78, 108, NULL, 6, 1, 6, 0, NULL),
+(168, 9, 'Affymetrix Raw QC Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 0, NULL, NULL, NULL, NULL, NULL, 0, NULL),
+(169, 9, 'Affymetrix Raw QC Background Job', 0, '2010-06-30 15:45:17', '0000-00-00 00:00:00', '0', 79, 108, NULL, 6, 1, 6, 0, NULL),
+(170, 5, 'Affymetrix Importer Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 80, 114, NULL, 5, 1, 4, 0, NULL),
+(171, 1, 'Affymetrix Importer Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 0, NULL, NULL, NULL, NULL, NULL, 0, NULL),
+(172, 1, 'Affymetrix Importer Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 0, NULL, NULL, NULL, NULL, NULL, 0, NULL),
+(173, 5, 'Affymetrix Importer Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 83, 114, NULL, 5, 1, 4, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -336,13 +342,28 @@ CREATE TABLE IF NOT EXISTS `script_sets` (
   `description` varchar(255) NOT NULL,
   `entry_script_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=68 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=84 ;
 
 --
 -- Dumping data for table `script_sets`
 --
 
 INSERT INTO `script_sets` (`id`, `description`, `entry_script_id`) VALUES
+(82, 'Temporary Scriptset', 4),
+(81, 'Temporary Scriptset', 4),
+(80, 'Temporary Scriptset', 4),
+(79, 'Temporary Scriptset', 5),
+(78, 'Temporary Scriptset', 5),
+(77, 'Temporary Scriptset', 5),
+(76, 'Temporary Scriptset', 5),
+(75, 'Temporary Scriptset', 5),
+(74, 'Temporary Scriptset', 4),
+(73, 'Temporary Scriptset', 4),
+(72, 'Temporary Scriptset', 4),
+(71, 'Temporary Scriptset', 5),
+(70, 'Temporary Scriptset', 4),
+(69, 'Temporary Scriptset', 4),
+(68, 'Temporary Scriptset', 5),
 (67, 'Temporary Scriptset', 4),
 (66, 'Temporary Scriptset', 4),
 (65, 'Temporary Scriptset', 4),
@@ -351,7 +372,8 @@ INSERT INTO `script_sets` (`id`, `description`, `entry_script_id`) VALUES
 (62, 'Temporary Scriptset', 4),
 (61, 'Temporary Scriptset', 4),
 (60, 'Temporary Scriptset', 4),
-(59, 'Temporary Scriptset', 1);
+(59, 'Temporary Scriptset', 1),
+(83, 'Temporary Scriptset', 4);
 
 -- --------------------------------------------------------
 
@@ -386,7 +408,39 @@ INSERT INTO `script_sets_scripts` (`script_set_id`, `script_id`) VALUES
 (66, 3),
 (66, 4),
 (67, 3),
-(67, 4);
+(67, 4),
+(68, 5),
+(68, 6),
+(69, 3),
+(69, 4),
+(70, 3),
+(70, 4),
+(71, 5),
+(71, 6),
+(72, 3),
+(72, 4),
+(73, 3),
+(73, 4),
+(74, 3),
+(74, 4),
+(75, 5),
+(75, 6),
+(76, 5),
+(76, 6),
+(77, 5),
+(77, 6),
+(78, 5),
+(78, 6),
+(79, 5),
+(79, 6),
+(80, 3),
+(80, 4),
+(81, 3),
+(81, 4),
+(82, 3),
+(82, 4),
+(83, 3),
+(83, 4);
 
 -- --------------------------------------------------------
 
@@ -401,7 +455,7 @@ CREATE TABLE IF NOT EXISTS `scripts` (
   `execution_command` varchar(255) NOT NULL,
   `can_be_called_directly` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `scripts`
@@ -411,7 +465,9 @@ INSERT INTO `scripts` (`id`, `internal_name`, `filename`, `execution_command`, `
 (1, 'randomizer', 'randomizer.sh', './randomizer.sh', 1),
 (2, 'randomizerhelper', 'randomizerhelper.sh', '', 0),
 (3, 'affyLoaderRscript', 'affyloader.R', '', 0),
-(4, 'affyLoaderInit', 'affyloaderinit.sh', './affyloaderinit.sh', 1);
+(4, 'affyLoaderInit', 'affyloaderinit.sh', './affyloaderinit.sh', 1),
+(5, 'affyRawQCInit', 'affyrawqcinit.sh', './affyrawqcinit.sh', 1),
+(6, 'affyRawQCRscript', 'affyrawqcrscrinpt.R', '', 0);
 
 -- --------------------------------------------------------
 
@@ -432,8 +488,10 @@ CREATE TABLE IF NOT EXISTS `scripts_bodies` (
 INSERT INTO `scripts_bodies` (`script_id`, `script_body`) VALUES
 (1, '#! /bin/bash\r\n\r\ncp ../input_data/* ../output_data\r\ncd ../output_data\r\nfor file in `ls` \r\ndo\r\n        randomfilename=$RANDOM\r\n        mv $file $randomfilename\r\ndone\r\ncd ..\r\ntouch JOB_COMPLETE\r\n'),
 (2, 'Randomizer Helper body'),
-(3, 'library(affy)\r\ncovariates <- read.table("../input_data/covariates.txt",sep="\\t", header=1)\r\nfilenames <- paste(c(''../input_data/''),covariates$Filename, sep='''')\r\nData <- ReadAffy(filenames=filenames,sampleNames=as.character(covariates$Label))\r\nsave(Data,file="../output_data/Data.Rdata")\r\n\r\n'),
-(4, '#! /bin/bash\r\nR --vanilla < affyloader.R\r\ncd ..\r\ntouch JOB_COMPLETE\r\n');
+(3, 'library(affy)\r\ncovariates <- read.table("../input_data/covariates.csv",header=1, sep="\\t", quote="\\"")\r\nfilenames <- paste(c(''../input_data/''), covariates$Filename, sep='''')\r\nadf <- new("AnnotatedDataFrame",data=covariates)\r\nData <- ReadAffy(filenames=filenames,sampleNames=as.character(covariates$Unique.Sample.Identifier), phenoData= adf)\r\nsave(Data,file="../output_data/Data.Rdata")'),
+(4, '#! /bin/bash\r\nR --vanilla < affyloader.R\r\ncd ..\r\ntouch JOB_COMPLETE\r\n'),
+(5, ' #! /bin/bash\r\nR --vanilla < affyrawqcrscrinpt.R\r\ncd ..\r\ntouch JOB_COMPLETE'),
+(6, 'library(affy)\r\nload(''../input_data/Data.Rdata'')\r\ncovariates <- pData(Data)\r\n\r\n# PM density plot\r\npng(filename=''../output_data/pm_density.png'', width=700, height=700)\r\nplotDensity(log2(pm(Data)),lty=1,col=1+as.numeric(covariates$Variable.Value.Identifier),main="Log2 PM intensities", ylab="Density",xlab="Log2 PM Intensity")\r\ndev.off()\r\n\r\n# MM density plot\r\npng(filename=''../output_data/mm_density.png'', width=700, height=700)\r\nplotDensity(log2(mm(Data)),lty=1,col=1+as.numeric(covariates$Variable.Value.Identifier),main="Log2 PM intensities", ylab="Density",xlab="Log2 MM Intensity")\r\ndev.off()\r\n\r\n# Array pseudo images\r\nfor( i in sampleNames(Data) ) {\r\n	png(filename=paste(''../output_data/'',i,''.png'', sep=''''), width=700, height=700)\r\n	image( Data[,i] )\r\n	dev.off()\r\n}');
 
 -- --------------------------------------------------------
 
@@ -446,7 +504,7 @@ CREATE TABLE IF NOT EXISTS `system_log` (
   `created` datetime NOT NULL,
   `message` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=40 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=76 ;
 
 --
 -- Dumping data for table `system_log`
@@ -486,7 +544,43 @@ INSERT INTO `system_log` (`id`, `created`, `message`) VALUES
 (36, '2010-06-29 16:25:55', 'Cron.php running'),
 (37, '2010-06-29 16:25:56', 'Cron.php running complete'),
 (38, '2010-06-29 16:27:22', 'Cron.php running'),
-(39, '2010-06-29 16:27:27', 'Cron.php running complete');
+(39, '2010-06-29 16:27:27', 'Cron.php running complete'),
+(40, '2010-06-30 12:08:34', 'Cron.php running'),
+(41, '2010-06-30 12:08:35', 'Cron.php running complete'),
+(42, '2010-06-30 12:08:36', 'Cron.php running'),
+(43, '2010-06-30 12:08:37', 'Cron.php running complete'),
+(44, '2010-06-30 12:09:35', 'Cron.php running'),
+(45, '2010-06-30 12:09:40', 'Cron.php running complete'),
+(46, '2010-06-30 12:21:51', 'Cron.php running'),
+(47, '2010-06-30 12:21:52', 'Cron.php running complete'),
+(48, '2010-06-30 12:22:08', 'Cron.php running'),
+(49, '2010-06-30 12:22:09', 'Cron.php running complete'),
+(50, '2010-06-30 12:23:35', 'Cron.php running'),
+(51, '2010-06-30 12:23:36', 'Cron.php running complete'),
+(52, '2010-06-30 12:25:14', 'Cron.php running'),
+(53, '2010-06-30 12:25:15', 'Cron.php running complete'),
+(54, '2010-06-30 12:25:58', 'Cron.php running'),
+(55, '2010-06-30 12:25:59', 'Cron.php running complete'),
+(56, '2010-06-30 12:26:41', 'Cron.php running'),
+(57, '2010-06-30 12:26:45', 'Cron.php running complete'),
+(58, '2010-06-30 14:28:45', 'Cron.php running'),
+(59, '2010-06-30 14:28:46', 'Cron.php running complete'),
+(60, '2010-06-30 15:20:35', 'Cron.php running'),
+(61, '2010-06-30 15:20:36', 'Cron.php running complete'),
+(62, '2010-06-30 15:21:07', 'Cron.php running'),
+(63, '2010-06-30 15:21:09', 'Cron.php running complete'),
+(64, '2010-06-30 15:22:15', 'Cron.php running'),
+(65, '2010-06-30 15:22:16', 'Cron.php running complete'),
+(66, '2010-06-30 15:23:04', 'Cron.php running'),
+(67, '2010-06-30 15:23:05', 'Cron.php running complete'),
+(68, '2010-06-30 15:25:11', 'Cron.php running'),
+(69, '2010-06-30 15:25:12', 'Cron.php running complete'),
+(70, '2010-06-30 15:26:15', 'Cron.php running'),
+(71, '2010-06-30 15:26:17', 'Cron.php running complete'),
+(72, '2010-06-30 15:45:17', 'Cron.php running'),
+(73, '2010-06-30 15:45:18', 'Cron.php running complete'),
+(74, '2010-06-30 15:55:28', 'Cron.php running'),
+(75, '2010-06-30 15:55:29', 'Cron.php running complete');
 
 -- --------------------------------------------------------
 
