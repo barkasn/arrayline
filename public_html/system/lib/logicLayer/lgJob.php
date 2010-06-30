@@ -46,6 +46,14 @@ class lgJob {
 		return $this->id;
 	}
 
+	public function getProcessId() {
+		return $this->dbJob->getProcessId();
+	}
+
+	public function setProcessId($value) {
+		$this->dbJob->setProcessId($value);
+	}
+
 	public function getDataCleared() {
 		return $this->dbJob->getDataCleared();
 	}
