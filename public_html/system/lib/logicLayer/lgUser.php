@@ -149,6 +149,20 @@ class lgUser {
 	public function setEmail($value) {
 		$this->dbUser->setEmail($value);
 	}
+
+
+	public function getLastAccess() {
+		return $this->dbUser->getLastAccess();
+	}
+
+	public function setLastAccess($value) {
+		$this->dbUser->setLastAccess($value);
+	}
+
+	public function setLastAccessNow() {
+		$now = date('Y-m-d H:i');
+		$this->setLastAccess($now);
+	}
 }
 
 

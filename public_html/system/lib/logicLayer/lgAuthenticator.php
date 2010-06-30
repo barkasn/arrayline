@@ -96,7 +96,7 @@ EOT;
 				$this->showLoginFailed('Invalid username or password');
 				exit;
 			} else if ($lgUser->checkPassword($password)) {
-				$this->setUserLoggedIn($lgUser->getId());
+				$this->setUserLoggedIn($lgUser);
 				$this->showLoginSuccess();
 			} else {
 				$this->showLoginFailed('Invalid username or password');
@@ -104,10 +104,11 @@ EOT;
 		}
 	}
 
-	private function setUserLoggedIn($id) {
+	private function setUserLoggedIn(lgUser $lgUser) {
 		$this->cleanupSession();	
 		$_SESSION['isloggedin'] = true;
-		$_SESSION['userid'] = $id;
+		$_SESSION['userid'] = $lgUser->getId();
+		$lgUser->setLastAccessNow();
 	}
 
 	private function cleanupSession() {
