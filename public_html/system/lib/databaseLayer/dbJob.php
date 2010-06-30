@@ -70,7 +70,7 @@ class dbJob {
 		return $this->processId;
 	}
 
-	public funciton setProcessId($value) {
+	public function setProcessId($value) {
 		$this->processId = $value;
 		$this->dirty = true;
 	}
