@@ -45,6 +45,8 @@ class dbDataset {
 			$this->ownerUserId = $row['owner_user_id'];
 			$this->datasetProcessorId = $row['dataset_processor_id'];
 			$this->dirty = false;
+		} else {
+			throw new Exception('dbDataset object not found');
 		}
 	}
 
