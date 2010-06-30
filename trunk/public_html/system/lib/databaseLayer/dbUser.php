@@ -234,7 +234,7 @@ class dbUser {
 			$stmt4->execute();
 
 			if (!empty($this->permissionsIds)) {
-				foreach ($permissionsIds as $pid) {
+				foreach ($this->permissionsIds as $pid) {
 					$stmt5 = $pdo->prepare('INSERT INTO user_permissions(user_id, permission_id) VALUES (:user_id, :permissions_id);');
 					$stmt5->bindValue(':user_id', $this->id);
 					$stmt5->bindValue(':permissions_id', $pid);
