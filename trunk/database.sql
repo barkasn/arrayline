@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 30, 2010 at 04:51 PM
+-- Generation Time: Jun 30, 2010 at 05:50 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.2-1ubuntu4.2
 
@@ -207,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `data_cleared` tinyint(1) NOT NULL,
   `process_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=174 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=177 ;
 
 --
 -- Dumping data for table `jobs`
@@ -223,10 +223,13 @@ INSERT INTO `jobs` (`id`, `job_state_id`, `description`, `autorun`, `run_start`,
 (167, 9, 'Affymetrix Raw QC Background Job', 0, '2010-06-30 15:45:17', '0000-00-00 00:00:00', '0', 78, 108, NULL, 6, 1, 6, 0, NULL),
 (168, 9, 'Affymetrix Raw QC Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 0, NULL, NULL, NULL, NULL, NULL, 0, NULL),
 (169, 9, 'Affymetrix Raw QC Background Job', 0, '2010-06-30 15:45:17', '0000-00-00 00:00:00', '0', 79, 108, NULL, 6, 1, 6, 0, NULL),
-(170, 5, 'Affymetrix Importer Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 80, 114, NULL, 5, 1, 4, 0, NULL),
-(171, 1, 'Affymetrix Importer Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 0, NULL, NULL, NULL, NULL, NULL, 0, NULL),
-(172, 1, 'Affymetrix Importer Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 0, NULL, NULL, NULL, NULL, NULL, 0, NULL),
-(173, 5, 'Affymetrix Importer Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 83, 114, NULL, 5, 1, 4, 0, NULL);
+(170, 9, 'Affymetrix Importer Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 80, 114, NULL, 5, 1, 4, 0, NULL),
+(171, 9, 'Affymetrix Importer Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 0, NULL, NULL, NULL, NULL, NULL, 0, NULL),
+(172, 9, 'Affymetrix Importer Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 0, NULL, NULL, NULL, NULL, NULL, 0, NULL),
+(173, 9, 'Affymetrix Importer Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 83, 114, NULL, 5, 1, 4, 0, NULL),
+(174, 9, 'Affymetrix Raw QC Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 84, 108, NULL, 6, 1, 6, 0, NULL),
+(175, 9, 'Affymetrix Raw QC Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 85, 108, NULL, 6, 1, 6, 0, NULL),
+(176, 9, 'Affymetrix Raw QC Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 86, 108, NULL, 6, 1, 6, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -342,7 +345,7 @@ CREATE TABLE IF NOT EXISTS `script_sets` (
   `description` varchar(255) NOT NULL,
   `entry_script_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=84 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=87 ;
 
 --
 -- Dumping data for table `script_sets`
@@ -373,7 +376,10 @@ INSERT INTO `script_sets` (`id`, `description`, `entry_script_id`) VALUES
 (61, 'Temporary Scriptset', 4),
 (60, 'Temporary Scriptset', 4),
 (59, 'Temporary Scriptset', 1),
-(83, 'Temporary Scriptset', 4);
+(83, 'Temporary Scriptset', 4),
+(84, 'Temporary Scriptset', 5),
+(85, 'Temporary Scriptset', 5),
+(86, 'Temporary Scriptset', 5);
 
 -- --------------------------------------------------------
 
@@ -440,7 +446,13 @@ INSERT INTO `script_sets_scripts` (`script_set_id`, `script_id`) VALUES
 (82, 3),
 (82, 4),
 (83, 3),
-(83, 4);
+(83, 4),
+(84, 5),
+(84, 6),
+(85, 5),
+(85, 6),
+(86, 5),
+(86, 6);
 
 -- --------------------------------------------------------
 
@@ -643,5 +655,5 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `passwordsha1`, `created`, `last_access`, `real_name`, `notes`, `room`, `telephone`, `email`) VALUES
-(1, 'nikolas', 'a28cc654d85c1d3cb8418061db20859c322a0bc6', '2010-05-26 00:00:00', '2010-05-26 00:00:00', '', '', '', '', '');
+(1, 'nikolas', 'a28cc654d85c1d3cb8418061db20859c322a0bc6', '2010-05-26 00:00:00', '2010-06-30 17:48:00', 'Nikolas Barkas', '', '', '', 'nikolas.barkas@kcl.ac.uk');
 
