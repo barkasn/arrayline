@@ -108,7 +108,7 @@ class dbDataset {
 	}
 
 	public function getUser() {
-		return new dbUser($this->userId);
+		return new dbUser($this->ownerUserId);
 	}
 
 	public function setUser($dbUser){

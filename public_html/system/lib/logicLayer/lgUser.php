@@ -115,7 +115,7 @@ class lgUser {
 	}
 
 	public function setRealName($value) {
-		$this->dbUser->setRealName($value);
+	 	$this->dbUser->setRealName($value);
 	}
 
 	public function getNotes() {

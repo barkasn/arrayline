@@ -57,10 +57,18 @@ class lgReqHandlerUsers implements iRequestHandler {
 			case 'editpermission':
 				$this->processEditPermission($lgRequest);
 				break;
+			case 'viewuser':
+				$this->processViewUser($lgRequest);
+				break;
 			default:
-				die('Invalid Request');
+				throw new Exception('Invalid Request');
 				break;
 		}
+	}
+
+	private function processViewuser($lgRequest) {
+		// TODO: implement
+		echo ('View User not implemented');
 	}
 
 	private function processViewPriviledges(lgRequest $lgRequest) {

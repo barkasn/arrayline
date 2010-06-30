@@ -40,6 +40,7 @@ class lgSystemRequestResolver {
 			'createdataset' => 'lgReqHandlerDatasets',
 			//User related requests
 			'viewusers' => 'lgReqHandlerUsers',
+			'viewuser' => 'lgReqHandlerUsers',
 			'edituser' => 'lgReqHandlerUsers',
 			'createuser' => 'lgReqHandlerUsers',
 			'deleteuser' => 'lgReqHandlerUsers',
