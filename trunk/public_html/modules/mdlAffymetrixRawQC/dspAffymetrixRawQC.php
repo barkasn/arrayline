@@ -27,10 +27,30 @@ class dspAffymetrixRawQC extends lgDatasetProcessor {
 	}
 
 	public function processRequest(lgRequest $lgRequest) {
+		$requestString = $lgRequest->getRequestString();
+		switch ($requestString) {
+			case 'processdataset':
+				$this->handleProcessRequest($lgRequest);
+				break;
+			case 'viewdataset': 
+				$this->handleViewRequest($lgRequest);
+				break;
+			default:
+				throw new Exception('Unknown request');
+				break;
+		}
+	}
+		
+	private function handleViewRequest($lgRequest){
+		echo 'View Dataset not implemented';
+
+	}
+
+	private function handleProcessRequest(lgRequest $lgRequest) {
 		$postArray = $lgRequest->getPostArray();
 		if (isset($postArray['processoraction']) &&
 				$postArray['processoraction'] == 'execute') {
-			$this->scheduleJob($lgRequest);
+			$this->doExecute($lgRequest);
 		} else {
 			$this->showConfirmationForm($lgRequest);
 		}
@@ -96,6 +116,17 @@ class dspAffymetrixRawQC extends lgDatasetProcessor {
 		$lgJob->setDatasetProcessor($this);
 
 		$lgJob->schedule();
+		return $lgJob;
+	}
+
+	private function doExecute($lgRequest) {
+		$lgJob = $this->schedulejob($lgRequest);
+		$this->showJobScheduled($lgJob);
+	}
+
+	private function showJobScheduled(lgJob $lgJob) {
+		//TODO: Fix this
+		echo 'jpb scheduled';
 	}
 
 }
