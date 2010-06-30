@@ -67,7 +67,7 @@ class lgDataset {
 	}
 
 	public function getProcessor() {
-		return new lgDatasetProcessor($dbDataset->getProcessor()->getId());
+		return new lgDatasetProcessor($this->dbDataset->getProcessor()->getId());
 	}
 
 	public function getMainDirectoryPath() {
