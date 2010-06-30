@@ -233,7 +233,7 @@ class dspAffymetrixUpload extends lgDatasetProcessor {
 
                 // TODO: Add checks here
                 if(is_uploaded_file($_FILES['file']['tmp_name']) ){
-                        $lgDataset->addFileFromUpload($_FILES['file']['tmp_name'],'covariates.txt');
+                        $lgDataset->addFileFromUpload($_FILES['file']['tmp_name'],'covariates.csv');
 
                         $message = 'Your file has been uploaded successfully';
                         $this->showMainSelectionForm(NULL,$message);

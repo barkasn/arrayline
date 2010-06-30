@@ -47,7 +47,7 @@ class dspAffymetrixRawQC extends lgDatasetProcessor {
 	private function showConfirmationForm(lgRequest $lgRequest) {
 		$postarray = $lgRequest->getPostArray();
 		$page = new lgCmsPage();
-		$page->setTitle('Affymetrix Importer');
+		$page->setTitle('Affymetrix Raw QC');
 		$page->appendContent('<h2>Affymetrix Raw QC</h2>');
 		$page->appendContent('<p>Are you sure you want to continue?</p>');
 
@@ -75,8 +75,8 @@ class dspAffymetrixRawQC extends lgDatasetProcessor {
 		$lgScriptSet = lgScriptSetHelper::createScriptSet('Temporary Scriptset');
 
 		// Get the scripts here
-		$lgScript = lgScriptHelper::getScriptByInternalName('affyLoaderRscript');
-		$lgScriptInit = lgScriptHelper::getScriptByInternalName('affyLoaderInit');
+		$lgScript = lgScriptHelper::getScriptByInternalName('affyRawQCRscript');
+		$lgScriptInit = lgScriptHelper::getScriptByInternalName('affyRawQCInit');
 
 		$lgScriptSet->appendScript($lgScript);
 		$lgScriptSet->appendScript($lgScriptInit);

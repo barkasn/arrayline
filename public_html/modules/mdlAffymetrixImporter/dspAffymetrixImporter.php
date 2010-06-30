@@ -49,7 +49,7 @@ class dspAffymetrixImporter extends lgDatasetProcessor {
 		$page = new lgCmsPage();
 		$page->setTitle('Affymetrix Importer');
 		$page->appendContent('<h2>Affymetrix Importer</h2>');
-		$page->appendContent('<p>You are about to schedule a background job that will convert your input dataset to an Biovconductor object. Are you sure you want to continue?</p>');
+		$page->appendContent('<p>You are about to schedule a background job that will convert your input dataset to an Bioconductor object. Are you sure you want to continue?</p>');
 
 		$form = new lgHtmlForm();
 		$field = new lgHtmlSubmitButton('submit','Continue >');
