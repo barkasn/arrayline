@@ -25,6 +25,16 @@ class lgDatasetHelper {
 	public static function getAllDatasets() {
 		$lgDatasets = array();
 		$dbDatasets = dbDatasetHelper::getAllDatasets();
+		return self::getLgFromDbDatasets($dbDatasets);
+	}
+
+	public static function getRootDatasets() {
+		$lgDatasets = array();
+		$dbDatasets = dbDatasetHelper::getRootDatasets();
+		return self::getLgFromDbDatasets($dbDatasets);
+	}
+
+	private static function getLgFromDbDatasets($dbDatasets) {
 		if ($dbDatasets) { 
 			foreach ($dbDatasets as $dbds) {
 				$lgDatasets[] = new lgDataset($dbds->getId());

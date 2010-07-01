@@ -53,7 +53,6 @@ class lgReqHandlerDatasets implements iRequestHandler {
 			$id = $postData['processorid'];
 			$lgDatasetProcessor = new lgDatasetProcessor($id);
 			$lgSpecialDatasetProcessor = $lgDatasetProcessor->getSpecificObject();
-
 			// TODO: check permissions again
 			$lgSpecialDatasetProcessor->processRequest($lgRequest);
 		} else {
@@ -91,7 +90,6 @@ class lgReqHandlerDatasets implements iRequestHandler {
 			$id = $postData['processorid'];
 			$lgDatasetProcessor = new lgDatasetProcessor($id);
 			$lgSpecialDatasetProcessor = $lgDatasetProcessor->getSpecificObject();
-
 			// TODO: check permissions again
 			$lgSpecialDatasetProcessor->processRequest($lgRequest);
 		} else {
@@ -155,9 +153,8 @@ class lgReqHandlerDatasets implements iRequestHandler {
 		$page = new lgCmsPage();
 		$page->setTitle('View Datasets');
 		$page->appendContent('<h2>View Datasets</h2>');
-
-		// TODO: Add Search Box
-
+		$page->appendContent($this->getSearchBoxHtml());
+		
 		$datasets = lgDatasetHelper::getAllDatasets();
 		if (isset($datasets) && !empty($datasets)) {
 			$page->appendContent('<div class="dataset-listing">');
@@ -173,7 +170,24 @@ class lgReqHandlerDatasets implements iRequestHandler {
 		$page->render();
 	}
 
-	private function getRenderedDatasetEntry($lgDataset, $class = '') {
+	private function getSearchBoxHtml() {
+		$searchBoxHtml=<<<EOE
+			<div class="search-box">
+				<h3>View Settings</h3>
+				<form action="index.php" method="post">
+					<p>View Style</p>
+					Simple<input type="radio" name="viewdisplay" value="simple" /><br />
+					Hierarchical<input type="radio" name="viewdisplay" value="hierarchical" /><br />
+					<input type="hidden" name="requeststring" value="viewdatasets" />
+					<input type="submit" value="Apply"/>
+				</form>
+			</div>
+		
+EOE;
+		return $searchBoxHtml;
+	}
+
+	private function getRenderedDatasetEntry($lgDataset, $class = '', $childrenHtml='') {
 		$lgDatasetState = $lgDataset->getDatasetState();
 		$lgUser = $lgDataset->getUser();
 
@@ -186,18 +200,25 @@ class lgReqHandlerDatasets implements iRequestHandler {
 
 		$datasetEntry =<<<EOE
 			<div class="dataset-entry $class">
-				<div class="dataset-title">$datasetId <span class="name">$datasetName</span></div>
-				<div class="dataset-info">
-					<ul>
-						<li>Dataset type: $datasetStateName</li>
-						<li>Created by: <a href="index.php?requeststring=viewuser&userid=$userId">$userRealName</a></li>
-						<li>Created on: $datasetCreated</li>
-					</ul>
+				<div class="dataset-entry-main" >
+					<div class="dataset-title">$datasetId <span class="name">$datasetName</span></div>
+					<div class="dataset-info">
+						<ul>
+							<li>Dataset type: $datasetStateName</li>
+							<li>Created by: <a href="index.php?requeststring=viewuser&userid=$userId">$userRealName</a></li>
+							<li>Created on: $datasetCreated</li>
+						</ul>
+					</div>
+					<div class="dataset-actions">
+						<ul>
+							<li><a href="index.php?requeststring=viewdataset&datasetid=$datasetId">View</a></li>
+							<li><a href="index.php?requeststring=processdataset&datasetid=$datasetId">Process</a></li>
+							<li><a href="index.php?requeststring=deletedataset&datasetid=$datasetId">Delete</a></li> 
+						</ul>
+					</div>
 				</div>
-				<div class="dataset-actions">
-					<a href="index.php?requeststring=viewdataset&datasetid=$datasetId">View</a> | 
-					<a href="index.php?requeststring=processdataset&datasetid=$datasetId">Process</a> | 
-					<a href="index.php?requeststring=deletedataset&datasetid=$datasetId">Delete</a> 
+				<div class="children">
+					$childrenHtml
 				</div>
 			</div>
 EOE;
@@ -206,7 +227,39 @@ EOE;
 	}
 
 	private function displayDatasetsHierarchical(lgRequest $lgRequest) {
-		die('Not implemented');	
+		$outputHtml = ' ';
+
+		$datasets = lgDatasetHelper::getRootDatasets();
+                if (isset($datasets) && !empty($datasets)) {
+			$i = 1;
+                        foreach($datasets as $lgDataset) {
+				$outputHtml .= $this->getDatasetHtmlHierarchical($lgDataset,($i++%2?'odd':'even'));
+                        }
+                } else {
+                        $outputHtml = '<p>No datasets found</p>';
+                }
+		
+                $page = new lgCmsPage();
+                $page->setTitle('View Datasets');
+                $page->appendContent('<h2>View Datasets</h2>');
+                $page->appendContent($this->getSearchBoxHtml());
+		$page->appendContent('<div class="dataset-listing">'.$outputHtml.'</div>');
+		$page->render();
+	}
+	
+	private function getDatasetHtmlHierarchical(lgDataset $lgDataset, $zebra= '') {
+		$childrenDatasets = $lgDataset->getChildren();
+		$childrenHtml = ' ';
+
+		if (isset($childrenDatasets) && !empty($childrenDatasets)) {
+			$i = 1;
+			foreach($childrenDatasets as $lgDatasetChild) {
+				$childrenHtml .= $this->getDatasetHtmlHierarchical($lgDatasetChild,($i++%2?'odd':'even'));
+			}
+		}
+
+		return $this->getRenderedDatasetEntry($lgDataset, $zebra, $childrenHtml);
+				
 	}
 
 	public function getRequiredPermissions() {

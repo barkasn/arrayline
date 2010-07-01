@@ -64,9 +64,9 @@ class lgDataset {
 
 	public function getChildren() {
 		$childrenLgDatasets = array();
-		$childrenDbDatasets = dbDatasetHelper::getDatasetsByParent($this->dbDatatset);
+		$childrenDbDatasets = dbDatasetHelper::getDatasetsByParent($this->dbDataset);
 		if ($childrenDbDatasets) {
-			foreach($childrenDbDataset as $dbds) {
+			foreach($childrenDbDatasets as $dbds) {
 				$childrenLgDatasets[] = new lgDataset($dbds->getId());
 			}
 		}

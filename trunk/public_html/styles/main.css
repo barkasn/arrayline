@@ -131,63 +131,87 @@ div.page div.main {
 	background-color: #fafafc;
 }
 
+div.page div.main div.search-box {
+	width: 630px;
+	height: 200px;
+	margin-bottom: 20px;
+	background-color: black;
+	padding: 10px 20px;
+	color: white;
+}
+
+
 div.page div.main div.dataset-listing {
-	display: block;
 	width: 100%;
 }
 
 div.page div.main div.dataset-listing div.dataset-entry {
 	display: block;
+	float: left;
+	clear: both;
 	width: 100%;
-	height: 90px;
-	position: relative;
+	overflow: hidden;
 }
 
 div.page div.main div.dataset-listing div.odd {
-	background-color: #e9e9e9;
+	background-color: #ddd
 }
 
-div.page div.main div.dataset-listing div.even {
-	background-color: #f5f5f5;
-}
-
-div.page div.main div.dataset-listing div.dataset-entry div.dataset-title {
+div.page div.main div.dataset-listing div.dataset-entry div.dataset-entry-main {
 	display: block;
-	width: 170px;
-	position: absolute;
-	top: 3px;
-	left: 5px;
+	float: left;
+	width: 100%;
+	clear: both;
+
 }
 
-div.page div.main div.dataset-listing div.dataset-entry div.dataset-title span.name {
-	font-weight: bold;
+div.page div.main div.dataset-listing div.dataset-entry div.dataset-entry-main div.dataset-title {
+	float: left;
+	padding: 5px 10px;
 }
 
-div.page div.main div.dataset-listing div.dataset-entry div.dataset-info {
+div.page div.main div.dataset-listing div.dataset-entry div.dataset-entry-main div.dataset-info {
 	display: block;
-	width: 400px;
-	height: 100px;
-	position: absolute;
-	top: 30px;
-	left: 0;
-}
-
-div.page div.main div.dataset-listing div.dataset-entry div.dataset-info ul{
-	list-style-type: none;
+	clear: both;
+	float: left;
 	font-size: 0.8em;
-	color: #333;
+	
 }
 
-div.page div.main div.dataset-listing div.dataset-entry div.dataset-actions {
+div.page div.main div.dataset-listing div.dataset-entry div.dataset-entry-main div.dataset-info ul {
+	list-style-type: none;
+}
+
+
+
+div.page div.main div.dataset-listing div.dataset-entry div.dataset-entry-main div.dataset-actions {
 	display: block;
-	position: absolute;
-	width: 170px;
-	top: 3px;
-	right: 0;
+	clear: both;
+	float: left;
+	margin-left: 40px;
+	
 }
 
-div.page div.main div.dataset-listing div.dataset-entry div.dataset-actions a {
-	color: red;
+div.page div.main div.dataset-listing div.dataset-entry div.dataset-entry-main div.dataset-actions ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+div.page div.main div.dataset-listing div.dataset-entry div.dataset-entry-main div.dataset-actions ul li {
+	display: block;
+	float: left;
+	padding-right: 4px;
+}
+
+div.page div.main div.dataset-listing div.dataset-entry div.children {
+	display: block;
+	float: left;
+	width: 80%;
+	clear: both;
+	margin-left: 50px;
+	padding-top: 10px;
+	
 }
 
 div.page div.main form label {
