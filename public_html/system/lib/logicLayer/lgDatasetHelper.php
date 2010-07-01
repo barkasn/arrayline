@@ -44,6 +44,8 @@ class lgDatasetHelper {
 		// Create the database record
 		$dbDataset = dbDatasetHelper::createDataset($jobId, $parentDatasetId, $datasetStateId, $ownerId, $datasetProcessorId);
 		$lgDataset = new lgDataset($dbDataset->getId());
+		$now = date('Y-m-d H:i');
+		$lgDataset->setCreated($now);
 
 		// And the corresponding directory
 		self::createDatasetDirectoryStructure($lgDataset);
