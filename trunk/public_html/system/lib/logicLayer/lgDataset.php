@@ -50,6 +50,14 @@ class lgDataset {
 		$this->dbDataset->setName($value);
 	}
 
+	public function getCreated() {
+		return $this->dbDataset->getCreated();
+	}
+
+	public function setCreated($value) {
+		$this->dbDataset->setCreated($value);
+	}
+
 	public function getParent() {
 		return lgDataset($dbDataset->getParentDatasetId());
 	}

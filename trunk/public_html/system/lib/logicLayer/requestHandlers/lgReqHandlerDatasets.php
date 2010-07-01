@@ -180,6 +180,7 @@ class lgReqHandlerDatasets implements iRequestHandler {
 		$datasetId = $lgDataset->getId();
 		$datasetName = $lgDataset->getName();
 		$datasetStateName = $lgDatasetState->getName();
+		$datasetCreated = $lgDataset->getCreated();
 		$userId = $lgUser->getid();
 		$userRealName = $lgUser->getRealName();
 
@@ -190,7 +191,7 @@ class lgReqHandlerDatasets implements iRequestHandler {
 					<ul>
 						<li>Dataset type: $datasetStateName</li>
 						<li>Created by: <a href="index.php?requeststring=viewuser&userid=$userId">$userRealName</a></li>
-						<li>Created on: </li>
+						<li>Created on: $datasetCreated</li>
 					</ul>
 				</div>
 				<div class="dataset-actions">

@@ -30,11 +30,12 @@ class dbDataset {
 	private $datasetStateId;
 	private $ownerUserId;
 	private $datasetProcessorId;
+	private $creates;
 	private $dirty;
 	
 	public function __construct($id) {
 		global $pdo;
-		$stmt = $pdo->prepare('SELECT job_id, name, parent_dataset_id, dataset_state_id, owner_user_id, dataset_processor_id FROM datasets WHERE id = :id;');
+		$stmt = $pdo->prepare('SELECT job_id, name, parent_dataset_id, dataset_state_id, owner_user_id, dataset_processor_id, created FROM datasets WHERE id = :id;');
 		$stmt->bindValue(':id', $id);
 		$stmt->execute();
 		
@@ -46,6 +47,7 @@ class dbDataset {
 			$this->datasetStateId = $row['dataset_state_id'];
 			$this->ownerUserId = $row['owner_user_id'];
 			$this->datasetProcessorId = $row['dataset_processor_id'];
+			$this->created = $row['created'];
 			$this->dirty = false;
 		} else {
 			throw new Exception('dbDataset object not found');
@@ -54,6 +56,16 @@ class dbDataset {
 
 	public function getId() {
 		return $this->id;
+	}
+
+
+	public function getCreated() {
+		return $this->created;
+	}
+
+	public function setCreated($value) {
+		$this->created = $value;
+		$this->dirty =  true;
 	}
 
 	public function getName() {
@@ -139,7 +151,7 @@ class dbDataset {
 	public function save() {
 		global $pdo;
 		if ($this->dirty) {
-			$stmt = $pdo->prepare('UPDATE datasets SET name = :name, job_id = :job_id, parent_dataset_id = :parent_dataset_id, dataset_state_id = :dataset_state_id, owner_user_id = :owner_user_id, dataset_processor_id = :dataset_processor_id WHERE id = :id;');
+			$stmt = $pdo->prepare('UPDATE datasets SET name = :name, job_id = :job_id, parent_dataset_id = :parent_dataset_id, dataset_state_id = :dataset_state_id, owner_user_id = :owner_user_id, dataset_processor_id = :dataset_processor_id, created = :created WHERE id = :id;');
 
 			$stmt->bindValue(':name', $this->name);
 			$stmt->bindValue(':job_id', $this->jobId);
@@ -147,6 +159,7 @@ class dbDataset {
 			$stmt->bindValue(':dataset_state_id', $this->datasetStateId);
 			$stmt->bindValue(':owner_user_id', $this->ownerUserId);
 			$stmt->bindValue(':dataset_processor_id', $this->datasetProcessorId);
+			$stmt->bindValue(':created', $this->created);
 			$stmt->bindValue(':id', $this->id);
 
 			$stmt->execute();
