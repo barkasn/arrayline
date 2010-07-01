@@ -149,7 +149,13 @@ EOF;
 		$userId = empty($postArray['userid'])?'':$postArray['userid'];
 		$lgUser = new lgUser($userId);
 		$lgUser->delete();
-		echo 'user deleted';
+
+		$page = new lgCmsPage();
+		$page->setTitle('User Deleted');
+		$page->appendContent('<h2>User deleted</h2>');
+		$page->appendContent('<p>User deleted succesfully</p>');
+
+		$page->render();
 	}
 
 	private function processDeleteUserRequest(lgRequest $lgRequest) {
@@ -190,16 +196,12 @@ EOF;
 
 		$page->appendContent('<p>Are you sure you want to delete user '.$lgUser->getUsername().'?</p>');
 		$form = new lgHtmlForm();
-		// TODO: Add hidden fields
-
                 $hiddenVals = array (
                         'requeststring' => 'deleteuser',
 			'userid' => $lgUser->getId(),
                         'confirm' => '1',
                 );
                 $form->addFields(lgHtmlFormHelper::getHiddenFieldsFromArray($hiddenVals));
-
-
 		$form->addField(new lgHtmlSubmitButton('Delete User','Delete User'));
 		$page->appendContent($form->getRenderedHtml());
 		$page->render();
