@@ -57,7 +57,7 @@ B. Apache configuration
 	Assuming you want to run apache in a user directory and not in the main
 	httpd folder you need to enable the user directories module:
 
-		$ sudo ap2enmod userdir
+		$ sudo a2enmod userdir
 
 	In Ubuntu, user directories are by default not processing php files
 	To enable php processing edit the php4 apache configuration file php5.conf
