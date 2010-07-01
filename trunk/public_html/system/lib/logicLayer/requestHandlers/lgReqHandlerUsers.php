@@ -144,12 +144,65 @@ EOF;
 		return $return;
 	}
 
-	private function processEditUserRequest(lgRequest $lgRequest) {
-		echo 'Edit User Request Processing Not Implemented';
+	private function doDeleteUser(lgRequest $lgRequest) {
+		$postArray = $lgRequest->getPostArray();
+		$userId = empty($postArray['userid'])?'':$postArray['userid'];
+		$lgUser = new lgUser($userId);
+		$lgUser->delete();
+		echo 'user deleted';
 	}
 
 	private function processDeleteUserRequest(lgRequest $lgRequest) {
-		echo 'Delete User Request Processing Not Implemented';
+		$postArray = $lgRequest->getPostArray();
+		$userId = empty($postArray['userid'])?'':$postArray['userid'];
+		$currentUser = lgUserHelper::getUserFromEnviroment();
+			
+		if ($userId == $currentUser->getId()) {
+			$this->showDeleteCurrentUserError($lgRequest);
+		} else {
+			if (empty($postArray['confirm'])) {
+				$this->showDeleteConfirmation($lgRequest);
+			} else {
+				$this->doDeleteUser($lgRequest);
+			}
+		}
+	}
+
+
+	private function showDeleteCurrentUserError(lgRequest $lgRequest) {
+		$page = new lgCmsPage();
+		$page->setTitle('Delete User Error');
+		$page->appendContent('<h2>Delete User Error</h2>');
+		$page->appendContent('<p>You cannot delete the current user.</p>');
+		$page->render();
+
+	}
+
+	private function showDeleteConfirmation(lgRequest $lgRequest) {
+                $postArray = $lgRequest->getPostArray();
+                $userId = empty($postArray['userid'])?'':$postArray['userid'];
+
+                $lgUser = new lguser($userId);
+
+                $page = new lgCmsPage();
+                $page->setTitle('Delete user confirmation');
+                $page->appendContent('<h2>Delete user confirmation</h2>');
+
+		$page->appendContent('<p>Are you sure you want to delete user '.$lgUser->getUsername().'?</p>');
+		$form = new lgHtmlForm();
+		// TODO: Add hidden fields
+
+                $hiddenVals = array (
+                        'requeststring' => 'deleteuser',
+			'userid' => $lgUser->getId(),
+                        'confirm' => '1',
+                );
+                $form->addFields(lgHtmlFormHelper::getHiddenFieldsFromArray($hiddenVals));
+
+
+		$form->addField(new lgHtmlSubmitButton('Delete User','Delete User'));
+		$page->appendContent($form->getRenderedHtml());
+		$page->render();
 	}
 
 	private function processCreateUserRequest(lgRequest $lgRequest) {

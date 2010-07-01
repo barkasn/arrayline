@@ -78,6 +78,7 @@ class lgUser {
 		return $allPermissions;
 	}
 
+
 	public function getRolePermissions() {
 		$permissionStrings = array();
 
@@ -162,6 +163,10 @@ class lgUser {
 	public function setLastAccessNow() {
 		$now = date('Y-m-d H:i');
 		$this->setLastAccess($now);
+	}
+
+	public function delete() {
+		$this->dbUser->setDeleted(true);
 	}
 }
 

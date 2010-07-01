@@ -210,7 +210,7 @@ class dbUser {
 		global $pdo;
 
 		if ($this->dirty) {
-			$stmt = $pdo->prepare('UPDATE users SET username = :username, passwordsha1 = :passwordsha1, created = :created, last_access = :last_access, real_name = :real_name, notes = :notes, room = :room, telephone = :telephone, email = :email WHERE id = :id;');
+			$stmt = $pdo->prepare('UPDATE users SET username = :username, passwordsha1 = :passwordsha1, created = :created, last_access = :last_access, real_name = :real_name, notes = :notes, room = :room, telephone = :telephone, email = :email, deleted = :deleted WHERE id = :id;');
 			$stmt->bindValue(':username', $this->username);
 			$stmt->bindValue(':passwordsha1', $this->passwordSha1);
 			$stmt->bindValue(':created', $this->created);

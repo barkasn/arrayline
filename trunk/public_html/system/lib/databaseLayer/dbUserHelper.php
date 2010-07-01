@@ -63,5 +63,16 @@ class dbUserHelper {
 		return $dbUserObjects;
 	}
 
-			
+	public static function getAllActiveUsers() {
+		global $pdo;
+	
+		$stmt = $pdo->prepare('SELECT id FROM users WHERE deleted = 0;');
+		$stmt->execute();
+
+		$dbUserObjects = array();
+		while($row = $stmt->fetch()) {
+			$dbUserObjects[] = new dbUser($row['id']);
+		}
+		return $dbUserObjects;
+	}
 }

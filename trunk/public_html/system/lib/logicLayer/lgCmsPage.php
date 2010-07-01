@@ -99,13 +99,6 @@ EOT;
 				</a>
 			</li>
 			<li>
-				<a href="index.php?requeststring=viewusers">
-					<span>
-						<img src="images/icons/layout.png" alt="add icon" />View Users
-					</span>
-				</a>
-			</li>
-			<li>
 				<a href="index.php?requeststring=createuser">
 					<span>
 						<img src="images/icons/add.png" alt="add icon" />Create User
@@ -113,12 +106,19 @@ EOT;
 				</a>
 			</li>
 			<li>
+				<a href="index.php?requeststring=viewusers">
+					<span>
+						<img src="images/icons/layout.png" alt="add icon" />View Users
+					</span>
+				</a>
+			</li>
+<!--			<li>
 				<a href="index.php?requeststring=viewroles">
 					<span>				
 						<img src="images/icons/layout.png" alt="add icon" />View Roles
 					</span>
 				</a>
-			</li>
+			</li> -->
 			<li>
 				<a href="index.php?requeststring=viewpriviledges">
 					<span>

@@ -51,8 +51,13 @@ class lgUserHelper {
 		return NULL;
 	}
 
-	public static function getAllUsers() {
-		$dbUsers = dbUserHelper::getAllUsers();
+	public static function getAllUsers($getDeleted = false) {
+		if ($getDeleted) {
+			$dbUsers = dbUserHelper::getAllUsers();
+		} else {
+			$dbUsers = dbUserHelper::getAllActiveUsers();
+		}
+
 		$lgUserObjects = array();
 		if (!empty($dbUsers)) {
 			foreach ($dbUsers as $usr) {
@@ -62,7 +67,7 @@ class lgUserHelper {
 		} else {
 			return NULL;
 		}
-
 	}
+
 
 }
