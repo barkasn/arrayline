@@ -42,6 +42,14 @@ class lgDataset {
 		return $this->id;
 	}
 
+	public function getName() {
+		return $this->dbDataset->getName();
+	}
+
+	public function setName($value) {
+		$this->dbDataset->setName($value);
+	}
+
 	public function getParent() {
 		return lgDataset($dbDataset->getParentDatasetId());
 	}

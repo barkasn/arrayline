@@ -24,6 +24,7 @@
 
 class dbDataset {
 	private $id;
+	private $name;
 	private $jobId;
 	private $parentDatasetId;
 	private $datasetStateId;
@@ -33,13 +34,14 @@ class dbDataset {
 	
 	public function __construct($id) {
 		global $pdo;
-		$stmt = $pdo->prepare('SELECT job_id, parent_dataset_id, dataset_state_id, owner_user_id, dataset_processor_id FROM datasets WHERE id = :id;');
+		$stmt = $pdo->prepare('SELECT job_id, name, parent_dataset_id, dataset_state_id, owner_user_id, dataset_processor_id FROM datasets WHERE id = :id;');
 		$stmt->bindValue(':id', $id);
 		$stmt->execute();
 		
 		if ($row = $stmt->fetch()) {
 			$this->id = $id;
 			$this->jobId = $row['job_id'];
+			$this->name = $row['name'];
 			$this->parentDatasetId = $row['parent_dataset_id'];
 			$this->datasetStateId = $row['dataset_state_id'];
 			$this->ownerUserId = $row['owner_user_id'];
@@ -52,6 +54,15 @@ class dbDataset {
 
 	public function getId() {
 		return $this->id;
+	}
+
+	public function getName() {
+		return $this->name;
+	}
+
+	public function setName($value) {
+		$this->name = $value;
+		$this->dirty = true;
 	}
 
 	public function getJobId() {
@@ -128,8 +139,9 @@ class dbDataset {
 	public function save() {
 		global $pdo;
 		if ($this->dirty) {
-			$stmt = $pdo->prepare('UPDATE datasets SET job_id = :job_id, parent_dataset_id = :parent_dataset_id, dataset_state_id = :dataset_state_id, owner_user_id = :owner_user_id, dataset_processor_id = :dataset_processor_id WHERE id = :id;');
+			$stmt = $pdo->prepare('UPDATE datasets SET name = :name, job_id = :job_id, parent_dataset_id = :parent_dataset_id, dataset_state_id = :dataset_state_id, owner_user_id = :owner_user_id, dataset_processor_id = :dataset_processor_id WHERE id = :id;');
 
+			$stmt->bindValue(':name', $this->name);
 			$stmt->bindValue(':job_id', $this->jobId);
 			$stmt->bindValue(':parent_dataset_id', $this->parentDatasetId);
 			$stmt->bindValue(':dataset_state_id', $this->datasetStateId);
