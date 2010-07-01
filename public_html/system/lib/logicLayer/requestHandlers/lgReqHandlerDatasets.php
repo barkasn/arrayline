@@ -177,19 +177,29 @@ class lgReqHandlerDatasets implements iRequestHandler {
 		$lgDatasetState = $lgDataset->getDatasetState();
 		$lgUser = $lgDataset->getUser();
 
+		$datasetId = $lgDataset->getId();
+		$datasetName = $lgDataset->getName();
+		$datasetStateName = $lgDatasetState->getName();
+		$userId = $lgUser->getid();
+		$userRealName = $lgUser->getRealName();
 
-		$datasetEntry = '<div class="dataset-entry '.$class.'">';
-		$datasetEntry .= '<div class="dataset-title">';
-		$datasetEntry .= '<strong>'.$lgDataset->getId().'</strong>';
-		$datasetEntry .= ': <i>'.$lgDatasetState->getName().'</i>';
-		$datasetEntry .= ' (<a href="index.php?requeststring=viewuser&userid='.$lgUser->getId().'" >'.$lgUser->getRealName().'</a>)';
-		$datasetEntry .= '</div>';
-		$datasetEntry .= '<div class="dataset-actions">';
-		$datasetEntry .= '<a href="index.php?requeststring=viewdataset&datasetid='.$lgDataset->getId().'">View</a> | ';
-		$datasetEntry .= '<a href="index.php?requeststring=processdataset&datasetid='.$lgDataset->getId().'">Process</a> | ';
-		$datasetEntry .= '<a href="index.php?requeststring=deletedataset&datasetid='.$lgDataset->getId().'">Delete</a> ';
-		$datasetEntry .= '</div>';
-		$datasetEntry .= '</div>';
+		$datasetEntry =<<<EOE
+			<div class="dataset-entry $class">
+				<div class="dataset-title">$datasetId <span class="name">$datasetName</span></div>
+				<div class="dataset-info">
+					<ul>
+						<li>Dataset type: $datasetStateName</li>
+						<li>Created by: <a href="index.php?requeststring=viewuser&userid=$userId">$userRealName</a></li>
+						<li>Created on: </li>
+					</ul>
+				</div>
+				<div class="dataset-actions">
+					<a href="index.php?requeststring=viewdataset&datasetid=$datasetId">View</a> | 
+					<a href="index.php?requeststring=processdataset&datasetid=$datasetId">Process</a> | 
+					<a href="index.php?requeststring=deletedataset&datasetid=$datasetId">Delete</a> 
+				</div>
+			</div>
+EOE;
 
 		return $datasetEntry;
 	}
