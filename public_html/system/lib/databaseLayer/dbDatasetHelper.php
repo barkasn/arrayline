@@ -33,6 +33,18 @@ class dbDatasetHelper {
 		return $datasets;
 	}	
 
+	public static function getRootDatasets() {
+
+		global $pdo;
+		$stmt = $pdo->prepare('SELECT id FROM datasets WHERE  parent_dataset_id IS NULL;');
+		$stmt->execute();
+		$datasets = array();
+		while ($row = $stmt->fetch()) {
+			$datasets[] = new dbDataset($row['id']);
+		}
+		return $datasets;
+	}
+
 	public static function getDatasetsByState($dbState) {
 		global $pdo;
 		$stmt = $pdo->prepare('SELECT id FROM datasets WHERE dataset_state_id = :dataset_state_id;');
@@ -48,7 +60,7 @@ class dbDatasetHelper {
 
 	public static function getDatasetsByParent($dbDataset) {
 		global $pdo;
-		$stmt = $pdo->prepare('SELECT id FROM datasets WHERE parend_dataset_id = :parent_dataset_id;');
+		$stmt = $pdo->prepare('SELECT id FROM datasets WHERE parent_dataset_id = :parent_dataset_id;');
 		$stmt->bindValue(':parent_dataset_id', $dbDataset->getId());
 		$stmt->execute();
 		
