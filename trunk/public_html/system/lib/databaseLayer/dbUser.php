@@ -29,19 +29,19 @@ class dbUser {
 	private $lastAccess;
 	private $rolesIds;
 	private $permissionsIds;
-
 	private $realName;
 	private $notes;
 	private $room;
 	private $telephone;
 	private $email;
+	private $deleted;
 
 	private $dirty;
 
 	public function __construct($id) {
 		global $pdo;
 
-		$stmt = $pdo->prepare('SELECT username, passwordsha1, created, last_access, real_name, notes, room, telephone, email FROM users WHERE id = :id;');
+		$stmt = $pdo->prepare('SELECT username, passwordsha1, created, last_access, real_name, notes, room, telephone, email, deleted FROM users WHERE id = :id;');
 		$stmt->bindParam(':id', $id);
 		$stmt->execute();
 		
@@ -56,6 +56,7 @@ class dbUser {
 			$this->room = $row['room'];
 			$this->room = $row['telephone'];
 			$this->email = $row['email'];
+			$this->deleted = $row['deleted'];
 
 			$this->rolesIds = array();
 			$stmt2 = $pdo->prepare('SELECT role_id FROM user_roles WHERE user_id = :user_id');
@@ -79,7 +80,6 @@ class dbUser {
 		}
 		
 	}
-	
 
 	public function getRealName() {
 		return $this->realName;
@@ -197,6 +197,15 @@ class dbUser {
 		$this->dirty = true;
 	}
 
+	public function getDeleted() {
+		return $this->deleted;
+	}
+
+	public function setDeleted($value) {
+		$this->deleted = $value;
+		$this->dirty = true;
+	}
+
 	public function save() {
 		global $pdo;
 
@@ -212,6 +221,7 @@ class dbUser {
 			$stmt->bindValue(':room', $this->room);
 			$stmt->bindValue(':telephone', $this->telephone);
 			$stmt->bindValue(':email', $this->email);
+			$stmt->bindValue(':deleted', $this->deleted);
 			$stmt->bindValue(':id', $this->id);
 
 			$stmt->execute();
