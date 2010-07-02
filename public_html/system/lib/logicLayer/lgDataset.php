@@ -105,7 +105,37 @@ class lgDataset {
 
 	public function getFileList() {
 		$files = scandir($this->getFilesDirectoryPath());
-		return $files;	
+		$ret = array();
+		if (!empty($files)) {
+			foreach ($files as $f) {
+				if ($f != '.' && $f !='..') {
+					$ret[] = $f;
+				}
+			}
+		}
+
+		return $ret;
+	}
+
+	public function getFilesInfo() {
+		$files = $this->getFileList();
+		$filesDir = $this->getFilesDirectoryPath();
+
+		$ret = array();
+		if (!empty($files)) {
+			foreach ($files as $f) {
+				$fileEntry = array();
+				$fileEntry['filename'] = $f;
+				$fileEntry['filepath'] = $filesDir.'/'.$f;
+				$fileEntry['filesize'] = filesize($fileEntry['filepath']);
+				$fileEntry['url'] = 'datastore/'.$this->getId().'/files/'.$f;
+				//TODO: Add Url & sha1
+
+				$ret[] = $fileEntry;
+			}
+		}
+
+		return $ret;
 	}
 
 	public function addFileFromUpload($pathToFile,$newFileName) {

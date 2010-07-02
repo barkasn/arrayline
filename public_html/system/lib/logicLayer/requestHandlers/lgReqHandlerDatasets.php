@@ -119,21 +119,77 @@ class lgReqHandlerDatasets implements iRequestHandler {
 
 
 	private function processDeleteDatasetRequest(lgRequest $lgRequest) {
-		die('Delete dataset not implemented');
+		$page = new lgCmsPage();
+		$page->setTitle('Delete Dataset');
+		$page->appendContent('Delete Dataset Not implemented');
+		$page->render();
 	}
 
 	private function processViewDatasetRequest(lgRequest $lgRequest) {
 		$postArray = $lgRequest->getPostArray();
 		$id = $postArray['datasetid'];
-
-		if (!is_numeric($id)) {
-			die('lgReqHanderDatasets: Non-numeric id');
-		}
+		$showSpecific = empty($postArray['showspecific'])?false:true;
 
 		$lgDataset = new lgDataset($id);
-		$datasetProcessor = $lgDataset->getProcessor();
-		$datasetProcessor = $datasetProcessor->getSpecificObject();
-		$datasetProcessor->processRequest($lgRequest);
+		if ($showSpecific) {
+			$datasetProcessor = $lgDataset->getProcessor();
+			$datasetProcessor = $datasetProcessor->getSpecificObject();
+			$datasetProcessor->processRequest($lgRequest);
+		} else {
+			$this->showDatasetGeneric($lgDataset);
+		}
+	}
+
+	private function showDatasetGeneric(lgDataset $lgDataset) {
+		$page = new lgCmsPage();
+		$page->setTitle('Show Dataset');
+		$page->appendContent('<h2>Show Dataset</h2>');
+		
+		$page->appendContent($this->getGeneralInfoHtml($lgDataset));
+		$page->appendContent($this->getFileListingHtml($lgDataset));
+			
+		$page->render();
+	}
+
+	private function getGeneralInfoHtml(lgDataset $lgDataset) {
+		$id = $lgDataset->getId();
+		$name = $lgDataset->getName();
+		$owner = $lgDataset->getUser()->getUsername();
+		$date = $lgDataset->getCreated();
+
+		$html=<<<EOE
+			<div class="general-info">
+				<h3>General Dataset Information</h3>
+				<p>Unique Id: $id</p>
+				<p>Name: $name</p>
+				<p>Owner user: $owner</p>
+				<p>Date created: $date</p>
+			</div>
+EOE;
+		return $html;
+	}
+
+	private function getFileListingHtml(lgDataset $lgDataset) {
+		$filesInfo = $lgDataset->getFilesInfo();
+
+		$html = '<div class="file-listing"> ';
+		$html .= '<h3>File Listing</h3>';
+		
+		if (!empty($filesInfo)) {
+			$i = 0;
+			foreach ($filesInfo as $fileRecord) {
+				$zebra = $i++%2?'odd':'even';
+				$html .= '<div class="file-record '.$zebra.'">';
+				$html .= '<span class="filename"><a href="'.$fileRecord['url'].'">'.$fileRecord['filename'].'</a></span>';
+				$html .= '<span class="size">'.lgGeneralHelper::formatFileSize($fileRecord['filesize']).'</span>';
+				$html .= '</div>';
+			}
+		} else {
+			$html = '<p>No files found</p>';
+		}
+		$html .= '</div>';
+
+		return $html;
 	}
 
 	private function processViewAllRequest(lgRequest $lgRequest) {

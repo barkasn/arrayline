@@ -306,3 +306,44 @@ div.page div.main div.user-listing div.user-entry div.user-actions {
 div.page div.main div.user-listing div.user-entry div.user-actions a {
 	color: red;
 }
+
+div.main div.file-listing {
+	display: block;
+	width: 100%;
+	float: left;
+	clear: both;
+}
+
+
+div.main div.file-listing div.file-record {
+	display: block;
+	width: 100%;
+	float: left;
+	clear: both;
+	height: 40px;
+}
+
+div.main div.file-listing div.odd {
+	background-color: #ccc;
+}
+
+div.main div.file-listing div.even {
+	background-color: #eee;
+}
+
+
+div.main div.file-listing div.file-record span.filename {
+	display: block;
+	float: left;
+	width: 70%;
+	padding-left: 30px;
+	padding-top: 13px;
+}
+
+
+div.main div.file-listing div.file-record span.size {
+	display: block;
+	float: left;
+	width: 20%;
+	padding-top: 13px;
+}
