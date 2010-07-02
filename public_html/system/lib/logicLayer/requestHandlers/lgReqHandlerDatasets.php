@@ -50,8 +50,6 @@ class lgReqHandlerDatasets implements iRequestHandler {
 		}
 	}
 
-	
-
 
 	private function processRenameDatasetRequest(lgRequest $lgRequest) {
 		$postArray = $lgRequest->getPostArray();
@@ -63,15 +61,22 @@ class lgReqHandlerDatasets implements iRequestHandler {
 	}
 
 	private function doRename(lgRequest $lgRequest) {
+		$postArray = $lgRequest->getPostArray();
+		$lgDataset = new lgDataset($postArray['datasetid']);
 		
+		$newName = $postArray['newname'];	
+		$lgDataset->setName($newName);
+
+                $postLogoutPage = new lgPage();
+                $postLogoutPage->setRedirect('index.php?requeststring=viewdatasets', 0);
+                $postLogoutPage->render();
+
+
 	}
 
 	private function showRenameForm($lgRequest) {
-
 		$postArray = $lgRequest->getPostArray();
-
 		$lgDataset = new lgDataset($postArray['datasetid']);
-
 
 		$page = new lgCmsPage();
 		$page->setTitle('Rename Dataset');
