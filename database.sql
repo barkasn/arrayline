@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 30, 2010 at 05:50 PM
+-- Generation Time: Jul 02, 2010 at 05:51 AM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.2-1ubuntu4.2
 
@@ -130,30 +130,25 @@ INSERT INTO `dataset_states` (`id`, `internal_name`, `name`, `description`) VALU
 
 CREATE TABLE IF NOT EXISTS `datasets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
   `job_id` int(11) DEFAULT NULL,
   `parent_dataset_id` int(11) DEFAULT NULL,
   `dataset_state_id` int(11) NOT NULL,
   `owner_user_id` int(11) NOT NULL,
   `dataset_processor_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=115 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=119 ;
 
 --
 -- Dumping data for table `datasets`
 --
 
-INSERT INTO `datasets` (`id`, `job_id`, `parent_dataset_id`, `dataset_state_id`, `owner_user_id`, `dataset_processor_id`) VALUES
-(114, NULL, NULL, 4, 1, 3),
-(113, NULL, NULL, 3, 1, 3),
-(112, NULL, NULL, 3, 1, 3),
-(111, NULL, NULL, 3, 1, 3),
-(110, 166, 108, 6, 1, 6),
-(109, 165, 108, 6, 1, 6),
-(108, 163, 104, 5, 1, 4),
-(107, 162, 104, 5, 1, 4),
-(106, 161, 104, 5, 1, 4),
-(105, 159, 104, 5, 1, 4),
-(104, NULL, NULL, 4, 1, 3);
+INSERT INTO `datasets` (`id`, `name`, `job_id`, `parent_dataset_id`, `dataset_state_id`, `owner_user_id`, `dataset_processor_id`, `created`) VALUES
+(115, 'Dataset Name', NULL, NULL, 1, 1, 1, '0000-00-00 00:00:00'),
+(116, NULL, NULL, NULL, 1, 1, 1, '0000-00-00 00:00:00'),
+(117, NULL, NULL, NULL, 1, 1, 1, '2010-07-01 14:23:00'),
+(118, NULL, 177, 115, 2, 1, 2, '2010-07-01 15:24:00');
 
 -- --------------------------------------------------------
 
@@ -207,29 +202,14 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `data_cleared` tinyint(1) NOT NULL,
   `process_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=177 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=178 ;
 
 --
 -- Dumping data for table `jobs`
 --
 
 INSERT INTO `jobs` (`id`, `job_state_id`, `description`, `autorun`, `run_start`, `run_end`, `comment`, `script_set_id`, `input_dataset_id`, `output_dataset_id`, `output_dataset_process_state_id`, `user_id`, `dataset_processor_id`, `data_cleared`, `process_id`) VALUES
-(165, 9, 'Affymetrix Raw QC Background Job', 0, '2010-06-30 00:00:00', '0000-00-00 00:00:00', '0', 76, 108, NULL, 6, 1, 6, 1, NULL),
-(163, 9, 'Affymetrix Importer Background Job', 0, '2010-06-30 00:00:00', '0000-00-00 00:00:00', '0', 74, 104, NULL, 5, 1, 4, 1, NULL),
-(162, 9, 'Affymetrix Importer Background Job', 0, '2010-06-30 00:00:00', '0000-00-00 00:00:00', '0', 73, 104, NULL, 5, 1, 4, 1, NULL),
-(161, 9, 'Affymetrix Importer Background Job', 0, '2010-06-30 00:00:00', '0000-00-00 00:00:00', '0', 72, 104, NULL, 5, 1, 4, 1, NULL),
-(159, 9, 'Affymetrix Importer Background Job', 0, '2010-06-30 00:00:00', '0000-00-00 00:00:00', '0', 70, 104, NULL, 5, 1, 4, 1, NULL),
-(166, 9, 'Affymetrix Raw QC Background Job', 0, '2010-06-30 15:21:08', '0000-00-00 00:00:00', '0', 77, 108, NULL, 6, 1, 6, 1, NULL),
-(167, 9, 'Affymetrix Raw QC Background Job', 0, '2010-06-30 15:45:17', '0000-00-00 00:00:00', '0', 78, 108, NULL, 6, 1, 6, 0, NULL),
-(168, 9, 'Affymetrix Raw QC Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 0, NULL, NULL, NULL, NULL, NULL, 0, NULL),
-(169, 9, 'Affymetrix Raw QC Background Job', 0, '2010-06-30 15:45:17', '0000-00-00 00:00:00', '0', 79, 108, NULL, 6, 1, 6, 0, NULL),
-(170, 9, 'Affymetrix Importer Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 80, 114, NULL, 5, 1, 4, 0, NULL),
-(171, 9, 'Affymetrix Importer Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 0, NULL, NULL, NULL, NULL, NULL, 0, NULL),
-(172, 9, 'Affymetrix Importer Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 0, NULL, NULL, NULL, NULL, NULL, 0, NULL),
-(173, 9, 'Affymetrix Importer Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 83, 114, NULL, 5, 1, 4, 0, NULL),
-(174, 9, 'Affymetrix Raw QC Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 84, 108, NULL, 6, 1, 6, 0, NULL),
-(175, 9, 'Affymetrix Raw QC Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 85, 108, NULL, 6, 1, 6, 0, NULL),
-(176, 9, 'Affymetrix Raw QC Background Job', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', 86, 108, NULL, 6, 1, 6, 0, NULL);
+(177, 9, 'mdlRandomizer Developement Job', 0, '2010-07-01 15:24:04', '2010-07-01 15:24:05', '0', 87, 115, NULL, 2, 1, 2, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -345,7 +325,7 @@ CREATE TABLE IF NOT EXISTS `script_sets` (
   `description` varchar(255) NOT NULL,
   `entry_script_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=87 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=88 ;
 
 --
 -- Dumping data for table `script_sets`
@@ -379,7 +359,8 @@ INSERT INTO `script_sets` (`id`, `description`, `entry_script_id`) VALUES
 (83, 'Temporary Scriptset', 4),
 (84, 'Temporary Scriptset', 5),
 (85, 'Temporary Scriptset', 5),
-(86, 'Temporary Scriptset', 5);
+(86, 'Temporary Scriptset', 5),
+(87, 'Filename randomizer job script set', 1);
 
 -- --------------------------------------------------------
 
@@ -452,7 +433,9 @@ INSERT INTO `script_sets_scripts` (`script_set_id`, `script_id`) VALUES
 (85, 5),
 (85, 6),
 (86, 5),
-(86, 6);
+(86, 6),
+(87, 1),
+(87, 2);
 
 -- --------------------------------------------------------
 
@@ -516,83 +499,15 @@ CREATE TABLE IF NOT EXISTS `system_log` (
   `created` datetime NOT NULL,
   `message` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=76 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=78 ;
 
 --
 -- Dumping data for table `system_log`
 --
 
 INSERT INTO `system_log` (`id`, `created`, `message`) VALUES
-(9, '2010-06-29 15:10:41', 'Cron.php running complete'),
-(8, '2010-06-29 15:10:40', 'Cron.php running'),
-(7, '2010-06-29 15:10:40', 'Cron.php running complete'),
-(6, '2010-06-29 15:08:35', 'Cron.php running'),
-(10, '2010-06-29 15:42:22', 'Cron.php running'),
-(11, '2010-06-29 15:43:18', 'Cron.php running complete'),
-(12, '2010-06-29 15:50:56', 'Cron.php running'),
-(13, '2010-06-29 15:50:57', 'Cron.php running complete'),
-(14, '2010-06-29 15:51:44', 'Cron.php running'),
-(15, '2010-06-29 15:52:43', 'Cron.php running complete'),
-(16, '2010-06-29 15:58:42', 'Cron.php running'),
-(17, '2010-06-29 16:10:15', 'Cron.php running'),
-(18, '2010-06-29 16:11:02', 'Cron.php running complete'),
-(19, '2010-06-29 16:11:02', 'Cron.php running'),
-(20, '2010-06-29 16:11:03', 'Cron.php running complete'),
-(21, '2010-06-29 16:16:39', 'Cron.php running'),
-(22, '2010-06-29 16:16:39', 'Cron.php running complete'),
-(23, '2010-06-29 16:18:06', 'Cron.php running'),
-(24, '2010-06-29 16:18:06', 'Cron.php running complete'),
-(25, '2010-06-29 16:18:45', 'Cron.php running'),
-(26, '2010-06-29 16:18:45', 'Cron.php running complete'),
-(27, '2010-06-29 16:19:30', 'Cron.php running'),
-(28, '2010-06-29 16:19:30', 'Cron.php running complete'),
-(29, '2010-06-29 16:21:06', 'Cron.php running'),
-(30, '2010-06-29 16:21:07', 'Cron.php running complete'),
-(31, '2010-06-29 16:21:56', 'Cron.php running'),
-(32, '2010-06-29 16:22:33', 'Cron.php running complete'),
-(33, '2010-06-29 16:23:50', 'Cron.php running'),
-(34, '2010-06-29 16:23:52', 'Cron.php running complete'),
-(35, '2010-06-29 16:25:02', 'Cron.php running'),
-(36, '2010-06-29 16:25:55', 'Cron.php running'),
-(37, '2010-06-29 16:25:56', 'Cron.php running complete'),
-(38, '2010-06-29 16:27:22', 'Cron.php running'),
-(39, '2010-06-29 16:27:27', 'Cron.php running complete'),
-(40, '2010-06-30 12:08:34', 'Cron.php running'),
-(41, '2010-06-30 12:08:35', 'Cron.php running complete'),
-(42, '2010-06-30 12:08:36', 'Cron.php running'),
-(43, '2010-06-30 12:08:37', 'Cron.php running complete'),
-(44, '2010-06-30 12:09:35', 'Cron.php running'),
-(45, '2010-06-30 12:09:40', 'Cron.php running complete'),
-(46, '2010-06-30 12:21:51', 'Cron.php running'),
-(47, '2010-06-30 12:21:52', 'Cron.php running complete'),
-(48, '2010-06-30 12:22:08', 'Cron.php running'),
-(49, '2010-06-30 12:22:09', 'Cron.php running complete'),
-(50, '2010-06-30 12:23:35', 'Cron.php running'),
-(51, '2010-06-30 12:23:36', 'Cron.php running complete'),
-(52, '2010-06-30 12:25:14', 'Cron.php running'),
-(53, '2010-06-30 12:25:15', 'Cron.php running complete'),
-(54, '2010-06-30 12:25:58', 'Cron.php running'),
-(55, '2010-06-30 12:25:59', 'Cron.php running complete'),
-(56, '2010-06-30 12:26:41', 'Cron.php running'),
-(57, '2010-06-30 12:26:45', 'Cron.php running complete'),
-(58, '2010-06-30 14:28:45', 'Cron.php running'),
-(59, '2010-06-30 14:28:46', 'Cron.php running complete'),
-(60, '2010-06-30 15:20:35', 'Cron.php running'),
-(61, '2010-06-30 15:20:36', 'Cron.php running complete'),
-(62, '2010-06-30 15:21:07', 'Cron.php running'),
-(63, '2010-06-30 15:21:09', 'Cron.php running complete'),
-(64, '2010-06-30 15:22:15', 'Cron.php running'),
-(65, '2010-06-30 15:22:16', 'Cron.php running complete'),
-(66, '2010-06-30 15:23:04', 'Cron.php running'),
-(67, '2010-06-30 15:23:05', 'Cron.php running complete'),
-(68, '2010-06-30 15:25:11', 'Cron.php running'),
-(69, '2010-06-30 15:25:12', 'Cron.php running complete'),
-(70, '2010-06-30 15:26:15', 'Cron.php running'),
-(71, '2010-06-30 15:26:17', 'Cron.php running complete'),
-(72, '2010-06-30 15:45:17', 'Cron.php running'),
-(73, '2010-06-30 15:45:18', 'Cron.php running complete'),
-(74, '2010-06-30 15:55:28', 'Cron.php running'),
-(75, '2010-06-30 15:55:29', 'Cron.php running complete');
+(76, '2010-07-01 15:24:04', 'Cron.php running'),
+(77, '2010-07-01 15:24:05', 'Cron.php running complete');
 
 -- --------------------------------------------------------
 
@@ -647,13 +562,15 @@ CREATE TABLE IF NOT EXISTS `users` (
   `room` varchar(255) NOT NULL,
   `telephone` text NOT NULL,
   `email` varchar(255) NOT NULL,
+  `deleted` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `passwordsha1`, `created`, `last_access`, `real_name`, `notes`, `room`, `telephone`, `email`) VALUES
-(1, 'nikolas', 'a28cc654d85c1d3cb8418061db20859c322a0bc6', '2010-05-26 00:00:00', '2010-06-30 17:48:00', 'Nikolas Barkas', '', '', '', 'nikolas.barkas@kcl.ac.uk');
+INSERT INTO `users` (`id`, `username`, `passwordsha1`, `created`, `last_access`, `real_name`, `notes`, `room`, `telephone`, `email`, `deleted`) VALUES
+(1, 'nikolas', 'a28cc654d85c1d3cb8418061db20859c322a0bc6', '2010-05-26 00:00:00', '2010-07-01 11:52:00', 'Nikolas Barkas', '', '4.10', '', 'nikolas.barkas@kcl.ac.uk', 0),
+(16, 'asdfasdf', '92429d82a41e930486c6de5ebda9602d55c39986', '2010-07-01 12:20:00', '0000-00-00 00:00:00', '', '', '', '', '', 1);
 
