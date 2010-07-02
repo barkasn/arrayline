@@ -35,6 +35,7 @@ class lgDatasetHelper {
 	}
 
 	private static function getLgFromDbDatasets($dbDatasets) {
+		$lgDatasets = array();
 		if ($dbDatasets) { 
 			foreach ($dbDatasets as $dbds) {
 				$lgDatasets[] = new lgDataset($dbds->getId());
