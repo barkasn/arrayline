@@ -42,9 +42,63 @@ class lgReqHandlerDatasets implements iRequestHandler {
 			case 'processdataset':
 				$this->processProcessDatasetRequest($lgRequest);
 				break;
+			case 'renamedataset':
+				$this->processRenameDatasetRequest($lgRequest);
+				break;
 			default:
-				die('lgReqHandlerDatasets: Unknown Request');
+				throw new Exceptions('Unknown request string');
 		}
+	}
+
+	
+
+
+	private function processRenameDatasetRequest(lgRequest $lgRequest) {
+		$postArray = $lgRequest->getPostArray();
+		if (!empty($postArray['execute'])) {
+			$this->doRename($lgRequest);
+		} else {
+			$this->showRenameForm($lgRequest);
+		}
+	}
+
+	private function doRename(lgRequest $lgRequest) {
+		
+	}
+
+	private function showRenameForm($lgRequest) {
+
+		$postArray = $lgRequest->getPostArray();
+
+		$lgDataset = new lgDataset($postArray['datasetid']);
+
+
+		$page = new lgCmsPage();
+		$page->setTitle('Rename Dataset');
+		$page->appendContent('<h2>Rename Dataset</h2>');
+		// TODO: Show some info about dataset
+
+		$form = new lgHtmlForm();
+		$form->addField(new lgHtmlTextField('newname','New Name:'));
+		$form->addField(new lgHtmlSubmitButton('submit','Change name >'));
+
+
+
+		$requestStringField = new lgHtmlHiddenField('requeststring','requeststring');
+		$requestStringField->setValue('renamedataset');
+		$form->addField($requestStringField);
+
+		$datasetIdField = new lgHtmlHiddenField('datasetid','datasetid');
+		$datasetIdField->setValue($lgDataset->getId());
+		$form->addField($datasetIdField);
+
+		$formExecField = new lgHtmlHiddenField('execute','execute');
+		$formExecField->setValue('1');
+		$form->addField($formExecField);
+
+		$page->appendContent($form->getRenderedHtml());
+		
+		$page->render();
 	}
 
 	private function processProcessDatasetRequest(lgRequest $lgRequest) {
@@ -267,6 +321,7 @@ EOE;
 					</div>
 					<div class="dataset-actions">
 						<ul>
+							<li><a href="index.php?requeststring=renamedataset&datasetid=$datasetId">Rename</a></li>
 							<li><a href="index.php?requeststring=viewdataset&datasetid=$datasetId">View</a></li>
 							<li><a href="index.php?requeststring=processdataset&datasetid=$datasetId">Process</a></li>
 							<li><a href="index.php?requeststring=deletedataset&datasetid=$datasetId">Delete</a></li> 

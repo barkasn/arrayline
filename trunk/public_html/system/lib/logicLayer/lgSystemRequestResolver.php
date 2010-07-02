@@ -38,6 +38,7 @@ class lgSystemRequestResolver {
 			'processdataset' => 'lgReqHandlerDatasets',
 			'deletedataset' => 'lgReqHandlerDatasets',
 			'createdataset' => 'lgReqHandlerDatasets',
+			'renamedataset' => 'lgReqHandlerDatasets',
 			//User related requests
 			'viewusers' => 'lgReqHandlerUsers',
 			'viewuser' => 'lgReqHandlerUsers',
