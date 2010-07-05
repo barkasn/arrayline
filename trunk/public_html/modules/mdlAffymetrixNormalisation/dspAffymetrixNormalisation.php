@@ -1,5 +1,5 @@
 <?php
-// $Id: dspAffymetrixImporter.php 138 2010-06-30 15:50:13Z barkasn $
+// $Id$
 
 /*
 
