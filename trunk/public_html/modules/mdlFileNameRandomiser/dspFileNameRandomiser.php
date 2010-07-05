@@ -88,7 +88,7 @@ class dspFileNameRandomiser extends lgDatasetProcessor{
 		$form->addField($field);
 
 		$hiddenVals = array (
-			'requeststring' => 'createdataset',
+			'requeststring' => 'processdataset',
 			'processorid' => $this->getId(),
 			'processoraction' => 'execute',
 			'datasetid' => $postarray['datasetid'],
