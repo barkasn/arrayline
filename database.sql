@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 05, 2010 at 04:06 PM
+-- Generation Time: Jul 05, 2010 at 04:35 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.2-1ubuntu4.2
 
@@ -207,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `data_cleared` tinyint(1) NOT NULL,
   `process_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=185 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=186 ;
 
 --
 -- Dumping data for table `jobs`
@@ -218,7 +218,8 @@ INSERT INTO `jobs` (`id`, `job_state_id`, `description`, `autorun`, `run_start`,
 (179, 9, 'Affymetrix Raw QC Background Job', 0, '2010-07-02 07:48:05', '2010-07-02 08:05:08', '0', 89, 120, NULL, 6, 1, 6, 1, NULL),
 (183, 9, 'Affymetrix Normalisation', 0, '2010-07-05 15:53:03', '2010-07-05 15:56:57', '0', 93, 120, NULL, 7, 1, 7, 1, NULL),
 (182, 9, 'Affymetrix Normalisation', 0, '2010-07-05 15:41:49', '2010-07-05 15:52:07', '0', 92, 120, NULL, 7, 1, 7, 1, NULL),
-(184, 9, 'Affymetrix Normalisation', 0, '2010-07-05 15:53:04', '2010-07-05 15:56:57', '0', 94, 120, NULL, 7, 1, 7, 1, NULL);
+(184, 9, 'Affymetrix Normalisation', 0, '2010-07-05 15:53:04', '2010-07-05 15:56:57', '0', 94, 120, NULL, 7, 1, 7, 1, NULL),
+(185, 6, 'Affymetrix Normalisation', 0, '2010-07-05 16:31:47', '0000-00-00 00:00:00', '0', 95, 120, NULL, 7, 1, 7, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -336,12 +337,14 @@ CREATE TABLE IF NOT EXISTS `script_sets` (
   `description` varchar(255) NOT NULL,
   `entry_script_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=95 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=96 ;
 
 --
 -- Dumping data for table `script_sets`
 --
 
+INSERT INTO `script_sets` (`id`, `description`, `entry_script_id`) VALUES
+(95, 'Temporary Scriptset', 11);
 
 -- --------------------------------------------------------
 
@@ -359,6 +362,9 @@ CREATE TABLE IF NOT EXISTS `script_sets_scripts` (
 -- Dumping data for table `script_sets_scripts`
 --
 
+INSERT INTO `script_sets_scripts` (`script_set_id`, `script_id`) VALUES
+(95, 11),
+(95, 12);
 
 -- --------------------------------------------------------
 
@@ -373,7 +379,7 @@ CREATE TABLE IF NOT EXISTS `scripts` (
   `execution_command` varchar(255) NOT NULL,
   `can_be_called_directly` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
 
 --
 -- Dumping data for table `scripts`
@@ -390,7 +396,11 @@ INSERT INTO `scripts` (`id`, `internal_name`, `filename`, `execution_command`, `
 (8, 'norm_rma', 'normalise.R', '', 0),
 (9, 'norm_vsnrma', 'normalise.R', '', 0),
 (10, 'norm_mas5', 'normalise.R', '', 0),
-(11, 'affyNormaliseInit', 'affynormaliseinit.sh', './affynormaliseinit.sh', 1);
+(11, 'affyNormaliseInit', 'affynormaliseinit.sh', './affynormaliseinit.sh', 1),
+(12, 'norm_quantiles', 'normalise.R', '', 0),
+(13, 'norm_invariantset', 'normalise.R', '', 0),
+(14, 'norm_cyclicloess', 'normalise.R', '', 0),
+(15, 'norm_contrast', 'normalise.R', '', 0);
 
 -- --------------------------------------------------------
 
@@ -418,7 +428,11 @@ INSERT INTO `scripts_bodies` (`script_id`, `script_body`) VALUES
 (11, '#! /bin/bash\r\nR --vanilla < normalise.R\r\ncd ..\r\ntouch JOB_COMPLETE'),
 (7, 'library(affy)\r\nlibrary(gcrma)\r\nload(''../input_data/Data.Rdata'')\r\nnormalisedData <- gcrma(Data)\r\nsave(normalisedData,file=''../output_data/Data.Rdata'')'),
 (8, 'library(affy)\r\nload(''../input_data/Data.Rdata'')\r\nnormalisedData <- rma(Data)\r\nsave(normalisedData,file=''../output_data/Data.Rdata'')'),
-(9, 'library(affy)\r\nlibrary(vsn)\r\nload(''../input_data/Data.Rdata'')\r\nnormalisedData <- normalise(Data,method="vsn")\r\nsave(normalisedData,file=''../output_data/Data.Rdata'')');
+(9, 'library(affy)\r\nlibrary(vsn)\r\nload(''../input_data/Data.Rdata'')\r\nnormalisedData <- normalize(Data,method="vsn")\r\nsave(normalisedData,file=''../output_data/Data.Rdata'')'),
+(12, 'library(affy)\r\nload(''../input_data/Data.Rdata'')\r\nnormalisedData <- normalize(Data,method="quantiles")\r\nsave(normalisedData,file=''../output_data/Data.Rdata'')'),
+(13, 'library(affy)\r\nload(''../input_data/Data.Rdata'')\r\nnormalisedData <- normalize(Data,method="invariantset")\r\nsave(normalisedData,file=''../output_data/Data.Rdata'')'),
+(14, 'library(affy)\r\nload(''../input_data/Data.Rdata'')\r\nnormalisedData <- normalize(Data,method="loess")\r\nsave(normalisedData,file=''../output_data/Data.Rdata'')'),
+(15, 'library(affy)\r\nload(''../input_data/Data.Rdata'')\r\nnormalisedData <- normalize(Data,method="contrast")\r\nsave(normalisedData,file=''../output_data/Data.Rdata'')');
 
 -- --------------------------------------------------------
 
@@ -431,12 +445,15 @@ CREATE TABLE IF NOT EXISTS `system_log` (
   `created` datetime NOT NULL,
   `message` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=98 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=100 ;
 
 --
 -- Dumping data for table `system_log`
 --
 
+INSERT INTO `system_log` (`id`, `created`, `message`) VALUES
+(99, '2010-07-05 16:31:48', 'Cron.php running complete'),
+(98, '2010-07-05 16:31:47', 'Cron.php running');
 
 -- --------------------------------------------------------
 
