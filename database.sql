@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 02, 2010 at 05:51 AM
+-- Generation Time: Jul 05, 2010 at 04:06 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.2-1ubuntu4.2
 
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `dataset_processors` (
   `name` varchar(255) NOT NULL,
   `has_no_accept_states` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `dataset_processors`
@@ -57,7 +57,8 @@ INSERT INTO `dataset_processors` (`id`, `internal_name`, `name`, `has_no_accept_
 (2, 'FileNameRandomiser', 'File Name Randomiser', 0),
 (3, 'AffymetrixUpload', 'Affymetrix Upload', 1),
 (4, 'AffymetrixImporter', 'Import Affymetrix Data into R/Bioconductor', 0),
-(6, 'AffymetrixRawQC', 'Affymetrix Raw QC Analysis', 0);
+(6, 'AffymetrixRawQC', 'Affymetrix Raw QC Analysis', 0),
+(7, 'AffymetrixNormalisation', 'Affymetrix Normalisation', 0);
 
 -- --------------------------------------------------------
 
@@ -77,7 +78,8 @@ CREATE TABLE IF NOT EXISTS `dataset_processors_accept_states` (
 INSERT INTO `dataset_processors_accept_states` (`dataset_processor_id`, `dataset_state_id`) VALUES
 (2, 1),
 (4, 4),
-(6, 5);
+(6, 5),
+(7, 5);
 
 -- --------------------------------------------------------
 
@@ -108,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `dataset_states` (
   `name` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `dataset_states`
@@ -120,7 +122,8 @@ INSERT INTO `dataset_states` (`id`, `internal_name`, `name`, `description`) VALU
 (3, 'affymetrixCelDataIncomplete', 'Affymetrix Non Finalised', 'Affymetric Raw .CEL Data - Not Finalised Dataset'),
 (4, 'affymetrixCelDataComplete', 'Affymetrix Finalised Raw Data', 'Affymetrix Finalised Raw Data'),
 (5, 'AffymetrixImportedData', 'Affymetrix Imported Data', 'Affymetrix Microarray Data in imported format'),
-(6, 'affymetrixRawQC', 'Affymetrix Raw Data QC', 'Quality Control Plots for Raw Affymetrix Data');
+(6, 'affymetrixRawQC', 'Affymetrix Raw Data QC', 'Quality Control Plots for Raw Affymetrix Data'),
+(7, 'affymetrixNormalised', 'Affymetrix Normalised Data', 'Affymetrix Normalised Microarray data');
 
 -- --------------------------------------------------------
 
@@ -138,17 +141,19 @@ CREATE TABLE IF NOT EXISTS `datasets` (
   `dataset_processor_id` int(11) NOT NULL,
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=119 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=125 ;
 
 --
 -- Dumping data for table `datasets`
 --
 
 INSERT INTO `datasets` (`id`, `name`, `job_id`, `parent_dataset_id`, `dataset_state_id`, `owner_user_id`, `dataset_processor_id`, `created`) VALUES
-(115, 'Dataset Name', NULL, NULL, 1, 1, 1, '0000-00-00 00:00:00'),
-(116, NULL, NULL, NULL, 1, 1, 1, '0000-00-00 00:00:00'),
-(117, NULL, NULL, NULL, 1, 1, 1, '2010-07-01 14:23:00'),
-(118, NULL, 177, 115, 2, 1, 2, '2010-07-01 15:24:00');
+(121, 'test', 179, 120, 6, 1, 6, '2010-07-02 08:05:00'),
+(120, NULL, 178, 119, 5, 1, 4, '2010-07-02 07:47:00'),
+(119, 'John Raw Affymetrix Data', NULL, NULL, 4, 1, 3, '2010-07-02 07:40:00'),
+(122, NULL, 182, 120, 7, 1, 7, '2010-07-05 15:52:00'),
+(123, NULL, 183, 120, 7, 1, 7, '2010-07-05 15:56:00'),
+(124, NULL, 184, 120, 7, 1, 7, '2010-07-05 15:56:00');
 
 -- --------------------------------------------------------
 
@@ -202,14 +207,18 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `data_cleared` tinyint(1) NOT NULL,
   `process_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=178 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=185 ;
 
 --
 -- Dumping data for table `jobs`
 --
 
 INSERT INTO `jobs` (`id`, `job_state_id`, `description`, `autorun`, `run_start`, `run_end`, `comment`, `script_set_id`, `input_dataset_id`, `output_dataset_id`, `output_dataset_process_state_id`, `user_id`, `dataset_processor_id`, `data_cleared`, `process_id`) VALUES
-(177, 9, 'mdlRandomizer Developement Job', 0, '2010-07-01 15:24:04', '2010-07-01 15:24:05', '0', 87, 115, NULL, 2, 1, 2, 1, NULL);
+(178, 9, 'Affymetrix Importer Background Job', 0, '2010-07-02 07:45:49', '2010-07-02 07:47:10', '0', 88, 119, NULL, 5, 1, 4, 1, NULL),
+(179, 9, 'Affymetrix Raw QC Background Job', 0, '2010-07-02 07:48:05', '2010-07-02 08:05:08', '0', 89, 120, NULL, 6, 1, 6, 1, NULL),
+(183, 9, 'Affymetrix Normalisation', 0, '2010-07-05 15:53:03', '2010-07-05 15:56:57', '0', 93, 120, NULL, 7, 1, 7, 1, NULL),
+(182, 9, 'Affymetrix Normalisation', 0, '2010-07-05 15:41:49', '2010-07-05 15:52:07', '0', 92, 120, NULL, 7, 1, 7, 1, NULL),
+(184, 9, 'Affymetrix Normalisation', 0, '2010-07-05 15:53:04', '2010-07-05 15:56:57', '0', 94, 120, NULL, 7, 1, 7, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -222,7 +231,7 @@ CREATE TABLE IF NOT EXISTS `modules` (
   `internal_name` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `modules`
@@ -233,7 +242,8 @@ INSERT INTO `modules` (`id`, `internal_name`, `name`) VALUES
 (2, 'FileNameRandomiser', 'Randomises File Names'),
 (3, 'AffymetrixUpload', 'Affymetrix Upload'),
 (4, 'AffymetrixImporter', 'Affymetrix Data Importer in R'),
-(5, 'AffymetrixRawQC', 'Affymetrix Raw QC Analysis');
+(5, 'AffymetrixRawQC', 'Affymetrix Raw QC Analysis'),
+(6, 'AffymetrixNormalisation', 'Affymetrix Normalisation');
 
 -- --------------------------------------------------------
 
@@ -255,7 +265,8 @@ INSERT INTO `modules_dataset_processors` (`module_id`, `dataset_processor_id`) V
 (2, 2),
 (3, 3),
 (4, 4),
-(5, 6);
+(5, 6),
+(6, 7);
 
 -- --------------------------------------------------------
 
@@ -325,42 +336,12 @@ CREATE TABLE IF NOT EXISTS `script_sets` (
   `description` varchar(255) NOT NULL,
   `entry_script_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=88 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=95 ;
 
 --
 -- Dumping data for table `script_sets`
 --
 
-INSERT INTO `script_sets` (`id`, `description`, `entry_script_id`) VALUES
-(82, 'Temporary Scriptset', 4),
-(81, 'Temporary Scriptset', 4),
-(80, 'Temporary Scriptset', 4),
-(79, 'Temporary Scriptset', 5),
-(78, 'Temporary Scriptset', 5),
-(77, 'Temporary Scriptset', 5),
-(76, 'Temporary Scriptset', 5),
-(75, 'Temporary Scriptset', 5),
-(74, 'Temporary Scriptset', 4),
-(73, 'Temporary Scriptset', 4),
-(72, 'Temporary Scriptset', 4),
-(71, 'Temporary Scriptset', 5),
-(70, 'Temporary Scriptset', 4),
-(69, 'Temporary Scriptset', 4),
-(68, 'Temporary Scriptset', 5),
-(67, 'Temporary Scriptset', 4),
-(66, 'Temporary Scriptset', 4),
-(65, 'Temporary Scriptset', 4),
-(64, 'Temporary Scriptset', 4),
-(63, 'Temporary Scriptset', 4),
-(62, 'Temporary Scriptset', 4),
-(61, 'Temporary Scriptset', 4),
-(60, 'Temporary Scriptset', 4),
-(59, 'Temporary Scriptset', 1),
-(83, 'Temporary Scriptset', 4),
-(84, 'Temporary Scriptset', 5),
-(85, 'Temporary Scriptset', 5),
-(86, 'Temporary Scriptset', 5),
-(87, 'Filename randomizer job script set', 1);
 
 -- --------------------------------------------------------
 
@@ -378,64 +359,6 @@ CREATE TABLE IF NOT EXISTS `script_sets_scripts` (
 -- Dumping data for table `script_sets_scripts`
 --
 
-INSERT INTO `script_sets_scripts` (`script_set_id`, `script_id`) VALUES
-(59, 1),
-(60, 3),
-(60, 4),
-(61, 3),
-(61, 4),
-(62, 3),
-(62, 4),
-(63, 3),
-(63, 4),
-(64, 3),
-(64, 4),
-(65, 3),
-(65, 4),
-(66, 3),
-(66, 4),
-(67, 3),
-(67, 4),
-(68, 5),
-(68, 6),
-(69, 3),
-(69, 4),
-(70, 3),
-(70, 4),
-(71, 5),
-(71, 6),
-(72, 3),
-(72, 4),
-(73, 3),
-(73, 4),
-(74, 3),
-(74, 4),
-(75, 5),
-(75, 6),
-(76, 5),
-(76, 6),
-(77, 5),
-(77, 6),
-(78, 5),
-(78, 6),
-(79, 5),
-(79, 6),
-(80, 3),
-(80, 4),
-(81, 3),
-(81, 4),
-(82, 3),
-(82, 4),
-(83, 3),
-(83, 4),
-(84, 5),
-(84, 6),
-(85, 5),
-(85, 6),
-(86, 5),
-(86, 6),
-(87, 1),
-(87, 2);
 
 -- --------------------------------------------------------
 
@@ -450,7 +373,7 @@ CREATE TABLE IF NOT EXISTS `scripts` (
   `execution_command` varchar(255) NOT NULL,
   `can_be_called_directly` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 --
 -- Dumping data for table `scripts`
@@ -462,7 +385,12 @@ INSERT INTO `scripts` (`id`, `internal_name`, `filename`, `execution_command`, `
 (3, 'affyLoaderRscript', 'affyloader.R', '', 0),
 (4, 'affyLoaderInit', 'affyloaderinit.sh', './affyloaderinit.sh', 1),
 (5, 'affyRawQCInit', 'affyrawqcinit.sh', './affyrawqcinit.sh', 1),
-(6, 'affyRawQCRscript', 'affyrawqcrscrinpt.R', '', 0);
+(6, 'affyRawQCRscript', 'affyrawqcrscrinpt.R', '', 0),
+(7, 'norm_gcrma', 'normalise.R', '', 0),
+(8, 'norm_rma', 'normalise.R', '', 0),
+(9, 'norm_vsnrma', 'normalise.R', '', 0),
+(10, 'norm_mas5', 'normalise.R', '', 0),
+(11, 'affyNormaliseInit', 'affynormaliseinit.sh', './affynormaliseinit.sh', 1);
 
 -- --------------------------------------------------------
 
@@ -486,7 +414,11 @@ INSERT INTO `scripts_bodies` (`script_id`, `script_body`) VALUES
 (3, 'library(affy)\r\ncovariates <- read.table("../input_data/covariates.csv",header=1, sep="\\t", quote="\\"")\r\nfilenames <- paste(c(''../input_data/''), covariates$Filename, sep='''')\r\nadf <- new("AnnotatedDataFrame",data=covariates)\r\nData <- ReadAffy(filenames=filenames,sampleNames=as.character(covariates$Unique.Sample.Identifier), phenoData= adf)\r\nsave(Data,file="../output_data/Data.Rdata")'),
 (4, '#! /bin/bash\r\nR --vanilla < affyloader.R\r\ncd ..\r\ntouch JOB_COMPLETE\r\n'),
 (5, ' #! /bin/bash\r\nR --vanilla < affyrawqcrscrinpt.R\r\ncd ..\r\ntouch JOB_COMPLETE'),
-(6, 'library(affy)\r\nload(''../input_data/Data.Rdata'')\r\ncovariates <- pData(Data)\r\n\r\n# PM density plot\r\npng(filename=''../output_data/pm_density.png'', width=700, height=700)\r\nplotDensity(log2(pm(Data)),lty=1,col=1+as.numeric(covariates$Variable.Value.Identifier),main="Log2 PM intensities", ylab="Density",xlab="Log2 PM Intensity")\r\ndev.off()\r\n\r\n# MM density plot\r\npng(filename=''../output_data/mm_density.png'', width=700, height=700)\r\nplotDensity(log2(mm(Data)),lty=1,col=1+as.numeric(covariates$Variable.Value.Identifier),main="Log2 PM intensities", ylab="Density",xlab="Log2 MM Intensity")\r\ndev.off()\r\n\r\n# Array pseudo images\r\nfor( i in sampleNames(Data) ) {\r\n	png(filename=paste(''../output_data/'',i,''.png'', sep=''''), width=700, height=700)\r\n	image( Data[,i] )\r\n	dev.off()\r\n}');
+(6, 'library(affy)\r\nload(''../input_data/Data.Rdata'')\r\ncovariates <- pData(Data)\r\n\r\n# PM density plot\r\npng(filename=''../output_data/pm_density.png'', width=700, height=700)\r\nplotDensity(log2(pm(Data)),lty=1,col=1+as.numeric(covariates$Variable.Value.Identifier),main="Log2 PM intensities", ylab="Density",xlab="Log2 PM Intensity")\r\ndev.off()\r\n\r\n# MM density plot\r\npng(filename=''../output_data/mm_density.png'', width=700, height=700)\r\nplotDensity(log2(mm(Data)),lty=1,col=1+as.numeric(covariates$Variable.Value.Identifier),main="Log2 PM intensities", ylab="Density",xlab="Log2 MM Intensity")\r\ndev.off()\r\n\r\n# Array pseudo images\r\nfor( i in sampleNames(Data) ) {\r\n	png(filename=paste(''../output_data/'',i,''.png'', sep=''''), width=700, height=700)\r\n	image( Data[,i] )\r\n	dev.off()\r\n}'),
+(11, '#! /bin/bash\r\nR --vanilla < normalise.R\r\ncd ..\r\ntouch JOB_COMPLETE'),
+(7, 'library(affy)\r\nlibrary(gcrma)\r\nload(''../input_data/Data.Rdata'')\r\nnormalisedData <- gcrma(Data)\r\nsave(normalisedData,file=''../output_data/Data.Rdata'')'),
+(8, 'library(affy)\r\nload(''../input_data/Data.Rdata'')\r\nnormalisedData <- rma(Data)\r\nsave(normalisedData,file=''../output_data/Data.Rdata'')'),
+(9, 'library(affy)\r\nlibrary(vsn)\r\nload(''../input_data/Data.Rdata'')\r\nnormalisedData <- normalise(Data,method="vsn")\r\nsave(normalisedData,file=''../output_data/Data.Rdata'')');
 
 -- --------------------------------------------------------
 
@@ -499,15 +431,12 @@ CREATE TABLE IF NOT EXISTS `system_log` (
   `created` datetime NOT NULL,
   `message` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=78 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=98 ;
 
 --
 -- Dumping data for table `system_log`
 --
 
-INSERT INTO `system_log` (`id`, `created`, `message`) VALUES
-(76, '2010-07-01 15:24:04', 'Cron.php running'),
-(77, '2010-07-01 15:24:05', 'Cron.php running complete');
 
 -- --------------------------------------------------------
 
@@ -571,6 +500,6 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `passwordsha1`, `created`, `last_access`, `real_name`, `notes`, `room`, `telephone`, `email`, `deleted`) VALUES
-(1, 'nikolas', 'a28cc654d85c1d3cb8418061db20859c322a0bc6', '2010-05-26 00:00:00', '2010-07-01 11:52:00', 'Nikolas Barkas', '', '4.10', '', 'nikolas.barkas@kcl.ac.uk', 0),
+(1, 'nikolas', 'a28cc654d85c1d3cb8418061db20859c322a0bc6', '2010-05-26 00:00:00', '2010-07-05 13:53:00', 'Nikolas Barkas', '', '', '', 'nikolas.barkas@kcl.ac.uk', 0),
 (16, 'asdfasdf', '92429d82a41e930486c6de5ebda9602d55c39986', '2010-07-01 12:20:00', '0000-00-00 00:00:00', '', '', '', '', '', 1);
 
