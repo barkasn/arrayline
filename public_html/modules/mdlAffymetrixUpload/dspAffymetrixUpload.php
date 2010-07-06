@@ -149,6 +149,7 @@ class dspAffymetrixUpload extends lgDatasetProcessor {
 		$optionsField->setValue( '
 			<input type="radio" name="actionname" value="uploadcel" />Upload .CEL file<br />
 			<input type="radio" name="actionname" value="uploadcovar" />Upload covariates file<br />
+			<input type="radio" name="actionname" value="createcovar" />Create covariates file<br />
 			<input type="radio" name="actionname" value="finalise" />Finalise Dataset<br />
 		');
 
@@ -182,7 +183,205 @@ class dspAffymetrixUpload extends lgDatasetProcessor {
 			case 'finalise':
 				$this->showFinaliseForm($lgRequest);
 				break;
+			case 'createcovar': 
+				$this->showCreateCovariates($lgRequest);
+				break;
+			default:
+				throw new Exception('Unknown selection');
 		}
+	}
+
+
+	private function showCreateCovariates(lgRequest $lgRequest) {
+		$postArray = $lgRequest->getPostArray();
+		$step = empty($postArray['step'])?'1':$postArray['step'];
+		switch($step) {
+			case '1':
+				$this->createCovarNumberOfVars($lgRequest);
+				break;
+			case '2':
+				$this->createCovarVarAllowedValues($lgRequest);
+				break;
+			case '3':
+				$this->createCovarSelectNumberOfFiles($lgRequest);
+				break;
+			case '4':
+				$this->createCovarFileNamesAndInfo($lgRequest);
+				break;
+			default:
+				throw new Exception('Unknown step');
+				break;
+		}
+	}
+
+	private function createCovarFileNamesAndInfo(lgRequest $lgRequest) {
+		$postArray = $lgRequest->getPostArray();
+	
+		$variablesInfo = json_decode(urldecode($postArray['varallowedvalues']));
+		$numberOfFiles = $postArray['nofiles'];
+
+		$page = new lgCmsPage();
+		$page->setTitle('Create Covariates File - File Information');
+		$page->appendContent('<h2>Create Covariates File - File Information</h2>');
+		
+		$form = new lgHtmlForm();
+
+		
+	}
+
+	private function getFileVariableTable($numberOfFiles, $variablesInfo) {
+
+	}
+
+	private function createCovarSelectNumberOfFiles(lgRequest $lgRequest) {
+		// Process Input and create serialisable array
+		$postArray = $lgRequest->getPostArray();
+		$variableCount = $postArray['novariables'];
+		$maxAllowedValues = $postArray['maxallowedvalues'];
+
+		
+		$variablesInfo = array();
+		for ($i = 0; $i < $variableCount; $i++ ) {
+			$varInfo = array();
+			$varInfo['name'] = $postArray['name_'.$i];
+
+			$varInfoValues = array();
+			for ($j = 0; $j < $maxAllowedValues; $j++) {
+				$varInfoValues[] = $postArray['val_'.$i.'_'.$j];
+			}
+			$varInfo['values'] = $varInfoValues;
+
+			$variablesInfo[] = $varInfo;
+		}
+	
+		// Show selection page for number of files
+		$page = new lgCmsPage();
+		$page->setTitle('Create Covariates File');
+		$page->appendContent('<h2>Create covariates File - Number of Files</h2>');
+		
+		$page->appendContent('<p>Select number of files</p>');
+		
+		$form = new lgHtmlForm();
+		
+		$dpdNumberOfFiles = new lgHtmlRawHtmlField('raw','raw');
+		$selectContent = '';
+		for ($i = 1; $i <= 10; $i++) {
+			$selectContent .= '<option value="'.$i.'">'.$i.'</option>';
+		}
+		$dpdNumberOfFiles->setValue('<select name="nofiles">'.$selectContent.'</select>');
+
+		$form->addField($dpdNumberOfFiles);
+		$form->addField(new lgHtmlSubmitButton('submit','Next >'));
+
+		$varAllowedValuesJson = urlencode(json_encode($variablesInfo));
+
+		//TODO Add hidden data and serialised variab,e array
+                $hiddenVals = array (
+                        'requeststring' => 'createdataset',
+                        'processorid' => $this->getId(),
+			'processoraction' => 'selectaction',
+			'actionname' => 'createcovar',
+			'datasetid' => $postArray['datasetid'],
+			'novariables' => $postArray['novariables'],
+			'maxallowedvalues' => $maxAllowedValues,
+			'varallowedvalues' => $varAllowedValuesJson,
+			'step' => '4',
+                 );
+		$form->addFields(lgHtmlFormHelper::getHiddenFieldsFromArray($hiddenVals));
+		$page->appendContent($form->getRenderedHtml());
+		$page->render();
+
+	}
+
+	private function createCovarVarAllowedValues(lgRequest $lgRequest) {
+		$postArray = $lgRequest->getPostArray();
+		$variableCount = $postArray['novariables'];
+
+		$maxAllowedValues = 3;
+
+		$page = new lgCmsPage();
+		$page->setTitle('Create Covariates File');
+		$page->appendContent('<h2>Create covariates File - Variable Allowed Values</h2>');
+	
+		$dataInput = new lgHtmlRawHtmlField('raw','raw');
+		$dataInput->setValue($this->getVariableValuesInputTable($variableCount, $maxAllowedValues));
+		
+		$form = new lgHtmlForm();
+		$form->addField($dataInput);
+		$form->addField(new lgHtmlSubmitButton('submit','Next >'));
+
+                $hiddenVals = array (
+                        'requeststring' => 'createdataset',
+                        'processorid' => $this->getId(),
+			'processoraction' => 'selectaction',
+			'actionname' => 'createcovar',
+			'datasetid' => $this->datasetId,
+			'novariables' => $variableCount,
+			'maxallowedvalues' => $maxAllowedValues,
+			'step' => '3',
+                 );
+
+		$form->addFields(lgHtmlFormHelper::getHiddenFieldsFromArray($hiddenVals));
+		$page->appendContent($form->getRenderedHtml());
+		$page->render();
+	}
+
+	private function getVariableValuesInputTable($variableCount, $maxValueCount) {
+		$dataInputValue = '';
+		
+		$dataInputValue .= '<table>';
+		$dataInputValue .= '<tr><td></td><td></td><td colspan="'.$maxValueCount.'">Allowed Variable Values</td></tr>';
+
+		$dataInputValue .= '<tr><td rowspan="'.($variableCount+1) .'">Variables</td><td>Variable Name</td>';
+		for ($i = 0; $i < $maxValueCount; $i++) {
+			$dataInputValue .= '<td>Value '.($i + 1).'</td>';
+		}
+		$dataInputValue .= '</tr>';
+
+		for ($i = 0; $i < $variableCount; $i++) {
+			$dataInputValue .= '<tr>';
+			$dataInputValue .= '<td><input type="text" name="name_'.$i.'" value="variable_'.($i+1).'" /></td>';
+			for ($j = 0; $j < $maxValueCount; $j++) {
+				$dataInputValue .= '<td><input type="text" name="val_'.$i.'_'.$j.'" /></td>';	
+			}
+			$dataInputValue .= '</tr>';
+		}
+
+		$dataInputValue .= '</table>';
+
+		return $dataInputValue;
+	}
+
+	private function createCovarNumberOfVars(lgRequest $lgRequest) {
+		$page = new lgCmsPage();
+		$page->setTitle('Create Covariates File');
+		$page->appendContent('<h2>Create covariates File - Select Number of Variables</h2>');
+		$page->appendContent('<p class="notice">Please select the number of variables you have in your experiment. This is the number of experimentl conditions you are changing (not the total number of your experiments)</p>');
+		$page->appendContent('<p>Select Number of variables</p>');
+
+		$form = new lgHtmlForm();
+		$dpdNoVars = new lgHtmlRawHtmlField('rawField','rawField');
+		$selectContent = '';
+		for ($i = 1; $i <= 10; $i++) {
+			$selectContent .= '<option value="'.$i.'">'.$i.'</option>';
+		}
+
+		$dpdNoVars->setValue('<select name="novariables">'.$selectContent.'</select>');
+		$form->addField($dpdNoVars);
+
+		$form->addField(new lgHtmlSubmitButton('submit','submit'));
+
+                $hiddenVals = array (
+                        'requeststring' => 'createdataset',
+                        'processorid' => $this->getId(),
+			'processoraction' => 'selectaction',
+			'actionname' => 'createcovar',
+			'datasetid' => $this->datasetId,
+			'step' => '2'
+                 );
+		$form->addFields(lgHtmlFormHelper::getHiddenFieldsFromArray($hiddenVals));
+		$page->appendContent($form->getRenderedHtml());
+		$page->render();
 	}
 
 	private function showUploadCelFileForm(lgRequest $lgRequest) {
@@ -217,7 +416,6 @@ class dspAffymetrixUpload extends lgDatasetProcessor {
 		// TODO: Add checks here
 		if(is_uploaded_file($_FILES['file']['tmp_name']) ){
 			$lgDataset->addFileFromUpload($_FILES['file']['tmp_name'],$_FILES['file']['name']);
-
 			$message = 'Your file has been uploaded successfully';
 			$this->showMainSelectionForm(NULL,$message);
 		} else {
