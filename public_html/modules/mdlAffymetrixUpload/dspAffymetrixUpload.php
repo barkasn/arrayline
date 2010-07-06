@@ -208,10 +208,18 @@ class dspAffymetrixUpload extends lgDatasetProcessor {
 			case '4':
 				$this->createCovarFileNamesAndInfo($lgRequest);
 				break;
+			case '5':
+				$this->createCovarFileDoFileCreate($lgRequest);
+				break;
 			default:
 				throw new Exception('Unknown step');
 				break;
 		}
+	}
+
+	private function createCovarFileDoFileCreate(lgRequest $lgRequest) {
+		$postArray = $lgRequest->getPostArray();
+		// TODO: Create File - overwriting the old one
 	}
 
 	private function createCovarFileNamesAndInfo(lgRequest $lgRequest) {
@@ -225,12 +233,66 @@ class dspAffymetrixUpload extends lgDatasetProcessor {
 		$page->appendContent('<h2>Create Covariates File - File Information</h2>');
 		
 		$form = new lgHtmlForm();
-
 		
+		$filesData = new lgHtmlRawHtmlField('raw','raw');
+		$filesData->setValue($this->getFileVariableTable($numberOfFiles, $variablesInfo));
+		
+		$form->addField($filesData);
+
+		//TODO: Add hidden vars
+                $hiddenVals = array (
+                        'requeststring' => 'createdataset',
+                        'processorid' => $this->getId(),
+			'processoraction' => 'selectaction',
+			'actionname' => 'createcovar',
+			'datasetid' => $postArray['datasetid'],
+			'novariables' => $postArray['novariables'],
+			'maxallowedvalues' => $postArray['maxallowedvalues'],
+			'varallowedvalues' => $postArray['varallowedvalues'],
+			'step' => '5',
+                 );
+
+		$form->addFields(lgHtmlFormHelper::getHiddenFieldsFromArray($hiddenVals));
+		$form->addField(new lgHtmlSubmitButton('submit', 'Next >'));
+		$page->appendContent($form->getRenderedHtml());
+		$page->render();
 	}
 
 	private function getFileVariableTable($numberOfFiles, $variablesInfo) {
+		$html = '';
 
+		$html .=<<<EOE
+<table
+	<tr>
+		<td>Filename</td>
+		<td>Comment</td>
+		<td>Replicate Identifier</td>
+EOE;
+
+		foreach ($variablesInfo as $variable) {
+			$html .= '<td>'.$variable->name.'</td>';
+		}
+		$html .= '</tr>';
+
+		for ($i = 0; $i < $numberOfFiles; $i++) {
+			$html .= '<tr>';
+			$html .= '<td><input type="text" name="filename_'.$i.'" /></td>';
+			$html .= '<td><input type="text" name="comment_'.$i.'" /></td>';
+			$html .= '<td><input type="text" name="replicateid_'.$i.'" /></td>';
+			
+			$j = 0;
+			foreach ($variablesInfo as $variable) {
+				$html .= '<td><select name="varval_'.$i.'_'.$j.'">';
+				foreach($variable->values as $value) {
+					$html .= '<option>'.$value.'</option>';
+				}
+				$html .= '</select></td>';	
+				$j++;
+			}
+			$html .= '</tr>';
+		}
+		$html .= '</table>';
+		return $html;
 	}
 
 	private function createCovarSelectNumberOfFiles(lgRequest $lgRequest) {
@@ -239,7 +301,6 @@ class dspAffymetrixUpload extends lgDatasetProcessor {
 		$variableCount = $postArray['novariables'];
 		$maxAllowedValues = $postArray['maxallowedvalues'];
 
-		
 		$variablesInfo = array();
 		for ($i = 0; $i < $variableCount; $i++ ) {
 			$varInfo = array();
@@ -247,7 +308,9 @@ class dspAffymetrixUpload extends lgDatasetProcessor {
 
 			$varInfoValues = array();
 			for ($j = 0; $j < $maxAllowedValues; $j++) {
-				$varInfoValues[] = $postArray['val_'.$i.'_'.$j];
+				if (!empty($postArray['val_'.$i.'_'.$j])) {
+					$varInfoValues[] = $postArray['val_'.$i.'_'.$j];
+				}
 			}
 			$varInfo['values'] = $varInfoValues;
 
@@ -275,7 +338,6 @@ class dspAffymetrixUpload extends lgDatasetProcessor {
 
 		$varAllowedValuesJson = urlencode(json_encode($variablesInfo));
 
-		//TODO Add hidden data and serialised variab,e array
                 $hiddenVals = array (
                         'requeststring' => 'createdataset',
                         'processorid' => $this->getId(),
