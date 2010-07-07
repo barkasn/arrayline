@@ -44,6 +44,7 @@ class lgDatasetHelper {
 		return $lgDatasets;
 	}
 
+
 	public static function createDataset($lgJob, $lgParentDataset, $lgDatasetState, $lgOwner, $lgDatasetProcessor) {
 
 		$jobId = ($lgJob != NULL)?$lgJob->getId():NULL;

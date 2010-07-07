@@ -38,6 +38,58 @@ class lgDataset {
 		$this->dbDataset->save();
 	}
 
+	public function delete() {
+		if($this->isDeletableRecursive()) {
+			$this->doDeleteRecursive();
+			return true;
+		}	
+		return false;
+	}
+
+	// This is public but must never be called by anything
+	// but functions in this class
+	public function doDeleteRecursive() {
+		$children = $this->getChildren();
+		foreach ($children as $child) {
+			$child->doDeleteRecursive();
+		}
+		$this->doDelete();
+	}
+
+
+	private function doDelete() {
+		// Mark as deleted
+		$this->dbDataset->delete();
+
+		// TODO: Delete files from FS
+	}
+
+	public function isDeletableRecursive() {
+		$children = $this->getChildren():
+		$flag = false;
+		foreach ($children as $child) {
+			if (! $child->isDeletableRecursive()) {
+				$flag = true;
+			}
+		}
+	
+		if (!$flag && $this->isDeletable()) {
+			return true;
+		} 
+		return false;
+	}
+
+	private function isDeletable() {
+		if (!$this->isInputToActiveJob()) {
+			return true;
+		}
+		return false;
+	}
+
+	private function isInputToActiveJob() {
+		//TODO: implement in job helper
+	}
+
 	public function getId() {
 		return $this->id;
 	}
