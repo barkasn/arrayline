@@ -219,7 +219,61 @@ class dspAffymetrixUpload extends lgDatasetProcessor {
 
 	private function createCovarFileDoFileCreate(lgRequest $lgRequest) {
 		$postArray = $lgRequest->getPostArray();
-		// TODO: Create File - overwriting the old one
+		$datasetId = $postArray['datasetid'];
+
+		$lgDataset = new lgDataset($datasetId);
+		$dirPath = $lgDataset->getFilesDirectoryPath();
+		$variablesInfo = json_decode(urldecode($postArray['varallowedvalues']));
+
+		// Open file
+		$fh = fopen($dirPath.'/covariates.csv','w');
+
+		// Prepare header line
+		$headerLineArray = array (
+			'Filename',
+			'Unique Sample Identifier',
+			'Variable Value Identifier',
+			'Sample Comment',
+			'Replicate Identifier',
+		);
+		foreach ($variablesInfo as $var) {
+			$headerLineArray[] = $var->name;
+		}
+		fputcsv($fh, $headerLineArray,',','"');
+
+		// Loop over files
+		for ( $i = 0; $i < $postArray['nofiles']; $i++) {
+			$filename = $postArray['filename_'.$i];
+			$comment = $postArray['comment_'.$i];
+			$replicateId = $postArray['replicateid_'.$i];
+
+			$vars = array();
+			for ($j = 0; $j < $postArray['novariables']; $j++) {
+				$vars[] = $postArray['varval_'.$i.'_'.$j];
+			}
+		
+			// Computed columns
+			$variableValueId = implode('_',$vars);
+			$uniqueSampleId = $variableValueId.'_'.$replicateId;
+
+			$rowArray = array (
+				$filename,
+				$uniqueSampleId,
+				$variableValueId,
+				$comment,
+				$replicateId,
+			);
+
+			foreach ($vars as $var) {
+				$rowArray[] = $var;
+			}
+			fputcsv($fh, $rowArray,',','"');
+		}
+
+		fclose($fh);
+
+		$message = 'The covariates file was sucessfuly created';
+                $this->showMainSelectionForm(NULL,$message);
 	}
 
 	private function createCovarFileNamesAndInfo(lgRequest $lgRequest) {
@@ -231,6 +285,8 @@ class dspAffymetrixUpload extends lgDatasetProcessor {
 		$page = new lgCmsPage();
 		$page->setTitle('Create Covariates File - File Information');
 		$page->appendContent('<h2>Create Covariates File - File Information</h2>');
+
+		$page->appendContent('<p class="notice">Use the table below to specify the names and variable values for each of your microarray experiments. Filenames are case-sensitive (i.e. capitalisation matters). Please place particular importance in specifying unique replicate identifiers. Replicate identifiers MUST be unique among experiments with the exact same variable conditions. Unless you are trying to replicate a numbering scheme used in the labelling of the physical arrays it is recommended you enter a sequence of numbers: 1,2, ..., n </p>');
 		
 		$form = new lgHtmlForm();
 		
@@ -249,6 +305,7 @@ class dspAffymetrixUpload extends lgDatasetProcessor {
 			'novariables' => $postArray['novariables'],
 			'maxallowedvalues' => $postArray['maxallowedvalues'],
 			'varallowedvalues' => $postArray['varallowedvalues'],
+			'nofiles' => $postArray['nofiles'],
 			'step' => '5',
                  );
 
@@ -322,13 +379,16 @@ EOE;
 		$page->setTitle('Create Covariates File');
 		$page->appendContent('<h2>Create covariates File - Number of Files</h2>');
 		
-		$page->appendContent('<p>Select number of files</p>');
+		$page->appendContent('<p class="notice">Here you can select the number of CEL files in your experiment. This is essentially the number of microarray experiments you have performed (and which to process). In the next screen you will be presented with a table that will allow you to specify the values of the variables in your experiment for each microarray</p>');
+
+
+		$page->appendContent('<p>Number of files</p>');
 		
 		$form = new lgHtmlForm();
 		
 		$dpdNumberOfFiles = new lgHtmlRawHtmlField('raw','raw');
 		$selectContent = '';
-		for ($i = 1; $i <= 10; $i++) {
+		for ($i = 1; $i <= 50; $i++) {
 			$selectContent .= '<option value="'.$i.'">'.$i.'</option>';
 		}
 		$dpdNumberOfFiles->setValue('<select name="nofiles">'.$selectContent.'</select>');
@@ -359,11 +419,15 @@ EOE;
 		$postArray = $lgRequest->getPostArray();
 		$variableCount = $postArray['novariables'];
 
-		$maxAllowedValues = 3;
+		// Maximum number of possible values any variable can have
+		// TODO: Allow the uset to change this
+		$maxAllowedValues = 10;
 
 		$page = new lgCmsPage();
 		$page->setTitle('Create Covariates File');
 		$page->appendContent('<h2>Create covariates File - Variable Allowed Values</h2>');
+
+		$page->appendContent('<p class="notice">Use the table below to enter the allowed values for each variable in your experiment. Rows in the table represent variables in the experiment, for example gene mutation and temperature. The first column on the table allows you to name your variable. The columns at the left allow you to enter allowed values. For a gene mutation and three temperature points you would enter here wt, mutant in the first row and the three temperatures at the second one. Please avoid funny characters and especially avoid values which differ only by a special character. These characters will be stripped and you this cause problems in downstream processing.</p>');
 	
 		$dataInput = new lgHtmlRawHtmlField('raw','raw');
 		$dataInput->setValue($this->getVariableValuesInputTable($variableCount, $maxAllowedValues));
@@ -418,10 +482,11 @@ EOE;
 		$page = new lgCmsPage();
 		$page->setTitle('Create Covariates File');
 		$page->appendContent('<h2>Create covariates File - Select Number of Variables</h2>');
-		$page->appendContent('<p class="notice">Please select the number of variables you have in your experiment. This is the number of experimentl conditions you are changing (not the total number of your experiments)</p>');
-		$page->appendContent('<p>Select Number of variables</p>');
+		$page->appendContent('<p class="notice">Here you can select the number of independent variables you have in your experiment. This is the total number of experimental conditions that you are changing and can include gene mutations and/or other parameters. For example if you are testing a gene mutant and its wild type in three different temperatures your would select two here. One for the mutant (wt vs mut) and one for the temperature (x,y and z degrees C).</p>');
+		$page->appendContent('Number of variables: ');
 
 		$form = new lgHtmlForm();
+
 		$dpdNoVars = new lgHtmlRawHtmlField('rawField','rawField');
 		$selectContent = '';
 		for ($i = 1; $i <= 10; $i++) {
