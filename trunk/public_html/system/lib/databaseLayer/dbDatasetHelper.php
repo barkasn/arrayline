@@ -24,7 +24,7 @@
 class dbDatasetHelper {
 	public static function getAllDatasets() {
 		global $pdo;
-		$stmt = $pdo->prepare('SELECT id FROM datasets;');
+		$stmt = $pdo->prepare('SELECT id FROM datasets WHERE deleted = 0;');
 		$stmt->execute();
 		$datasets = array();
 		while ($row = $stmt->fetch()) {
@@ -36,7 +36,7 @@ class dbDatasetHelper {
 	public static function getRootDatasets() {
 
 		global $pdo;
-		$stmt = $pdo->prepare('SELECT id FROM datasets WHERE  parent_dataset_id IS NULL;');
+		$stmt = $pdo->prepare('SELECT id FROM datasets WHERE  parent_dataset_id IS NULL AND deleted  = 0;');
 		$stmt->execute();
 		$datasets = array();
 		while ($row = $stmt->fetch()) {
@@ -45,9 +45,25 @@ class dbDatasetHelper {
 		return $datasets;
 	}
 
+	public static function checkDatasetInputToActiveJob(dbDataset $dbDataset){
+		global $pdo;
+
+		$stmt = $pdo->prepare('SELECT jobs.id as id FROM jobs, job_states WHERE jobs.job_state_id = job_states.id AND  job_states.internal_name != :job_state_internal_name AND input_dataset_id = :input_dataset_id;');
+
+		$stmt->bindValue(':input_dataset_id', $dbDataset->getId());
+		$stmt->bindValue(':job_state_internal_name', 'complete');
+		$stmt->execute();
+
+		if ($row = $stmt->fetch()) {
+			var_dump($row);
+			return true;
+		}
+		return false;
+	} 
+
 	public static function getDatasetsByState($dbState) {
 		global $pdo;
-		$stmt = $pdo->prepare('SELECT id FROM datasets WHERE dataset_state_id = :dataset_state_id;');
+		$stmt = $pdo->prepare('SELECT id FROM datasets WHERE dataset_state_id = :dataset_state_id AND deleted = 0;');
 		$stmt->bindValue(':dataset_state_id', $dbState->getId());
 		$stmt->execute();
 
@@ -60,7 +76,7 @@ class dbDatasetHelper {
 
 	public static function getDatasetsByParent($dbDataset) {
 		global $pdo;
-		$stmt = $pdo->prepare('SELECT id FROM datasets WHERE parent_dataset_id = :parent_dataset_id;');
+		$stmt = $pdo->prepare('SELECT id FROM datasets WHERE parent_dataset_id = :parent_dataset_id AND deleted = 0;');
 		$stmt->bindValue(':parent_dataset_id', $dbDataset->getId());
 		$stmt->execute();
 		

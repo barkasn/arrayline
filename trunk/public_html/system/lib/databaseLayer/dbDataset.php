@@ -90,6 +90,7 @@ class dbDataset {
 
 	public function delete() {
 		$this->deleted = true;
+		$this->dirty = true;
 	}	
 
 	public function setProcessor(dbDatasetProcessor $dbDatasetProcessor) {
