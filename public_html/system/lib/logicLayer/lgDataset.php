@@ -73,7 +73,6 @@ class lgDataset {
 		return $childrenLgDatasets;
 	}
 
-
 	public function getUser() {
 		return new lgUser($this->dbDataset->getUser()->getId());
 	}

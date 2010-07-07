@@ -50,10 +50,6 @@ class lgJob {
 		return $this->dbJob->getProcessId();
 	}
 
-	public function setProcessId($value) {
-		$this->dbJob->setProcessId($value);
-	}
-
 	public function getDataCleared() {
 		return $this->dbJob->getDataCleared();
 	}
@@ -140,8 +136,13 @@ class lgJob {
 			throw new Exception('Unable to change directory to: '.$scriptsDir);
 			return false;
 		} else {
-			$command = 'nohup '.$entryPath.' > ../joblog.txt 2>&1 &';
-			exec($command);
+			$command = 'nohup '.$entryPath.' > ../joblog.txt 2>&1 & echo $!';
+			
+			$output = '';	
+			exec($command,$op);
+			$pid = (int) $op[0];
+			$this->dbJob->setProcessId($pid);
+
 			$this->setRunning();
 			$this->setRunStartNow();
 		}
