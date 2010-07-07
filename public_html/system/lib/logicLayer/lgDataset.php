@@ -65,11 +65,13 @@ class lgDataset {
 	}
 
 	public function isDeletableRecursive() {
-		$children = $this->getChildren():
+		$children = $this->getChildren();
 		$flag = false;
-		foreach ($children as $child) {
-			if (! $child->isDeletableRecursive()) {
-				$flag = true;
+		if (!empty($children)) {
+			foreach ($children as $child) {
+				if (! $child->isDeletableRecursive()) {
+					$flag = true;
+				}
 			}
 		}
 	
@@ -80,14 +82,14 @@ class lgDataset {
 	}
 
 	private function isDeletable() {
-		if (!$this->isInputToActiveJob()) {
-			return true;
+		if ($this->isInputToActiveJob()) {
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 	private function isInputToActiveJob() {
-		//TODO: implement in job helper
+		return lgDatasetHelper::checkDatasetInputToActiveJob($this);
 	}
 
 	public function getId() {

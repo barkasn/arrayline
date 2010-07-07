@@ -44,6 +44,9 @@ class lgDatasetHelper {
 		return $lgDatasets;
 	}
 
+	public static function checkDatasetInputToActiveJob(lgDataset $lgDataset) {
+		return dbDatasetHelper::checkDatasetInputToActiveJob(new dbDataset($lgDataset->getId()));	
+	}
 
 	public static function createDataset($lgJob, $lgParentDataset, $lgDatasetState, $lgOwner, $lgDatasetProcessor) {
 
