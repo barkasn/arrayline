@@ -177,11 +177,18 @@ class lgReqHandlerDatasets implements iRequestHandler {
 		$id = $postArray['datasetid'];
 
 		$lgDataset = new lgDataset($id);
-		$lgDataset->delete();
+		$result = $lgDataset->delete();
 
 		$page = new lgCmsPage();
 		$page->setTitle('Delete Dataset');
-		$page->appendContent('Dataset deleted');
+		$page->appendContent('<h2>Dataset Deletion</h2>');
+		if ($result) {
+			$page->appendContent('<p>The dataset was succesfully deleted</p>');
+		} else {
+			$page->appendConyent('<p>An error occured while attempting to delete the dataset. This could be due to
+				the dataset, or one of its children being in use by a job</p>');
+		}
+
 		$page->render();
 	}
 
@@ -255,7 +262,9 @@ EOE;
 	private function processViewAllRequest(lgRequest $lgRequest) {
 		$postArray = $lgRequest->getPostArray();
 
-		switch (isset($postArray['viewdisplay'])?$postArray['viewdisplay']:'simple') {
+		$defaultView  = 'hierarchical';
+
+		switch (isset($postArray['viewdisplay'])?$postArray['viewdisplay']:$defaultView) {
 			case 'simple':
 				$this->displayDatasetsSimple($lgRequest);
 				break;
