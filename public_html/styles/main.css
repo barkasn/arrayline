@@ -347,3 +347,22 @@ div.main div.file-listing div.file-record span.size {
 	width: 20%;
 	padding-top: 13px;
 }
+
+table, th, td {
+	border: 1px solid black;
+	border-collapse: collapse;
+	text-align: centre;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	font-size: 0.9em;
+}
+
+div.page div.main form table input {
+	margin: 0;
+	padding: 0;
+	width: 40px;
+}
+
+
+
