@@ -136,7 +136,7 @@ class dspAffymetrixUpload extends lgDatasetProcessor {
 		$page->appendContent('<h2>Affymetrix Upload</h2>');
 
 		if ($message !== NULL) {
-			$page->appendContent('<p class="notice">'.'</p>');
+			$page->appendContent('<p class="notice">'.$message.'</p>');
 		}
 
 		$page->appendContent('<h3>Select action</h3>');
