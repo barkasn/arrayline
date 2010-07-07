@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 05, 2010 at 04:35 PM
+-- Generation Time: Jul 07, 2010 at 03:43 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.2-1ubuntu4.2
 
@@ -140,20 +140,39 @@ CREATE TABLE IF NOT EXISTS `datasets` (
   `owner_user_id` int(11) NOT NULL,
   `dataset_processor_id` int(11) NOT NULL,
   `created` datetime NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=125 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=143 ;
 
 --
 -- Dumping data for table `datasets`
 --
 
-INSERT INTO `datasets` (`id`, `name`, `job_id`, `parent_dataset_id`, `dataset_state_id`, `owner_user_id`, `dataset_processor_id`, `created`) VALUES
-(121, 'test', 179, 120, 6, 1, 6, '2010-07-02 08:05:00'),
-(120, NULL, 178, 119, 5, 1, 4, '2010-07-02 07:47:00'),
-(119, 'John Raw Affymetrix Data', NULL, NULL, 4, 1, 3, '2010-07-02 07:40:00'),
-(122, NULL, 182, 120, 7, 1, 7, '2010-07-05 15:52:00'),
-(123, NULL, 183, 120, 7, 1, 7, '2010-07-05 15:56:00'),
-(124, NULL, 184, 120, 7, 1, 7, '2010-07-05 15:56:00');
+INSERT INTO `datasets` (`id`, `name`, `job_id`, `parent_dataset_id`, `dataset_state_id`, `owner_user_id`, `dataset_processor_id`, `created`, `deleted`) VALUES
+(121, 'test', 179, 120, 6, 1, 6, '2010-07-02 08:05:00', 1),
+(120, NULL, 178, 119, 5, 1, 4, '2010-07-02 07:47:00', 1),
+(119, 'John Raw Affymetrix Data', NULL, NULL, 4, 1, 3, '2010-07-02 07:40:00', 1),
+(122, NULL, 182, 120, 7, 1, 7, '2010-07-05 15:52:00', 1),
+(123, NULL, 183, 120, 7, 1, 7, '2010-07-05 15:56:00', 1),
+(124, NULL, 184, 120, 7, 1, 7, '2010-07-05 15:56:00', 1),
+(125, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 11:52:00', 0),
+(126, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 12:47:00', 0),
+(127, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 12:58:00', 0),
+(128, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 13:54:00', 0),
+(129, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 14:08:00', 0),
+(130, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 14:15:00', 0),
+(131, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 14:22:00', 0),
+(132, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 15:00:00', 0),
+(133, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 15:59:00', 0),
+(134, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 16:02:00', 0),
+(135, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 16:35:00', 0),
+(136, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 16:49:00', 0),
+(137, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 16:54:00', 0),
+(138, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 16:55:00', 0),
+(139, NULL, NULL, NULL, 3, 1, 3, '2010-07-07 10:17:00', 0),
+(140, NULL, NULL, NULL, 3, 1, 3, '2010-07-07 11:31:00', 0),
+(141, NULL, NULL, NULL, 3, 1, 3, '2010-07-07 11:56:00', 0),
+(142, NULL, 185, 120, 7, 1, 7, '2010-07-07 13:29:00', 1);
 
 -- --------------------------------------------------------
 
@@ -207,7 +226,7 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `data_cleared` tinyint(1) NOT NULL,
   `process_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=186 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=187 ;
 
 --
 -- Dumping data for table `jobs`
@@ -219,7 +238,8 @@ INSERT INTO `jobs` (`id`, `job_state_id`, `description`, `autorun`, `run_start`,
 (183, 9, 'Affymetrix Normalisation', 0, '2010-07-05 15:53:03', '2010-07-05 15:56:57', '0', 93, 120, NULL, 7, 1, 7, 1, NULL),
 (182, 9, 'Affymetrix Normalisation', 0, '2010-07-05 15:41:49', '2010-07-05 15:52:07', '0', 92, 120, NULL, 7, 1, 7, 1, NULL),
 (184, 9, 'Affymetrix Normalisation', 0, '2010-07-05 15:53:04', '2010-07-05 15:56:57', '0', 94, 120, NULL, 7, 1, 7, 1, NULL),
-(185, 6, 'Affymetrix Normalisation', 0, '2010-07-05 16:31:47', '0000-00-00 00:00:00', '0', 95, 120, NULL, 7, 1, 7, 0, NULL);
+(185, 9, 'Affymetrix Normalisation', 0, '2010-07-05 16:31:47', '2010-07-07 13:29:36', '0', 95, 120, NULL, 7, 1, 7, 1, NULL),
+(186, 9, 'Affymetrix Raw QC Background Job', 0, '2010-07-07 13:29:35', '0000-00-00 00:00:00', '0', 96, 120, NULL, 6, 1, 6, 0, 1814);
 
 -- --------------------------------------------------------
 
@@ -337,13 +357,14 @@ CREATE TABLE IF NOT EXISTS `script_sets` (
   `description` varchar(255) NOT NULL,
   `entry_script_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=96 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=97 ;
 
 --
 -- Dumping data for table `script_sets`
 --
 
 INSERT INTO `script_sets` (`id`, `description`, `entry_script_id`) VALUES
+(96, 'Temporary Scriptset', 5),
 (95, 'Temporary Scriptset', 11);
 
 -- --------------------------------------------------------
@@ -364,7 +385,9 @@ CREATE TABLE IF NOT EXISTS `script_sets_scripts` (
 
 INSERT INTO `script_sets_scripts` (`script_set_id`, `script_id`) VALUES
 (95, 11),
-(95, 12);
+(95, 12),
+(96, 5),
+(96, 6);
 
 -- --------------------------------------------------------
 
@@ -445,13 +468,15 @@ CREATE TABLE IF NOT EXISTS `system_log` (
   `created` datetime NOT NULL,
   `message` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=100 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=102 ;
 
 --
 -- Dumping data for table `system_log`
 --
 
 INSERT INTO `system_log` (`id`, `created`, `message`) VALUES
+(101, '2010-07-07 13:29:36', 'Cron.php running complete'),
+(100, '2010-07-07 13:29:35', 'Cron.php running'),
 (99, '2010-07-05 16:31:48', 'Cron.php running complete'),
 (98, '2010-07-05 16:31:47', 'Cron.php running');
 
@@ -517,6 +542,6 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `passwordsha1`, `created`, `last_access`, `real_name`, `notes`, `room`, `telephone`, `email`, `deleted`) VALUES
-(1, 'nikolas', 'a28cc654d85c1d3cb8418061db20859c322a0bc6', '2010-05-26 00:00:00', '2010-07-05 13:53:00', 'Nikolas Barkas', '', '', '', 'nikolas.barkas@kcl.ac.uk', 0),
+(1, 'nikolas', 'a28cc654d85c1d3cb8418061db20859c322a0bc6', '2010-05-26 00:00:00', '2010-07-07 15:15:00', 'Nikolas Barkas', '', '', '', 'nikolas.barkas@kcl.ac.uk', 0),
 (16, 'asdfasdf', '92429d82a41e930486c6de5ebda9602d55c39986', '2010-07-01 12:20:00', '0000-00-00 00:00:00', '', '', '', '', '', 1);
 
