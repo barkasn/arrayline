@@ -71,6 +71,16 @@ class lgReqHandlerUsers implements iRequestHandler {
 		echo ('View User not implemented');
 	}
 
+	private function processEditUserRequest(lgRequest $lgRequest) {
+		// TODO: Implement
+		$page = new lgCmsPage();
+		$page->setTitle('Edit User');
+		$page->appendContent('<h2>Edit User</h2>');
+		$page->appendContent('<p>Edit user not implemented</p>');
+		$page->render();
+	
+	}
+
 	private function processViewPriviledges(lgRequest $lgRequest) {
 		$page = new lgCmsPage();
 		$page->setTitle('View Priviledges');

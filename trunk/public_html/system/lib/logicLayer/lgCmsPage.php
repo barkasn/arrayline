@@ -119,13 +119,13 @@ EOT;
 					</span>
 				</a>
 			</li> -->
-			<li>
+<!--			<li>
 				<a href="index.php?requeststring=viewpriviledges">
 					<span>
 						<img src="images/icons/layout.png" alt="add icon" />View Priviledges
 					</span>
 				</a>
-			</li>
+			</li> -->
 			<li>
 				<a href="index.php?requeststring=about">
 					<span>
