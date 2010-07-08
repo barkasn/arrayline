@@ -329,7 +329,7 @@ EOE;
 					<div class="dataset-info">
 						<ul>
 							<li>Dataset type: $datasetStateName</li>
-							<li>Created by: <a href="index.php?requeststring=viewuser&userid=$userId">$userRealName</a></li>
+							<li>Created by: $userRealName</li>
 							<li>Created on: $datasetCreated</li>
 						</ul>
 					</div>
