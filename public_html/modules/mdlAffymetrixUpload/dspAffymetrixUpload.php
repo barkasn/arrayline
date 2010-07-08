@@ -143,253 +143,253 @@ class dspAffymetrixUpload extends lgDatasetProcessor {
 
 		$form = new lgHtmlForm();
 		
-		// Using raw html field to built a radio button selection
-		// TODO: implement proper radio buttons in system
-		$optionsField = new lgHtmlRawHtmlField('options');
-		$optionsField->setValue( '
-			<input type="radio" name="actionname" value="uploadcel" />Upload .CEL file<br />
-			<input type="radio" name="actionname" value="uploadcovar" />Upload covariates file<br />
-			<input type="radio" name="actionname" value="createcovar" />Create covariates file<br />
-			<input type="radio" name="actionname" value="finalise" />Finalise Dataset<br />
-		');
+	// Using raw html field to built a radio button selection
+	// TODO: implement proper radio buttons in system
+	$optionsField = new lgHtmlRawHtmlField('options');
+	$optionsField->setValue( '
+		<input type="radio" name="actionname" value="uploadcel" />Upload .CEL files<br />
+		<input type="radio" name="actionname" value="uploadcovar" />Upload covariates file<br />
+		<input type="radio" name="actionname" value="createcovar" />Create covariates file wizard<br />
+		<input type="radio" name="actionname" value="finalise" />Finalise Dataset<br />
+	');
 
-		$form->addField($optionsField);
-		$form->addField(new lgHtmlSubmitButton('submit', 'Go!'));
-		
-                $hiddenVals = array (
-                        'requeststring' => 'createdataset',
-                        'processorid' => $this->getId(),
-			'processoraction' => 'selectaction',
-			'datasetid' => $this->datasetId,
-                 );
-		$form->addFields(lgHtmlFormHelper::getHiddenFieldsFromArray($hiddenVals));
-
-		$page->appendContent($form->getRenderedHtml());
-		$page->render();
-	}
-
-	private function processActionSelection(lgRequest $lgRequest) {
-		$post =  $lgRequest->getPostArray();
-		$actionname = $post['actionname'];
-		$this->datasetId = $post['datasetid'];
-
-		switch($actionname) {
-			case 'uploadcel':
-				$this->showUploadCelFileForm($lgRequest);
-				break;
-			case 'uploadcovar':
-				$this->showUploadCovarFileForm($lgRequest);
-				break;
-			case 'finalise':
-				$this->showFinaliseForm($lgRequest);
-				break;
-			case 'createcovar': 
-				$this->showCreateCovariates($lgRequest);
-				break;
-			default:
-				throw new Exception('Unknown selection');
-		}
-	}
-
-
-	private function showCreateCovariates(lgRequest $lgRequest) {
-		$postArray = $lgRequest->getPostArray();
-		$step = empty($postArray['step'])?'1':$postArray['step'];
-		switch($step) {
-			case '1':
-				$this->createCovarNumberOfVars($lgRequest);
-				break;
-			case '2':
-				$this->createCovarVarAllowedValues($lgRequest);
-				break;
-			case '3':
-				$this->createCovarSelectNumberOfFiles($lgRequest);
-				break;
-			case '4':
-				$this->createCovarFileNamesAndInfo($lgRequest);
-				break;
-			case '5':
-				$this->createCovarFileDoFileCreate($lgRequest);
-				break;
-			default:
-				throw new Exception('Unknown step');
-				break;
-		}
-	}
-
-	private function createCovarFileDoFileCreate(lgRequest $lgRequest) {
-		$postArray = $lgRequest->getPostArray();
-		$datasetId = $postArray['datasetid'];
-
-		$lgDataset = new lgDataset($datasetId);
-		$dirPath = $lgDataset->getFilesDirectoryPath();
-		$variablesInfo = json_decode(urldecode($postArray['varallowedvalues']));
-
-		// Open file
-		$fh = fopen($dirPath.'/covariates.csv','w');
-
-		// Prepare header line
-		$headerLineArray = array (
-			'Filename',
-			'Unique Sample Identifier',
-			'Variable Value Identifier',
-			'Sample Comment',
-			'Replicate Identifier',
-		);
-		foreach ($variablesInfo as $var) {
-			$headerLineArray[] = $var->name;
-		}
-		fputcsv($fh, $headerLineArray,',','"');
-
-		// Loop over files
-		for ( $i = 0; $i < $postArray['nofiles']; $i++) {
-			$filename = $postArray['filename_'.$i];
-			$comment = $postArray['comment_'.$i];
-			$replicateId = $postArray['replicateid_'.$i];
-
-			$vars = array();
-			for ($j = 0; $j < $postArray['novariables']; $j++) {
-				$vars[] = $postArray['varval_'.$i.'_'.$j];
-			}
-		
-			// Computed columns
-			$variableValueId = implode('_',$vars);
-			$uniqueSampleId = $variableValueId.'_'.$replicateId;
-
-			$rowArray = array (
-				$filename,
-				$uniqueSampleId,
-				$variableValueId,
-				$comment,
-				$replicateId,
-			);
-
-			foreach ($vars as $var) {
-				$rowArray[] = $var;
-			}
-			fputcsv($fh, $rowArray,',','"');
-		}
-
-		fclose($fh);
-
-		$message = 'The covariates file was sucessfuly created';
-                $this->showMainSelectionForm(NULL,$message);
-	}
-
-	private function createCovarFileNamesAndInfo(lgRequest $lgRequest) {
-		$postArray = $lgRequest->getPostArray();
+	$form->addField($optionsField);
+	$form->addField(new lgHtmlSubmitButton('submit', 'Go!'));
 	
-		$variablesInfo = json_decode(urldecode($postArray['varallowedvalues']));
-		$numberOfFiles = $postArray['nofiles'];
+	$hiddenVals = array (
+		'requeststring' => 'createdataset',
+		'processorid' => $this->getId(),
+		'processoraction' => 'selectaction',
+		'datasetid' => $this->datasetId,
+	 );
+	$form->addFields(lgHtmlFormHelper::getHiddenFieldsFromArray($hiddenVals));
 
-		$page = new lgCmsPage();
-		$page->setTitle('Create Covariates File - File Information');
-		$page->appendContent('<h2>Create Covariates File - File Information</h2>');
+	$page->appendContent($form->getRenderedHtml());
+	$page->render();
+}
 
-		$page->appendContent('<p class="notice">Use the table below to specify the names and variable values for each of your microarray experiments. Filenames are case-sensitive (i.e. capitalisation matters). Please place particular importance in specifying unique replicate identifiers. Replicate identifiers MUST be unique among experiments with the exact same variable conditions. Unless you are trying to replicate a numbering scheme used in the labelling of the physical arrays it is recommended you enter a sequence of numbers: 1,2, ..., n </p>');
-		
-		$form = new lgHtmlForm();
-		
-		$filesData = new lgHtmlRawHtmlField('raw','raw');
-		$filesData->setValue($this->getFileVariableTable($numberOfFiles, $variablesInfo));
-		
-		$form->addField($filesData);
+private function processActionSelection(lgRequest $lgRequest) {
+	$post =  $lgRequest->getPostArray();
+	$actionname = $post['actionname'];
+	$this->datasetId = $post['datasetid'];
 
-		//TODO: Add hidden vars
-                $hiddenVals = array (
-                        'requeststring' => 'createdataset',
-                        'processorid' => $this->getId(),
-			'processoraction' => 'selectaction',
-			'actionname' => 'createcovar',
-			'datasetid' => $postArray['datasetid'],
-			'novariables' => $postArray['novariables'],
-			'maxallowedvalues' => $postArray['maxallowedvalues'],
-			'varallowedvalues' => $postArray['varallowedvalues'],
-			'nofiles' => $postArray['nofiles'],
-			'step' => '5',
-                 );
+	switch($actionname) {
+		case 'uploadcel':
+			$this->showUploadCelFileForm($lgRequest);
+			break;
+		case 'uploadcovar':
+			$this->showUploadCovarFileForm($lgRequest);
+			break;
+		case 'finalise':
+			$this->showFinaliseForm($lgRequest);
+			break;
+		case 'createcovar': 
+			$this->showCreateCovariates($lgRequest);
+			break;
+		default:
+			throw new Exception('Unknown selection');
+	}
+}
 
-		$form->addFields(lgHtmlFormHelper::getHiddenFieldsFromArray($hiddenVals));
-		$form->addField(new lgHtmlSubmitButton('submit', 'Next >'));
-		$page->appendContent($form->getRenderedHtml());
-		$page->render();
+
+private function showCreateCovariates(lgRequest $lgRequest) {
+	$postArray = $lgRequest->getPostArray();
+	$step = empty($postArray['step'])?'1':$postArray['step'];
+	switch($step) {
+		case '1':
+			$this->createCovarNumberOfVars($lgRequest);
+			break;
+		case '2':
+			$this->createCovarVarAllowedValues($lgRequest);
+			break;
+		case '3':
+			$this->createCovarSelectNumberOfFiles($lgRequest);
+			break;
+		case '4':
+			$this->createCovarFileNamesAndInfo($lgRequest);
+			break;
+		case '5':
+			$this->createCovarFileDoFileCreate($lgRequest);
+			break;
+		default:
+			throw new Exception('Unknown step');
+			break;
+	}
+}
+
+private function createCovarFileDoFileCreate(lgRequest $lgRequest) {
+	$postArray = $lgRequest->getPostArray();
+	$datasetId = $postArray['datasetid'];
+
+	$lgDataset = new lgDataset($datasetId);
+	$dirPath = $lgDataset->getFilesDirectoryPath();
+	$variablesInfo = json_decode(urldecode($postArray['varallowedvalues']));
+
+	// Open file
+	$fh = fopen($dirPath.'/covariates.csv','w');
+
+	// Prepare header line
+	$headerLineArray = array (
+		'Filename',
+		'Unique Sample Identifier',
+		'Variable Value Identifier',
+		'Sample Comment',
+		'Replicate Identifier',
+	);
+	foreach ($variablesInfo as $var) {
+		$headerLineArray[] = $var->name;
+	}
+	fputcsv($fh, $headerLineArray,',','"');
+
+	// Loop over files
+	for ( $i = 0; $i < $postArray['nofiles']; $i++) {
+		$filename = $postArray['filename_'.$i];
+		$comment = $postArray['comment_'.$i];
+		$replicateId = $postArray['replicateid_'.$i];
+
+		$vars = array();
+		for ($j = 0; $j < $postArray['novariables']; $j++) {
+			$vars[] = $postArray['varval_'.$i.'_'.$j];
+		}
+	
+		// Computed columns
+		$variableValueId = implode('_',$vars);
+		$uniqueSampleId = $variableValueId.'_'.$replicateId;
+
+		$rowArray = array (
+			$filename,
+			$uniqueSampleId,
+			$variableValueId,
+			$comment,
+			$replicateId,
+		);
+
+		foreach ($vars as $var) {
+			$rowArray[] = $var;
+		}
+		fputcsv($fh, $rowArray,',','"');
 	}
 
-	private function getFileVariableTable($numberOfFiles, $variablesInfo) {
-		$html = '';
+	fclose($fh);
 
-		$html .=<<<EOE
+	$message = 'The covariates file was sucessfuly created';
+	$this->showMainSelectionForm(NULL,$message);
+}
+
+private function createCovarFileNamesAndInfo(lgRequest $lgRequest) {
+	$postArray = $lgRequest->getPostArray();
+
+	$variablesInfo = json_decode(urldecode($postArray['varallowedvalues']));
+	$numberOfFiles = $postArray['nofiles'];
+
+	$page = new lgCmsPage();
+	$page->setTitle('Create Covariates File - File Information');
+	$page->appendContent('<h2>Create Covariates File - File Information</h2>');
+
+	$page->appendContent('<p class="notice">Use the table below to specify the names and variable values for each of your microarray experiments. Filenames are case-sensitive (i.e. capitalisation matters). Please place particular importance in specifying unique replicate identifiers. Replicate identifiers MUST be unique among experiments with the exact same variable conditions. Unless you are trying to replicate a numbering scheme used in the labelling of the physical arrays it is recommended you enter a sequence of numbers: 1,2, ..., n </p>');
+	
+	$form = new lgHtmlForm();
+	
+	$filesData = new lgHtmlRawHtmlField('raw','raw');
+	$filesData->setValue($this->getFileVariableTable($numberOfFiles, $variablesInfo));
+	
+	$form->addField($filesData);
+
+	//TODO: Add hidden vars
+	$hiddenVals = array (
+		'requeststring' => 'createdataset',
+		'processorid' => $this->getId(),
+		'processoraction' => 'selectaction',
+		'actionname' => 'createcovar',
+		'datasetid' => $postArray['datasetid'],
+		'novariables' => $postArray['novariables'],
+		'maxallowedvalues' => $postArray['maxallowedvalues'],
+		'varallowedvalues' => $postArray['varallowedvalues'],
+		'nofiles' => $postArray['nofiles'],
+		'step' => '5',
+	 );
+
+	$form->addFields(lgHtmlFormHelper::getHiddenFieldsFromArray($hiddenVals));
+	$form->addField(new lgHtmlSubmitButton('submit', 'Next >'));
+	$page->appendContent($form->getRenderedHtml());
+	$page->render();
+}
+
+private function getFileVariableTable($numberOfFiles, $variablesInfo) {
+	$html = '';
+
+	$html .=<<<EOE
 <table
-	<tr>
-		<td>Filename</td>
-		<td>Comment</td>
-		<td>Replicate Identifier</td>
+<tr>
+	<td>Filename</td>
+	<td>Comment</td>
+	<td>Replicate Identifier</td>
 EOE;
 
+	foreach ($variablesInfo as $variable) {
+		$html .= '<td>'.$variable->name.'</td>';
+	}
+	$html .= '</tr>';
+
+	for ($i = 0; $i < $numberOfFiles; $i++) {
+		$html .= '<tr>';
+		$html .= '<td><input type="text" name="filename_'.$i.'" /></td>';
+		$html .= '<td><input type="text" name="comment_'.$i.'" /></td>';
+		$html .= '<td><input type="text" name="replicateid_'.$i.'" value="'.($i+1).'" /></td>';
+		
+		$j = 0;
 		foreach ($variablesInfo as $variable) {
-			$html .= '<td>'.$variable->name.'</td>';
+			$html .= '<td><select name="varval_'.$i.'_'.$j.'">';
+			foreach($variable->values as $value) {
+				$html .= '<option>'.$value.'</option>';
+			}
+			$html .= '</select></td>';	
+			$j++;
 		}
 		$html .= '</tr>';
+	}
+	$html .= '</table>';
+	return $html;
+}
 
-		for ($i = 0; $i < $numberOfFiles; $i++) {
-			$html .= '<tr>';
-			$html .= '<td><input type="text" name="filename_'.$i.'" /></td>';
-			$html .= '<td><input type="text" name="comment_'.$i.'" /></td>';
-			$html .= '<td><input type="text" name="replicateid_'.$i.'" /></td>';
-			
-			$j = 0;
-			foreach ($variablesInfo as $variable) {
-				$html .= '<td><select name="varval_'.$i.'_'.$j.'">';
-				foreach($variable->values as $value) {
-					$html .= '<option>'.$value.'</option>';
-				}
-				$html .= '</select></td>';	
-				$j++;
+private function createCovarSelectNumberOfFiles(lgRequest $lgRequest) {
+	// Process Input and create serialisable array
+	$postArray = $lgRequest->getPostArray();
+	$variableCount = $postArray['novariables'];
+	$maxAllowedValues = $postArray['maxallowedvalues'];
+
+	$variablesInfo = array();
+	for ($i = 0; $i < $variableCount; $i++ ) {
+		$varInfo = array();
+		$varInfo['name'] = $postArray['name_'.$i];
+
+		$varInfoValues = array();
+		for ($j = 0; $j < $maxAllowedValues; $j++) {
+			if (!empty($postArray['val_'.$i.'_'.$j])) {
+				$varInfoValues[] = $postArray['val_'.$i.'_'.$j];
 			}
-			$html .= '</tr>';
 		}
-		$html .= '</table>';
-		return $html;
+		$varInfo['values'] = $varInfoValues;
+
+		$variablesInfo[] = $varInfo;
 	}
 
-	private function createCovarSelectNumberOfFiles(lgRequest $lgRequest) {
-		// Process Input and create serialisable array
-		$postArray = $lgRequest->getPostArray();
-		$variableCount = $postArray['novariables'];
-		$maxAllowedValues = $postArray['maxallowedvalues'];
-
-		$variablesInfo = array();
-		for ($i = 0; $i < $variableCount; $i++ ) {
-			$varInfo = array();
-			$varInfo['name'] = $postArray['name_'.$i];
-
-			$varInfoValues = array();
-			for ($j = 0; $j < $maxAllowedValues; $j++) {
-				if (!empty($postArray['val_'.$i.'_'.$j])) {
-					$varInfoValues[] = $postArray['val_'.$i.'_'.$j];
-				}
-			}
-			$varInfo['values'] = $varInfoValues;
-
-			$variablesInfo[] = $varInfo;
-		}
+	// Show selection page for number of files
+	$page = new lgCmsPage();
+	$page->setTitle('Create Covariates File');
+	$page->appendContent('<h2>Create covariates File - Number of Files</h2>');
 	
-		// Show selection page for number of files
-		$page = new lgCmsPage();
-		$page->setTitle('Create Covariates File');
-		$page->appendContent('<h2>Create covariates File - Number of Files</h2>');
-		
-		$page->appendContent('<p class="notice">Here you can select the number of CEL files in your experiment. This is essentially the number of microarray experiments you have performed (and which to process). In the next screen you will be presented with a table that will allow you to specify the values of the variables in your experiment for each microarray</p>');
+	$page->appendContent('<p class="notice">Here you can select the number of CEL files in your experiment. This is essentially the number of microarray experiments you have performed (and which to process). In the next screen you will be presented with a table that will allow you to specify the values of the variables in your experiment for each microarray</p>');
 
 
-		$page->appendContent('<p>Number of files</p>');
-		
-		$form = new lgHtmlForm();
-		
-		$dpdNumberOfFiles = new lgHtmlRawHtmlField('raw','raw');
-		$selectContent = '';
-		for ($i = 1; $i <= 50; $i++) {
-			$selectContent .= '<option value="'.$i.'">'.$i.'</option>';
+	$page->appendContent('<p>Number of files</p>');
+	
+	$form = new lgHtmlForm();
+	
+	$dpdNumberOfFiles = new lgHtmlRawHtmlField('raw','raw');
+	$selectContent = '';
+	for ($i = 1; $i <= 50; $i++) {
+		$selectContent .= '<option value="'.$i.'">'.$i.'</option>';
 		}
 		$dpdNumberOfFiles->setValue('<select name="nofiles">'.$selectContent.'</select>');
 
@@ -514,13 +514,15 @@ EOE;
 	private function showUploadCelFileForm(lgRequest $lgRequest) {
 		$page  = new lgCmsPage();
 		$page->setTitle('Create Dataset - Affymetrix Upload - Upload .CEL File');
-		$page->appendContent('<h3>Upload .CEL file</h3>');
-		$page->appendContent('<p class="notice">Please use the form below to upload .CEL files one at a time.</p>');
+		$page->appendContent('<h3>Upload .CEL files</h3>');
+		$page->appendContent('<p class="notice">Please use the form below to upload .CEL files. You can upload a maximum of 10 files from this page, but you can repeat the procedure to upload larger datasets.</p>');
 		
 		$form = new lgHtmlForm();
 		$form->setEnctype('multipart/form-data');
 
-		$form->addField(new lgHtmlFileField('file'));
+		for ($i=0; $i <10;  $i++) {
+			$form->addField(new lgHtmlFileField('file_'.$i));
+		}
 		
                 $hiddenVals = array (
                         'requeststring' => 'createdataset',
@@ -540,16 +542,23 @@ EOE;
 		$this->datasetId = $post['datasetid'];
 		$lgDataset = new lgDataset($this->datasetId);
 	
-		// TODO: Add checks here
-		if(is_uploaded_file($_FILES['file']['tmp_name']) ){
-			$lgDataset->addFileFromUpload($_FILES['file']['tmp_name'],$_FILES['file']['name']);
-			$message = 'Your file has been uploaded successfully';
-			$this->showMainSelectionForm(NULL,$message);
-		} else {
+		$flag = false;
+		for ($i = 0; $i < 10; $i++) {
+			if(is_uploaded_file($_FILES['file_'.$i]['tmp_name']) ){
+				$lgDataset->addFileFromUpload($_FILES['file_'.$i]['tmp_name'],$_FILES['file_'.$i]['name']);
+			} else {
+				$flag = true;
+			}
+		}
+
+		if ($flag) {
 			$message = 'An error occured while attempting to upload your file. Please try again. If the 
 				problem persists please contact ther system administrator';
-			$this->showMainSelectionForm(NULL,$message);
+		} else {
+			$message = 'Your files have been uploaded sucessfully';
 		}
+		$this->showMainSelectionForm(NULL,$message);
+
 	}
 
 	private function showUploadCovarFileForm(lgRequest $lgRequest) {
