@@ -73,6 +73,13 @@ class dspFileNameRandomiser extends lgDatasetProcessor{
 		$lgJob->setDatasetProcessor($this);
 
 		$lgJob->schedule();
+
+
+		$page = new lgCmsPage();
+		$page->setTitle('File name randomizer - Job Scheduled');
+		$page->appendContent('<h2>Job Scheduled</h2>');
+		$page->appendContent('<p>A job has been scheduled. Your new dataset should appear in the dataset listing shortly</p>');
+		$page->render();
 	}
 
 	private function showConfirmationForm(lgRequest $lgRequest) {
@@ -83,7 +90,7 @@ class dspFileNameRandomiser extends lgDatasetProcessor{
 		$page->appendContent('<p>Are you sure you want to proceed</p>');
 
 		$form = new lgHtmlForm();
-		$field = new lgHtmlSubmitButton('submit','Yes!');
+		$field = new lgHtmlSubmitButton('submit','Proceed >');
 		$field->setValue('submit');
 		$form->addField($field);
 
