@@ -300,9 +300,8 @@ EOE;
 			<div class="search-box">
 				<h3>View Settings</h3>
 				<form action="index.php" method="post">
-					<p>View Style</p>
 					Simple<input type="radio" name="viewdisplay" value="simple" /><br />
-					Hierarchical<input type="radio" name="viewdisplay" value="hierarchical" /><br />
+					Hierarchical<input type="radio" name="viewdisplay" value="hierarchical" /><br /><br />
 					<input type="hidden" name="requeststring" value="viewdatasets" />
 					<input type="submit" value="Apply"/>
 				</form>
