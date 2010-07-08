@@ -122,8 +122,12 @@ class dspAffymetrixImporter extends lgDatasetProcessor {
 	}
 
 	private function showScheduledConfirmation(lgJob $lgJob) {
-		//TODO: Fix this
-		echo 'Job scheduled';
+		$page = new lgCmsPage();
+		$page->setTitle('Import Data to R - Job Scheculed');
+		$page->appendContent('<h2>Import Data to R</h2>');
+		$page->appendContent('<p>A job has been scheduled to import the dataset into R.
+			The processed dataset should appear in the dataset list in a few minutes.</p>');
+		$page->render();
 	}
 	
 	private function doExecute(lgRequest $lgRequest) {
