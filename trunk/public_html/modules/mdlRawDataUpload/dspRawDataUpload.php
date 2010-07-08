@@ -60,6 +60,12 @@ class dspRawDataUpload extends lgDatasetProcessor {
 		}
 		$lgDataset->computeAllChecksums();
 
+		// Show page to user
+		$page = new lgCmsPage();
+		$page->setTitle('Raw File Upload');
+		$page->appendContent('<h3>Raw File Upload</h3>');
+		$page->appendContent('<p>Your files have been uploaded succesfully</p>');
+		$page->render();
 	}
 
 
