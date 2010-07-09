@@ -125,8 +125,11 @@ class dspAffymetrixRawQC extends lgDatasetProcessor {
 	}
 
 	private function showJobScheduled(lgJob $lgJob) {
-		//TODO: Fix this
-		echo 'jpb scheduled';
+		$page = new lgCmsPage();
+		$page->setTitle('Affymetrix Raw Data QC');
+		$page->appendContent('<h2>Raw Data QC - Job Scheduled</h2>');
+		$page->appendContent('<p>A background job has been scheduled. The new dataset will appear in the dataset listing when ready</p>');
+		$page->render();
 	}
 
 }
