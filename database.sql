@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 07, 2010 at 03:43 PM
+-- Generation Time: Jul 09, 2010 at 12:00 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.2-1ubuntu4.2
 
@@ -142,37 +142,12 @@ CREATE TABLE IF NOT EXISTS `datasets` (
   `created` datetime NOT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=143 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=162 ;
 
 --
 -- Dumping data for table `datasets`
 --
 
-INSERT INTO `datasets` (`id`, `name`, `job_id`, `parent_dataset_id`, `dataset_state_id`, `owner_user_id`, `dataset_processor_id`, `created`, `deleted`) VALUES
-(121, 'test', 179, 120, 6, 1, 6, '2010-07-02 08:05:00', 1),
-(120, NULL, 178, 119, 5, 1, 4, '2010-07-02 07:47:00', 1),
-(119, 'John Raw Affymetrix Data', NULL, NULL, 4, 1, 3, '2010-07-02 07:40:00', 1),
-(122, NULL, 182, 120, 7, 1, 7, '2010-07-05 15:52:00', 1),
-(123, NULL, 183, 120, 7, 1, 7, '2010-07-05 15:56:00', 1),
-(124, NULL, 184, 120, 7, 1, 7, '2010-07-05 15:56:00', 1),
-(125, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 11:52:00', 0),
-(126, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 12:47:00', 0),
-(127, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 12:58:00', 0),
-(128, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 13:54:00', 0),
-(129, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 14:08:00', 0),
-(130, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 14:15:00', 0),
-(131, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 14:22:00', 0),
-(132, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 15:00:00', 0),
-(133, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 15:59:00', 0),
-(134, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 16:02:00', 0),
-(135, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 16:35:00', 0),
-(136, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 16:49:00', 0),
-(137, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 16:54:00', 0),
-(138, NULL, NULL, NULL, 3, 1, 3, '2010-07-06 16:55:00', 0),
-(139, NULL, NULL, NULL, 3, 1, 3, '2010-07-07 10:17:00', 0),
-(140, NULL, NULL, NULL, 3, 1, 3, '2010-07-07 11:31:00', 0),
-(141, NULL, NULL, NULL, 3, 1, 3, '2010-07-07 11:56:00', 0),
-(142, NULL, 185, 120, 7, 1, 7, '2010-07-07 13:29:00', 1);
 
 -- --------------------------------------------------------
 
@@ -226,20 +201,12 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `data_cleared` tinyint(1) NOT NULL,
   `process_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=187 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=206 ;
 
 --
 -- Dumping data for table `jobs`
 --
 
-INSERT INTO `jobs` (`id`, `job_state_id`, `description`, `autorun`, `run_start`, `run_end`, `comment`, `script_set_id`, `input_dataset_id`, `output_dataset_id`, `output_dataset_process_state_id`, `user_id`, `dataset_processor_id`, `data_cleared`, `process_id`) VALUES
-(178, 9, 'Affymetrix Importer Background Job', 0, '2010-07-02 07:45:49', '2010-07-02 07:47:10', '0', 88, 119, NULL, 5, 1, 4, 1, NULL),
-(179, 9, 'Affymetrix Raw QC Background Job', 0, '2010-07-02 07:48:05', '2010-07-02 08:05:08', '0', 89, 120, NULL, 6, 1, 6, 1, NULL),
-(183, 9, 'Affymetrix Normalisation', 0, '2010-07-05 15:53:03', '2010-07-05 15:56:57', '0', 93, 120, NULL, 7, 1, 7, 1, NULL),
-(182, 9, 'Affymetrix Normalisation', 0, '2010-07-05 15:41:49', '2010-07-05 15:52:07', '0', 92, 120, NULL, 7, 1, 7, 1, NULL),
-(184, 9, 'Affymetrix Normalisation', 0, '2010-07-05 15:53:04', '2010-07-05 15:56:57', '0', 94, 120, NULL, 7, 1, 7, 1, NULL),
-(185, 9, 'Affymetrix Normalisation', 0, '2010-07-05 16:31:47', '2010-07-07 13:29:36', '0', 95, 120, NULL, 7, 1, 7, 1, NULL),
-(186, 9, 'Affymetrix Raw QC Background Job', 0, '2010-07-07 13:29:35', '0000-00-00 00:00:00', '0', 96, 120, NULL, 6, 1, 6, 0, 1814);
 
 -- --------------------------------------------------------
 
@@ -357,15 +324,12 @@ CREATE TABLE IF NOT EXISTS `script_sets` (
   `description` varchar(255) NOT NULL,
   `entry_script_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=97 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=116 ;
 
 --
 -- Dumping data for table `script_sets`
 --
 
-INSERT INTO `script_sets` (`id`, `description`, `entry_script_id`) VALUES
-(96, 'Temporary Scriptset', 5),
-(95, 'Temporary Scriptset', 11);
 
 -- --------------------------------------------------------
 
@@ -383,11 +347,6 @@ CREATE TABLE IF NOT EXISTS `script_sets_scripts` (
 -- Dumping data for table `script_sets_scripts`
 --
 
-INSERT INTO `script_sets_scripts` (`script_set_id`, `script_id`) VALUES
-(95, 11),
-(95, 12),
-(96, 5),
-(96, 6);
 
 -- --------------------------------------------------------
 
@@ -444,7 +403,7 @@ CREATE TABLE IF NOT EXISTS `scripts_bodies` (
 INSERT INTO `scripts_bodies` (`script_id`, `script_body`) VALUES
 (1, '#! /bin/bash\r\n\r\ncp ../input_data/* ../output_data\r\ncd ../output_data\r\nfor file in `ls` \r\ndo\r\n        randomfilename=$RANDOM\r\n        mv $file $randomfilename\r\ndone\r\ncd ..\r\ntouch JOB_COMPLETE\r\n'),
 (2, 'Randomizer Helper body'),
-(3, 'library(affy)\r\ncovariates <- read.table("../input_data/covariates.csv",header=1, sep="\\t", quote="\\"")\r\nfilenames <- paste(c(''../input_data/''), covariates$Filename, sep='''')\r\nadf <- new("AnnotatedDataFrame",data=covariates)\r\nData <- ReadAffy(filenames=filenames,sampleNames=as.character(covariates$Unique.Sample.Identifier), phenoData= adf)\r\nsave(Data,file="../output_data/Data.Rdata")'),
+(3, 'library(affy)\r\ncovariates <- read.table("../input_data/covariates.csv",header=1, sep=",", quote="\\"")\r\nfilenames <- paste(c(''../input_data/''), covariates$Filename, sep='''')\r\nadf <- new("AnnotatedDataFrame",data=covariates)\r\nData <- ReadAffy(filenames=filenames,sampleNames=as.character(covariates$Unique.Sample.Identifier), phenoData= adf)\r\nsave(Data,file="../output_data/Data.Rdata")'),
 (4, '#! /bin/bash\r\nR --vanilla < affyloader.R\r\ncd ..\r\ntouch JOB_COMPLETE\r\n'),
 (5, ' #! /bin/bash\r\nR --vanilla < affyrawqcrscrinpt.R\r\ncd ..\r\ntouch JOB_COMPLETE'),
 (6, 'library(affy)\r\nload(''../input_data/Data.Rdata'')\r\ncovariates <- pData(Data)\r\n\r\n# PM density plot\r\npng(filename=''../output_data/pm_density.png'', width=700, height=700)\r\nplotDensity(log2(pm(Data)),lty=1,col=1+as.numeric(covariates$Variable.Value.Identifier),main="Log2 PM intensities", ylab="Density",xlab="Log2 PM Intensity")\r\ndev.off()\r\n\r\n# MM density plot\r\npng(filename=''../output_data/mm_density.png'', width=700, height=700)\r\nplotDensity(log2(mm(Data)),lty=1,col=1+as.numeric(covariates$Variable.Value.Identifier),main="Log2 PM intensities", ylab="Density",xlab="Log2 MM Intensity")\r\ndev.off()\r\n\r\n# Array pseudo images\r\nfor( i in sampleNames(Data) ) {\r\n	png(filename=paste(''../output_data/'',i,''.png'', sep=''''), width=700, height=700)\r\n	image( Data[,i] )\r\n	dev.off()\r\n}'),
@@ -468,17 +427,12 @@ CREATE TABLE IF NOT EXISTS `system_log` (
   `created` datetime NOT NULL,
   `message` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=102 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=182 ;
 
 --
 -- Dumping data for table `system_log`
 --
 
-INSERT INTO `system_log` (`id`, `created`, `message`) VALUES
-(101, '2010-07-07 13:29:36', 'Cron.php running complete'),
-(100, '2010-07-07 13:29:35', 'Cron.php running'),
-(99, '2010-07-05 16:31:48', 'Cron.php running complete'),
-(98, '2010-07-05 16:31:47', 'Cron.php running');
 
 -- --------------------------------------------------------
 
@@ -535,13 +489,12 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(255) NOT NULL,
   `deleted` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `username`, `passwordsha1`, `created`, `last_access`, `real_name`, `notes`, `room`, `telephone`, `email`, `deleted`) VALUES
-(1, 'nikolas', 'a28cc654d85c1d3cb8418061db20859c322a0bc6', '2010-05-26 00:00:00', '2010-07-07 15:15:00', 'Nikolas Barkas', '', '', '', 'nikolas.barkas@kcl.ac.uk', 0),
-(16, 'asdfasdf', '92429d82a41e930486c6de5ebda9602d55c39986', '2010-07-01 12:20:00', '0000-00-00 00:00:00', '', '', '', '', '', 1);
+(1, 'admin', 'dc6e038eca7bb16c5c84109e0100ae18f17dd8bb', '2010-05-26 00:00:00', '2010-07-09 09:53:00', 'System Administrator', '', '', '', '', 0);
 
