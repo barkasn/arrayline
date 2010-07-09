@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 09, 2010 at 02:39 PM
+-- Generation Time: Jul 09, 2010 at 05:10 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.2-1ubuntu4.2
 
@@ -142,12 +142,19 @@ CREATE TABLE IF NOT EXISTS `datasets` (
   `created` datetime NOT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=167 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=173 ;
 
 --
 -- Dumping data for table `datasets`
 --
 
+INSERT INTO `datasets` (`id`, `name`, `job_id`, `parent_dataset_id`, `dataset_state_id`, `owner_user_id`, `dataset_processor_id`, `created`, `deleted`) VALUES
+(171, NULL, 212, 170, 6, 1, 6, '2010-07-09 16:57:00', 0),
+(170, NULL, 211, 169, 5, 1, 4, '2010-07-09 16:51:00', 0),
+(169, NULL, NULL, NULL, 4, 1, 3, '2010-07-09 16:40:00', 0),
+(168, NULL, NULL, NULL, 3, 1, 3, '2010-07-09 16:32:00', 1),
+(167, NULL, NULL, NULL, 3, 1, 3, '2010-07-09 16:15:00', 1),
+(172, NULL, 213, 170, 7, 1, 7, '2010-07-09 16:58:00', 0);
 
 -- --------------------------------------------------------
 
@@ -201,12 +208,16 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `data_cleared` tinyint(1) NOT NULL,
   `process_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=211 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=214 ;
 
 --
 -- Dumping data for table `jobs`
 --
 
+INSERT INTO `jobs` (`id`, `job_state_id`, `description`, `autorun`, `run_start`, `run_end`, `comment`, `script_set_id`, `input_dataset_id`, `output_dataset_id`, `output_dataset_process_state_id`, `user_id`, `dataset_processor_id`, `data_cleared`, `process_id`) VALUES
+(213, 9, 'Affymetrix Normalisation', 0, '2010-07-09 16:57:31', '2010-07-09 16:58:24', '0', 123, 170, NULL, 7, 1, 7, 1, 4840),
+(212, 9, 'Affymetrix Raw QC Background Job', 0, '2010-07-09 16:51:54', '2010-07-09 16:57:12', '0', 122, 170, NULL, 6, 1, 6, 1, 4828),
+(211, 9, 'Affymetrix Importer Background Job', 0, '2010-07-09 16:50:33', '2010-07-09 16:51:37', '0', 121, 169, NULL, 5, 1, 4, 1, 4820);
 
 -- --------------------------------------------------------
 
@@ -324,12 +335,16 @@ CREATE TABLE IF NOT EXISTS `script_sets` (
   `description` varchar(255) NOT NULL,
   `entry_script_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=121 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=124 ;
 
 --
 -- Dumping data for table `script_sets`
 --
 
+INSERT INTO `script_sets` (`id`, `description`, `entry_script_id`) VALUES
+(123, 'Temporary Scriptset', 11),
+(122, 'Temporary Scriptset', 5),
+(121, 'Temporary Scriptset', 4);
 
 -- --------------------------------------------------------
 
@@ -347,6 +362,13 @@ CREATE TABLE IF NOT EXISTS `script_sets_scripts` (
 -- Dumping data for table `script_sets_scripts`
 --
 
+INSERT INTO `script_sets_scripts` (`script_set_id`, `script_id`) VALUES
+(121, 3),
+(121, 4),
+(122, 5),
+(122, 6),
+(123, 8),
+(123, 11);
 
 -- --------------------------------------------------------
 
@@ -427,12 +449,27 @@ CREATE TABLE IF NOT EXISTS `system_log` (
   `created` datetime NOT NULL,
   `message` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=202 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=216 ;
 
 --
 -- Dumping data for table `system_log`
 --
 
+INSERT INTO `system_log` (`id`, `created`, `message`) VALUES
+(215, '2010-07-09 16:58:25', 'Cron.php running complete'),
+(214, '2010-07-09 16:58:23', 'Cron.php running'),
+(213, '2010-07-09 16:57:32', 'Cron.php running complete'),
+(212, '2010-07-09 16:57:30', 'Cron.php running'),
+(211, '2010-07-09 16:57:14', 'Cron.php running complete'),
+(210, '2010-07-09 16:57:11', 'Cron.php running'),
+(209, '2010-07-09 16:51:55', 'Cron.php running complete'),
+(208, '2010-07-09 16:51:53', 'Cron.php running'),
+(207, '2010-07-09 16:51:39', 'Cron.php running complete'),
+(206, '2010-07-09 16:51:36', 'Cron.php running'),
+(205, '2010-07-09 16:50:43', 'Cron.php running complete'),
+(204, '2010-07-09 16:50:42', 'Cron.php running'),
+(203, '2010-07-09 16:50:34', 'Cron.php running complete'),
+(202, '2010-07-09 16:50:33', 'Cron.php running');
 
 -- --------------------------------------------------------
 
