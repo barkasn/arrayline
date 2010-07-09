@@ -171,8 +171,11 @@ select continue. This will schedule a new job for background running</p>');
 
 
 	private function showJobScheduled(lgJob $lgJob) {
-		//TODO: Fix this
-		echo 'Job Scheduled';
+		$page = new lgCmsPage();
+		$page->setTitle('Affymetrix Normalisation');
+		$page->appendContent('<h2>Affymetrix Normalisation - Job Scheduled</h2>');
+		$page->appendContent('<p>A job has been scheduled. Please note that some normalisation algorithms can take up to 30min to complete.</p>');
+		$page->render();
 	}
 
 	private function doExecute(lgRequest $lgRequest) {

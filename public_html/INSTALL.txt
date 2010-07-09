@@ -28,6 +28,12 @@ Arrayline requires:
 	* R with Bioconductor (for Affymetrix modules)
 
 Individual modules may have further requirements
+	* In particular affymetrix modules require R and Bioconductor 
+	* Bioconductor must be installed system wide for the www-data user to be able to
+		find the libraries. For installation instructions for Bioconductor 
+		look at http://www.bioconductor.org/docs/install/ To get a system-wide
+		installation you normally need to start R as 'sudo R' and then execute the
+		required commands.
 
 Installation Guidelines for Ubuntu systems
 ------------------------------------------
@@ -83,11 +89,16 @@ C. R with Bioconductor
 		> source("http://bioconductor.org/biocLite.R")
 		> biocLite()
 
+	Bioconductor automatically downloads additional libraries as required by the 
+	commands. It is recommended you ensure that the necessary CDF files for any type
+	of array your users may process are already present on the system to avoid run-time 
+	problems.
+
 D. Get arrayline
 	
 	1. Create a public directory on your (or preferably a dedicated users) 
 		home folder and make it accessible to the webserver ( you are
-		also making it accessible to every other user on the system)
+		also making it accessible(read-only) to every other user on the system)
 
 		$ cd ~/..
 		$ chmod 755 `whoami`
@@ -126,6 +137,11 @@ D. Get arrayline
 
 	7. Use phpmyadmin to import database.sql into your server
 
-	8. Visit http://localhost/~username/arrayline on your browser and login
+	8. Visit http://localhost/~username/arrayline on your browser and login with
+		username: admin
+		password: secret215
 
-	9. Change the default password
+	9. Change the default password from phpMyAdmin
+		edit the record for user admin and enter the new password in the password field
+		select sha1 hashing function in the drop down to the left.
+	
