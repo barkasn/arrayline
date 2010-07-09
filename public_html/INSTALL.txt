@@ -145,3 +145,9 @@ D. Get arrayline
 		edit the record for user admin and enter the new password in the password field
 		select sha1 hashing function in the drop down to the left.
 	
+	10. Setup cron
+		Setup a cron job to run every few minutes (less than 5) which places a request to 
+		cron.php for example you could use:
+		
+		wget -O - -q -t 1 http://www.example.com/cron.php
+
