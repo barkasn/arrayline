@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 09, 2010 at 12:00 PM
+-- Generation Time: Jul 09, 2010 at 02:39 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.2-1ubuntu4.2
 
@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `datasets` (
   `created` datetime NOT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=162 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=167 ;
 
 --
 -- Dumping data for table `datasets`
@@ -201,7 +201,7 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `data_cleared` tinyint(1) NOT NULL,
   `process_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=206 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=211 ;
 
 --
 -- Dumping data for table `jobs`
@@ -324,7 +324,7 @@ CREATE TABLE IF NOT EXISTS `script_sets` (
   `description` varchar(255) NOT NULL,
   `entry_script_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=116 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=121 ;
 
 --
 -- Dumping data for table `script_sets`
@@ -406,7 +406,7 @@ INSERT INTO `scripts_bodies` (`script_id`, `script_body`) VALUES
 (3, 'library(affy)\r\ncovariates <- read.table("../input_data/covariates.csv",header=1, sep=",", quote="\\"")\r\nfilenames <- paste(c(''../input_data/''), covariates$Filename, sep='''')\r\nadf <- new("AnnotatedDataFrame",data=covariates)\r\nData <- ReadAffy(filenames=filenames,sampleNames=as.character(covariates$Unique.Sample.Identifier), phenoData= adf)\r\nsave(Data,file="../output_data/Data.Rdata")'),
 (4, '#! /bin/bash\r\nR --vanilla < affyloader.R\r\ncd ..\r\ntouch JOB_COMPLETE\r\n'),
 (5, ' #! /bin/bash\r\nR --vanilla < affyrawqcrscrinpt.R\r\ncd ..\r\ntouch JOB_COMPLETE'),
-(6, 'library(affy)\r\nload(''../input_data/Data.Rdata'')\r\ncovariates <- pData(Data)\r\n\r\n# PM density plot\r\npng(filename=''../output_data/pm_density.png'', width=700, height=700)\r\nplotDensity(log2(pm(Data)),lty=1,col=1+as.numeric(covariates$Variable.Value.Identifier),main="Log2 PM intensities", ylab="Density",xlab="Log2 PM Intensity")\r\ndev.off()\r\n\r\n# MM density plot\r\npng(filename=''../output_data/mm_density.png'', width=700, height=700)\r\nplotDensity(log2(mm(Data)),lty=1,col=1+as.numeric(covariates$Variable.Value.Identifier),main="Log2 PM intensities", ylab="Density",xlab="Log2 MM Intensity")\r\ndev.off()\r\n\r\n# Array pseudo images\r\nfor( i in sampleNames(Data) ) {\r\n	png(filename=paste(''../output_data/'',i,''.png'', sep=''''), width=700, height=700)\r\n	image( Data[,i] )\r\n	dev.off()\r\n}'),
+(6, 'library(affy)\r\nload(''../input_data/Data.Rdata'')\r\ncovariates <- pData(Data)\r\n\r\n# Avoid recalculating\r\npmData <- pm(Data)\r\nmmData <- mm(Data)\r\n\r\n# Array pseudo images\r\nfor( i in sampleNames(Data) ) {\r\n	png(filename=paste(''../output_data/'',i,''.png'', sep=''''), width=1000, height=1000)\r\n	image( Data[,i] )\r\n	dev.off()\r\n}\r\n\r\n# PM density plot\r\npng(filename=''../output_data/pm_density.png'', width=700, height=700)\r\nplotDensity(log2(pmData),lty=(covariates$Replicate.Identifier),col=1+as.numeric(covariates$Variable.Value.Identifier),main="Log2 PM intensities", ylab="Density",xlab="Log2 PM Intensity")\r\nlegend("topright",legend=covariates$Unique.Sample.Identifier, lty=(covariates$Replicate.Identifier),col=1+as.numeric(covariates$Variable.Value.Identifier))\r\ndev.off()\r\n\r\n# MM density plot\r\npng(filename=''../output_data/mm_density.png'', width=700, height=700)\r\nplotDensity(log2(mmData),lty=(covariates$Replicate.Identifier),col=1+as.numeric(covariates$Variable.Value.Identifier),main="Log2 MM intensities", ylab="Density",xlab="Log2 MM Intensity")\r\nlegend("topright",legend=covariates$Unique.Sample.Identifier, lty=(covariates$Replicate.Identifier),col=1+as.numeric(covariates$Variable.Value.Identifier))\r\ndev.off()\r\n\r\n# PM / MM density plot\r\npng(filename=''../output_data/pm_mm_density.png'', width=700, height=700)\r\nplotDensity(log2(pmData/mmData),lty=(covariates$Replicate.Identifier),col=1+as.numeric(covariates$Variable.Value.Identifier), main="Log2 (PM/MM) intensities", xlab="Log2 (PM/MM) Intensity")\r\nlegend("topright",legend=covariates$Unique.Sample.Identifier, lty=(covariates$Replicate.Identifier),col=1+as.numeric(covariates$Variable.Value.Identifier))\r\ndev.off()\r\n\r\n# Free some memory\r\nrm(pmData, mmData)\r\n\r\n# affyPLM commands\r\nlibrary(affyPLM)\r\nPset <- fitPLM(Data, PM ~ -1 + samples + probes)\r\n\r\n# Nuse plot\r\npng(filename=''../output_data/nuse.png'', width=700, height=700)\r\nNUSE(Pset, main="NUSE", las=3, col=1+as.numeric(covariates$Variable.Value.Identifier));\r\ndev.off()\r\n\r\n# RLE plot\r\npng(filename=''../output_data/rle.png'', width=700, height=700)\r\nRLE(Pset, main="RLE", las=3, col=1+as.numeric(covariates$Variable.Value.Identifier));\r\ndev.off()\r\n'),
 (11, '#! /bin/bash\r\nR --vanilla < normalise.R\r\ncd ..\r\ntouch JOB_COMPLETE'),
 (7, 'library(affy)\r\nlibrary(gcrma)\r\nload(''../input_data/Data.Rdata'')\r\nnormalisedData <- gcrma(Data)\r\nsave(normalisedData,file=''../output_data/Data.Rdata'')'),
 (8, 'library(affy)\r\nload(''../input_data/Data.Rdata'')\r\nnormalisedData <- rma(Data)\r\nsave(normalisedData,file=''../output_data/Data.Rdata'')'),
@@ -427,7 +427,7 @@ CREATE TABLE IF NOT EXISTS `system_log` (
   `created` datetime NOT NULL,
   `message` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=182 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=202 ;
 
 --
 -- Dumping data for table `system_log`
@@ -496,5 +496,5 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `passwordsha1`, `created`, `last_access`, `real_name`, `notes`, `room`, `telephone`, `email`, `deleted`) VALUES
-(1, 'admin', 'dc6e038eca7bb16c5c84109e0100ae18f17dd8bb', '2010-05-26 00:00:00', '2010-07-09 09:53:00', 'System Administrator', '', '', '', '', 0);
+(1, 'admin', 'dc6e038eca7bb16c5c84109e0100ae18f17dd8bb', '2010-05-26 00:00:00', '2010-07-09 13:13:00', 'System Administrator', '', '', '', '', 0);
 
