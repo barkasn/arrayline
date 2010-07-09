@@ -82,8 +82,8 @@ select continue. This will schedule a new job for background running</p>');
 				<option value="quantiles">Quantiles</option>
 				<option value="invariantset">Non-linear</option>
 				<option value="cyclicloess">Cyclic loess</option>
-				<option value="contrast">Contrast</option>
-				<option value="mas5">MAS5</option>
+			<!--	<option value="contrast">Contrast</option>
+				<option value="mas5">MAS5</option> -->
 			</select>');
 		$form->addField($algorithmDropDown);
 		//TODO: Add Hidden Fields
